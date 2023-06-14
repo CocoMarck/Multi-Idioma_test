@@ -1,13 +1,13 @@
 import Modulo_Util as Util
-import Modulo_Lenguage as Leng
+import Modulo_Language as Lang
 
 
 sys = Util.System()
-leng = Leng.Lenguage()
+lang = Lang.Language()
 
 
 def Title(
-    text=leng['title'],
+    text=lang['title'],
     smb='#',
     space=4,
     print_mode=True,
@@ -50,8 +50,8 @@ def Title(
 
 
 def Continue(
-    text=f'¿{leng["continue"]}?',
-    yn=leng['YesNo'],
+    text=f'¿{lang["continue"]}?',
+    yn=lang['YesNo'],
     message_error=False
 ):
     '''
@@ -80,11 +80,11 @@ def Continue(
         # Se mostrara un input, que se quitara, precionando enter.
         #Util.CleanScreen()
         if text == '':
-            input(leng['continue_enter'] + '...')
+            input(lang['continue_enter'] + '...')
         else:
             input(
                 f'ERROR - {text}\n' +
-                leng['continue_enter'] + '...'
+                lang['continue_enter'] + '...'
             )
 
     else:

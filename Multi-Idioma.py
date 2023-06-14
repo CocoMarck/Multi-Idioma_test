@@ -1,26 +1,26 @@
 import Modulo_Util as Util
 import Modulo_ShowPrint as Show
-import Modulo_Lenguage as Leng
+import Modulo_Language as Lang
 
 
 def Main():
     loop = True
-    leng = Leng.Lenguage()
+    lang = Lang.Language()
     while loop == True:
         # Menu - Visal - Ayuda
         Util.CleanScreen()
-        Show.Title( leng['app'] )
+        Show.Title( lang['app'] )
         print(
-            f'1. {leng["leng"]}\n'
-            f'0. {leng["exit"]}'
+            f'1. {lang["lang"]}\n'
+            f'0. {lang["exit"]}'
         )
-        option = input(f'{leng["option"]}: ')
+        option = input(f'{lang["option"]}: ')
         
         # Continuar o no con la opcion eligida
         option_continue = Show.Continue()
-        if option_continue == (leng['YesNo'])[0]:
+        if option_continue == (lang['YesNo'])[0]:
             pass
-        elif option_continue == (leng['YesNo'])[1]:
+        elif option_continue == (lang['YesNo'])[1]:
             option = None
         else:
             Show.Continue(message_error=True)
@@ -28,7 +28,7 @@ def Main():
         # Evento de Opciones
         Util.CleanScreen()
         if option == '1':
-            leng = Select_Lenguage(leng=leng)
+            lang = Select_Language(lang=lang)
         
         elif option == '0':
             loop=False
@@ -43,62 +43,62 @@ def Main():
             )
     
     else:
-        print( f"{leng['bye']}..." )
+        print( f"{lang['bye']}..." )
         exit()
 
 
-def Select_Lenguage( leng=Leng.Lenguage() ):
+def Select_Language( lang=Lang.Language() ):
     # Menu de opciones - Visual
-    Util.Title( leng['leng'] )
+    Show.Title( lang['lang'] )
     option = input(
         '1. Español\n'
         '2. English\n'
-        f'{leng["option"]}: '
+        f'{lang["option"]}: '
     )
     
-    # Archivo de Texto Lenguages.dat
-    # Leer y verificar set_leng
-    text_leng = Util.Text_Read(
-        file_and_path='./Lenguages.dat',
+    # Archivo de Texto Languages.dat
+    # Leer y verificar set_lang
+    text_lang = Util.Text_Read(
+        file_and_path='./Languages.dat',
         opc='ModeText'
     )
-    change_leng = False
-    for line in text_leng.split('\n'):
-        if line.startswith('set_leng='):
-            # Si la linea set_leng existe
-            change_leng = True
+    change_lang = False
+    for line in text_lang.split('\n'):
+        if line.startswith('set_lang='):
+            # Si la linea set_lang existe
+            change_lang = True
         else:
-            # Si la linea set_leng no existe
+            # Si la linea set_lang no existe
             pass
     
     # Opcion elegida
     if option == '1':
-        #leng = Leng.Lenguage('es') Funciona, pero mal
-        set_leng = 'es'
+        #lang = Lang.Language('es') Funciona, pero mal
+        set_lang = 'es'
 
     elif option == '2':
-        #leng = Leng.Lenguage('en') Funciona, pero mal
-        set_leng = 'en'
+        #lang = Lang.Language('en') Funciona, pero mal
+        set_lang = 'en'
         
     else:
-        set_leng = ''
+        set_lang = ''
         
-    # Establecer o no, leng en el archivo Lenguages.dat
-    if change_leng == True:
-        leng_ready = ''
-        for line in text_leng.split('\n'):
-            if line.startswith('set_leng='):
-                leng_ready += f'set_leng={set_leng}\n'
+    # Establecer o no, lang en el archivo Languages.dat
+    if change_lang == True:
+        lang_ready = ''
+        for line in text_lang.split('\n'):
+            if line.startswith('set_lang='):
+                lang_ready += f'set_lang={set_lang}\n'
             else:
-                leng_ready += line + '\n'
+                lang_ready += line + '\n'
         # Eliminar ultimo salto de linea
-        leng_ready = leng_ready[:-1]
-        with open('./Lenguages.dat', 'w') as text_leng:
-            text_leng.write(leng_ready)
+        lang_ready = lang_ready[:-1]
+        with open('./Languages.dat', 'w') as text_lang:
+            text_lang.write(lang_ready)
     else:
         pass
         
-    return leng
+    return lang
 
 
 if __name__ == '__main__':
