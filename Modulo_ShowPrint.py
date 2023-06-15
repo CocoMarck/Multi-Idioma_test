@@ -113,3 +113,31 @@ def Continue(
             
     
     return option
+
+
+def Separator(
+    smb = '#',
+    smb_number = 128,
+    print_mode = True,
+):
+    '''
+    Separador
+    Muestra una serie de un solo caracter, tiene la funcion de separar textos.
+    Te devuele un str.
+
+
+    Parametros:
+    smb = str
+    # Un simbolo/caracter, que se repetira por smb_number
+    
+    smb_number = int
+    # Catidad de simbolos/caracteres.
+    
+    print_mode = bool
+    # Mostrar con print o no.
+    '''
+    separator = f'\n\n{smb*smb_number}\n\n'
+    if print_mode == True:
+        print(separator)
+    else:
+        return separator
