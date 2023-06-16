@@ -94,15 +94,21 @@ def Continue(
     # Continue - Loop
     while loop == True:
         # Visual input, si o no
+        # [:1] Es el primer caracter
+        # lower() modo minusculas, upper() Modo Mayusculas
         option = input(
-            f'{text} {yn[0]}/{yn[1]}: '
+            f'{text} '
+            f'{ Lang.YesNo("yes") }'
+            '/'
+            f'{ Lang.YesNo("no") }: '
         )
         
         # Eleccion de opcion
+        # lower() modo minusculas, upper() Modo Mayusculas
         Util.CleanScreen()
         if (
-            option == yn[0] or
-            option == yn[1]
+            option == Lang.YesNo('yes') or
+            option == Lang.YesNo('no')
         ):
             # Si la opcion es si o no, el loop para
             loop = False

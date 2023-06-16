@@ -5,6 +5,7 @@ import Modulo_Language as Lang
 
 def Main():
     loop = True
+    #lang = Lang.Translate(language_output='fr')
     lang = Lang.Language()
     while loop == True:
         # Menu - Visal - Ayuda
@@ -18,9 +19,9 @@ def Main():
         
         # Continuar o no con la opcion eligida
         option_continue = Show.Continue()
-        if option_continue == (lang['YesNo'])[0]:
+        if option_continue == Lang.YesNo('yes'):
             pass
-        elif option_continue == (lang['YesNo'])[1]:
+        elif option_continue == Lang.YesNo('no'):
             option = None
         else:
             Show.Continue(message_error=True)
@@ -85,16 +86,7 @@ def Select_Language( lang=Lang.Language() ):
         
     # Establecer o no, lang en el archivo Languages.dat
     if change_lang == True:
-        lang_ready = ''
-        for line in text_lang.split('\n'):
-            if line.startswith('set_lang='):
-                lang_ready += f'set_lang={set_lang}\n'
-            else:
-                lang_ready += line + '\n'
-        # Eliminar ultimo salto de linea
-        lang_ready = lang_ready[:-1]
-        with open('./Languages.dat', 'w') as text_lang:
-            text_lang.write(lang_ready)
+        Lang.set_lang(set_lang=set_lang)
     else:
         pass
         
