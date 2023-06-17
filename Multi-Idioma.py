@@ -1,12 +1,13 @@
 import Modulo_Util as Util
 import Modulo_ShowPrint as Show
 import Modulo_Language as Lang
+from Modulo_Language_GT import Translate as GoogleTranslate 
 
 
 def Main():
     loop = True
-    #lang = Lang.Translate(language_output='fr')
-    lang = Lang.Language()
+    lang = GoogleTranslate(language_output='fr')
+    #lang = Lang.Language()
     while loop == True:
         # Menu - Visal - Ayuda
         Util.CleanScreen()
