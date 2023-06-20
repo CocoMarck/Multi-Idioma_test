@@ -1,13 +1,13 @@
-import Modulo_Util as Util
-import Modulo_ShowPrint as Show
-import Modulo_Language as Lang
-from Modulo_Language_GT import Translate as GoogleTranslate 
+from Modulos import Modulo_Util as Util
+from Modulos import Modulo_ShowPrint as Show
+from Modulos import Modulo_Language as Lang
+from Modulos.Modulo_Language_GT import Translate as GoogleTranslate 
 
 
 def Main():
     loop = True
-    lang = GoogleTranslate(language_output='fr')
-    #lang = Lang.Language()
+    #lang = GoogleTranslate(language_output='fr')
+    lang = Lang.Language()
     while loop == True:
         # Menu - Visal - Ayuda
         Util.CleanScreen()
@@ -61,18 +61,11 @@ def Select_Language( lang=Lang.Language() ):
     # Archivo de Texto Languages.dat
     # Leer y verificar set_lang
     text_lang = Util.Text_Read(
-        file_and_path='./Languages.dat',
+        file_and_path='./Language_en.dat',
         opc='ModeText'
     )
-    change_lang = False
-    for line in text_lang.split('\n'):
-        if line.startswith('set_lang='):
-            # Si la linea set_lang existe
-            change_lang = True
-        else:
-            # Si la linea set_lang no existe
-            pass
-    
+
+    change_lang = True
     # Opcion elegida
     if option == '1':
         #lang = Lang.Language('es') Funciona, pero mal
@@ -85,11 +78,8 @@ def Select_Language( lang=Lang.Language() ):
     else:
         set_lang = ''
         
-    # Establecer o no, lang en el archivo Languages.dat
-    if change_lang == True:
-        Lang.set_lang(set_lang=set_lang)
-    else:
-        pass
+    # Establecer, lang en el archivo Languages.dat
+    Lang.set_lang(set_lang=set_lang)
         
     return lang
 

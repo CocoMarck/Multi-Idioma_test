@@ -1,15 +1,24 @@
-import Modulo_Util as Util
-from Modulo_GT import Translate as GoogleTranslator
-from Modulo_Language import (
+from . import Modulo_Util as Util
+from .Modulo_GT import Translate as GoogleTranslator
+from .Modulo_Language import (
     Default_Language,
     Language
 )
+
+
+lang_dir = './Languages/'
 
 
 def Translate(
     language_input=Default_Language(),
     language_output='pt'
 ):
+    # Si el language input es Enlgish (el default)
+    if language_input == 'en':
+        language_input = 'es'
+    else:
+        pass
+
     # Establecer dict-lang por medio del parametro
     lang = Language(language_input)
     

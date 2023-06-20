@@ -1,5 +1,5 @@
-import Modulo_Util as Util
-import Modulo_Language as Lang
+from . import Modulo_Util as Util
+from . import Modulo_Language as Lang
 
 
 sys = Util.System()
