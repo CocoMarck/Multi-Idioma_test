@@ -51,7 +51,6 @@ def Title(
 
 def Continue(
     text=f'¿{lang["continue"]}?',
-    yn=lang['YesNo'],
     message_error=False
 ):
     '''
@@ -60,9 +59,6 @@ def Continue(
     Parametros:
     text = str
     # Es el mensaje ¿Continuar?
-
-    yn = list
-    # Una lista así ['y', 'n']
 
     message_error = bool
     # Muestra un input de error, que se quita precionando enter.

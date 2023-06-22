@@ -3,7 +3,7 @@ from . import Modulo_Util as Util
 from pathlib import Path as pathlib
 
 
-lang_dir = './Languages/'
+lang_dir = 'Languages/'
 
 
 def Default_Language():
@@ -47,7 +47,7 @@ def Language( lang=Default_Language() ):
         # Si es incorrecto, entonces se coloca el default
         pass
 
-    # Verificar que el lang sea español o english
+    # Verificar que el archivo lang exista
     if pathlib(
         f'{lang_dir}Language_{lang}.dat'
     ).exists():
@@ -211,3 +211,49 @@ def set_lang(set_lang='es'):
     lang_ready = lang_ready[:-1]
     with open(f'{lang_dir}Language_en.dat', 'w') as text_lang:
         text_lang.write(lang_ready)
+
+
+def get_lang():
+    # Archivo de Texto Languages.dat
+    # Leer y verificar set_lang
+    text_lang = Util.Text_Read(
+        file_and_path=f'{lang_dir}Language_en.dat',
+        opc='ModeText'
+    )
+
+    # Verificar la exitensia de la linea set_lang=
+    lang_ready = ''
+    for line in text_lang.split('\n'):
+        if line.startswith('set_lang='):
+            # Si la linea enpieza con 'set_lang='
+            lang_ready = ( line.split('set_lang=') ) [1]
+        else:
+            # No hacer nada
+            pass
+    
+    # Si un language es nada o no
+    if lang_ready == '':
+        # Etoncens es el dafault.
+        lang_ready = f'default ( {Default_Language()} )'
+    else:
+        # El lang establecido es correcto.
+        pass
+            
+    return lang_ready
+
+
+def List_Lang():
+    list_lang = Util.Files_List(
+        files='Language_*.dat',
+        path=lang_dir,
+        remove_path=True
+    )
+    
+    list_ready = []
+    for text in list_lang:
+        text_ready = (
+            (text.replace('Language_', '')).replace('.dat', '')
+        )
+        list_ready.append(text_ready)
+    
+    return list_ready

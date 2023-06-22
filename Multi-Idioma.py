@@ -6,17 +6,19 @@ from Modulos.Modulo_Language_GT import Translate as GoogleTranslate
 
 def Main():
     loop = True
-    #lang = GoogleTranslate(language_output='fr')
-    lang = Lang.Language()
+    #lang = GoogleTranslate(language_output='pt')
+    GoogleTranslate(language_output='fr')
+    #lang = Lang.Language()
     while loop == True:
         # Menu - Visal - Ayuda
         Util.CleanScreen()
-        Show.Title( lang['app'] )
+        Show.Title( Lang.get_text('app') )
         print(
-            f'1. {lang["lang"]}\n'
-            f'0. {lang["exit"]}'
+            f'1. {Lang.get_text("lang")}\n'
+            f'2. {Lang.get_text("text")}\n'
+            f'0. {Lang.get_text("exit")}'
         )
-        option = input(f'{lang["option"]}: ')
+        option = input(f'{Lang.get_text("option")}: ')
         
         # Continuar o no con la opcion eligida
         option_continue = Show.Continue()
@@ -30,7 +32,10 @@ def Main():
         # Evento de Opciones
         Util.CleanScreen()
         if option == '1':
-            lang = Select_Language(lang=lang)
+            Select_Language()
+            
+        elif option == '2':
+            Show_Text()
         
         elif option == '0':
             loop=False
@@ -45,43 +50,62 @@ def Main():
             )
     
     else:
-        print( f"{lang['bye']}..." )
+        print( f"{Lang.get_text('bye')}..." )
         exit()
 
 
-def Select_Language( lang=Lang.Language() ):
+def Select_Language( ):
     # Menu de opciones - Visual
-    Show.Title( lang['lang'] )
-    option = input(
-        '1. Español\n'
-        '2. English\n'
-        f'{lang["option"]}: '
+    Show.Title( Lang.get_text('lang') )
+    print(
+        f'{Lang.get_text("lang")}: {Lang.get_lang()}'
     )
     
-    # Archivo de Texto Languages.dat
-    # Leer y verificar set_lang
-    text_lang = Util.Text_Read(
-        file_and_path='./Language_en.dat',
-        opc='ModeText'
+    # Mostrar opciones de lenguajes
+    option_nmb = 0
+    option_dict = {}
+    for text in Lang.List_Lang():
+        option_nmb += 1
+        option_dict.update({ option_nmb : text })
+    
+    for key in option_dict.keys():
+        print(f'{key}. {option_dict[key]}')
+    
+    print('0. default')
+    
+    # Input de opciones
+    option = input(
+        f'{Lang.get_text("option")}: '
     )
-
-    change_lang = True
+    
     # Opcion elegida
-    if option == '1':
-        #lang = Lang.Language('es') Funciona, pero mal
-        set_lang = 'es'
-
-    elif option == '2':
-        #lang = Lang.Language('en') Funciona, pero mal
-        set_lang = 'en'
-        
+    if int(option) in option_dict.keys():
+        set_lang = option_dict[int(option)]
+    
     else:
         set_lang = ''
+    
+    # Mostrar opcion
+    input(f'{set_lang}...')
         
     # Establecer, lang en el archivo Languages.dat
     Lang.set_lang(set_lang=set_lang)
+
+
+def Show_Text():
+    number = 0
+    for key in (Lang.Language()).keys():
+        number += 1
+        print(
+            f'key - {key}\n'
+            f'{number}. {Lang.get_text(key)}'
+            '\n'
+        )
         
-    return lang
+    input( 
+        '\n' +
+        Lang.get_text('continue_enter') + '...' 
+    )
 
 
 if __name__ == '__main__':
