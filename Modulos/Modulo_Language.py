@@ -84,76 +84,10 @@ def Language( lang=Default_Language() ):
         list_YesNo = []
         for option in (file_dict['YesNo']).split(','):
             list_YesNo.append(option)
+            file_dict.update( {'YesNo': list_YesNo} )
 
         # Agregar al diccionario
-        lang_dict = {
-            # Opciones
-            'option': file_dict[f'option'],
-            'exit': file_dict[f'exit'],
-            'continue': file_dict['continue'],
-            'continue_enter': file_dict['continue_enter'],
-            'install': file_dict['install'],
-            'select': file_dict['select'],
-            'YesNo': list_YesNo,
-            'more_info': file_dict['more_info'],
-            'set_dir': file_dict['set_dir'],
-            'view_cfg': file_dict['view_cfg'],
-            'start': file_dict['start'],
-            'rec_video': file_dict['rec_video'],
-            'rec_audio': file_dict['rec_audio'],
-            'mode': file_dict['mode'],
-            'set_option': file_dict['set_option'],
-            'save_arch': file_dict['save_arch'],
-            
-            # Finalizando - Completando
-            'finalized': file_dict['finalized'],
-            'bye': file_dict['bye'],
-            'fin_install': file_dict['fin_install'],
-            
-            # Errores
-            'error_admin': file_dict['error_admin'],
-            'error_dir': file_dict['error_dir'],
-            'error_parameter': file_dict['error_parameter'],
-            
-            # Ayuda
-            'help_wait': file_dict['help_wait'],
-            'help': file_dict['help'],
-            
-            # Solo texto
-            'app': file_dict['app'],
-            'title': file_dict['title'],
-            'lang': file_dict['lang'],
-            'dir': file_dict['dir'],
-            'ver': file_dict['ver'],
-            'name': file_dict['name'],
-            'exec': file_dict['exec'],
-            'icon': file_dict['icon'],
-            'comment': file_dict['comment'],
-            'terminal': file_dict['terminal'],
-            'categories': file_dict['categories'],
-            'wait': file_dict['wait'],
-            'text': file_dict['text'],
-            'cmd': file_dict['cmd'],
-            'cfg': file_dict['cfg'],
-            'record': file_dict['record'],
-            'reproduce': file_dict['reproduce'],
-            'set': file_dict['set'],
-            'disp_audio': file_dict['disp_audio'],
-            'arch': file_dict['arch'],
-            'no_set': file_dict['no_set'],
-            'yes_set': file_dict['yes_set'],
-            'the_cfg_be': file_dict['the_cfg_be'],
-            'are_disp': file_dict['are_disp'],
-            'resolution': file_dict['resolution'],
-            'quality': file_dict['quality'],
-            'fps': file_dict['fps'],
-            'cpu_use': file_dict['cpu_use'],
-            'set_arch': file_dict['set_arch'],
-            'no_arch': file_dict['no_arch'],
-            'see_options': file_dict['see_options']
-        }
-    else:
-        pass
+        lang_dict = file_dict
     
     return lang_dict
 
@@ -163,15 +97,15 @@ def YesNo(option='yes', lang=Default_Language()):
     # Y hacerlo sin mayusculas con el metodo lower().
     if option == 'yes':
         # Obtener si
-        text = ( (get_text('YesNo'))[0][:1] ).lower()
+        text = ( (get_text('yes'))[:1] ).lower()
 
     elif option == 'no':
         # Obtener no
-        text = ( (get_text('YesNo'))[1][:1] ).lower()
+        text = ( (get_text('no'))[:1] ).lower()
 
     else:
         # Obtener no
-        text = ( (get_text('YesNo'))[1][:1] ).lower()
+        text = ( (get_text('no'))[:1] ).lower()
     
     return text
 
@@ -179,6 +113,16 @@ def YesNo(option='yes', lang=Default_Language()):
 def get_text(text='app'):
     # Declarar variable/diccionario
     lang = Language()
+    
+    # Si el texto es si o no
+    if text == 'yes':
+        # Devolver si
+        return (lang['YesNo'])[0]
+    elif text == 'no':
+        # Devolver no
+        return (lang['YesNo'])[1]
+    else:
+        pass
     
     # Si el texto existe en las key del diccionario
     if text in lang.keys():

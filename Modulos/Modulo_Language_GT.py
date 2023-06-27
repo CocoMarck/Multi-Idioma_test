@@ -2,7 +2,8 @@ from . import Modulo_Util as Util
 from .Modulo_GT import Translate as GoogleTranslator
 from .Modulo_Language import (
     Default_Language,
-    Language
+    Language,
+    set_lang
 )
 from pathlib import Path as pathlib
 
@@ -35,8 +36,10 @@ def Translate(
         # El language es igual al output
         dict_lang = Language(language_output)
     else:
+        set_lang(language_input)
         # Establecer dict-lang por medio del parametro
         lang = Language(language_input)
+        input(lang)
         
         # Declarar list_text, que obtendra el texto traducido.
         # Obtener el texto, del dicionario lang
@@ -98,6 +101,7 @@ def Translate(
             # Sumar texto
             total_number += 1
 
+        input(list_text)
         # Añadir key y texto al dict_lang
         # Es -1 porque se enpieza por el cero, y en el for le sumo uno
         number_ready = -1
@@ -135,6 +139,9 @@ def Translate(
                     file_text.write(
                         f'{key}={list_text[number_ready]}\n'
                     )
+
+        # Etablecer lenguaje default del sistema
+        set_lang('')
     
     # Devolver el diccionario listo.
     return dict_lang
