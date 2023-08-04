@@ -44,7 +44,9 @@ class Window_Main(QWidget):
         self.show()
         
     def evt_set_lang(self):
+        self.hide()
         Dialog_Select_Language(self).exec()
+        self.show()
     
     def evt_see_text(self):
         number = 0
@@ -99,6 +101,7 @@ class Dialog_Select_Language(QDialog):
             else:
                 Lang.set_lang( button.text() )
             self.close()
+        sys.exit()
 
 
 if __name__ == '__main__':

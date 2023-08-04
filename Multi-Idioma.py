@@ -1,17 +1,18 @@
-from Modulos import Modulo_Util as Util
+from Modulos.Modulo_System import CleanScreen
 from Modulos import Modulo_ShowPrint as Show
 from Modulos import Modulo_Language as Lang
-from Modulos.Modulo_Language_GT import Translate as GoogleTranslate 
+from Modulos.Modulo_Language_GT import Translate as GoogleTranslate
+import sys
 
 
 def Main():
     loop = True
     #lang = GoogleTranslate(language_output='pt')
-    GoogleTranslate(language_output='fr')
+    GoogleTranslate(language_output='pt')
     #lang = Lang.Language()
     while loop == True:
         # Menu - Visal - Ayuda
-        Util.CleanScreen()
+        CleanScreen()
         Show.Title( Lang.get_text('app') )
         print(
             f'1. {Lang.get_text("lang")}\n'
@@ -30,7 +31,7 @@ def Main():
             Show.Continue(message_error=True)
         
         # Evento de Opciones
-        Util.CleanScreen()
+        CleanScreen()
         if option == '1':
             Select_Language()
             
@@ -79,10 +80,13 @@ def Select_Language( ):
     )
     
     # Opcion elegida
-    if int(option) in option_dict.keys():
-        set_lang = option_dict[int(option)]
+    try:
+        if int(option) in option_dict.keys():
+            set_lang = option_dict[int(option)]
     
-    else:
+        else:
+            set_lang = ''
+    except:
         set_lang = ''
     
     # Mostrar opcion
@@ -90,6 +94,7 @@ def Select_Language( ):
         
     # Establecer, lang en el archivo Languages.dat
     Lang.set_lang(set_lang=set_lang)
+    sys.exit()
 
 
 def Show_Text():

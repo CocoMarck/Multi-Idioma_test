@@ -36,7 +36,11 @@ class Window_Main(Gtk.Window):
         self.add(vbox_main)
     
     def evt_set_lang(self, widget):
-        Dialog_Select_Language(self)
+        dialog = Dialog_Select_Language(self)
+        self.hide()
+        dialog.run()
+        dialog.destroy()
+        self.show_all()
     
     def evt_see_text(self, widget):
         number = 0
@@ -62,7 +66,7 @@ class Dialog_Select_Language(Gtk.Dialog):
             title=f'{Lang.get_text("lang")}: {Lang.get_lang()}',
             transient_for=parent, flags=0
         )
-        self.set_default_size(256, -1)
+        self.set_default_size(308, -1)
         
         # Contenedor Principal
         vbox_main = Gtk.Box(
@@ -92,6 +96,7 @@ class Dialog_Select_Language(Gtk.Dialog):
         else:
             Lang.set_lang( button.get_label() )
         self.destroy()
+        win.destroy()
 
 
 win = Window_Main()
