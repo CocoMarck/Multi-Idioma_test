@@ -1,8 +1,8 @@
 from .Modulo_Text import (
     Text_Read,
 )
-from .Modulo_Files import (
-    Path,
+from .Modulo_Files import(
+    Path
 )
 from .Modulo_ShowPrint import (
     Title,
@@ -58,7 +58,7 @@ def Translate(
                 # Traducir input_text
                 to_translate = Text_Read(
                     file_and_path=input_text,
-                    opc='ModeText'
+                    option='ModeText'
                 )
             except:
                 # El input no es un texto.
@@ -72,7 +72,7 @@ def Translate(
                                 Path(input_text) +
                                 id_input
                             ),
-                            opc='ModeText'
+                            option='ModeText'
                         )
                     except:
                         # No traducir
@@ -88,7 +88,7 @@ def Translate(
                 # ID Traducir
                 to_translate = Text_Read(
                     file_and_path=id_input,
-                    opc='ModeText'
+                    option='ModeText'
                 )
                 #output_text = id_output
             except:
