@@ -19,27 +19,34 @@ class Window_Main(Gtk.Window):
         )
         
         # Secciones Verticales, Botones
-        button_lang = Gtk.Button( label=Lang.get_text('lang') )
-        button_lang.connect('clicked', self.evt_set_lang)
-        vbox_main.pack_start(button_lang, False, True, 0)
+        self.button_lang = Gtk.Button( label=Lang.get_text('lang') )
+        self.button_lang.connect('clicked', self.evt_set_lang)
+        vbox_main.pack_start(self.button_lang, False, True, 0)
         
-        button_see_text = Gtk.Button( label=Lang.get_text('text') )
-        button_see_text.connect('clicked', self.evt_see_text)
-        vbox_main.pack_start(button_see_text, False, True, 0)
+        self.button_see_text = Gtk.Button( label=Lang.get_text('text') )
+        self.button_see_text.connect('clicked', self.evt_see_text)
+        vbox_main.pack_start(self.button_see_text, False, True, 0)
         
         # Seccion vertical final, boton para salir
-        button_exit = Gtk.Button( label=Lang.get_text('exit') )
-        button_exit.connect('clicked', self.evt_exit)
-        vbox_main.pack_end(button_exit, False, True, 16)
+        self.button_exit = Gtk.Button( label=Lang.get_text('exit') )
+        self.button_exit.connect('clicked', self.evt_exit)
+        vbox_main.pack_end(self.button_exit, False, True, 16)
         
         # Agragar contenedor principal
         self.add(vbox_main)
     
+    def set_text(self):
+        self.button_lang.set_label( Lang.get_text('lang') )
+        self.button_see_text.set_label( Lang.get_text('text') )
+        self.button_exit.set_label( Lang.get_text('exit') )
+        self.set_title( Lang.get_text('app') )
+    
     def evt_set_lang(self, widget):
         dialog = Dialog_Select_Language(self)
-        self.hide()
         dialog.run()
+        self.hide()
         dialog.destroy()
+        self.set_text()
         self.show_all()
     
     def evt_see_text(self, widget):
@@ -96,7 +103,7 @@ class Dialog_Select_Language(Gtk.Dialog):
         else:
             Lang.set_lang( button.get_label() )
         self.destroy()
-        win.destroy()
+        #win.destroy()
 
 
 win = Window_Main()

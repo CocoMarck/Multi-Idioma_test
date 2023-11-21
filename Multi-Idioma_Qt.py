@@ -24,28 +24,35 @@ class Window_Main(QWidget):
         self.setLayout(vbox_main)
         
         # Secciones Verticales, botones de opcion
-        button_lang = QPushButton( Lang.get_text('lang') )
-        button_lang.clicked.connect(self.evt_set_lang)
-        vbox_main.addWidget(button_lang)
+        self.button_lang = QPushButton( Lang.get_text('lang') )
+        self.button_lang.clicked.connect(self.evt_set_lang)
+        vbox_main.addWidget(self.button_lang)
         
-        button_see_text = QPushButton( Lang.get_text('text') )
-        button_see_text.clicked.connect(self.evt_see_text)
-        vbox_main.addWidget(button_see_text)
+        self.button_see_text = QPushButton( Lang.get_text('text') )
+        self.button_see_text.clicked.connect(self.evt_see_text)
+        vbox_main.addWidget(self.button_see_text)
         
         # VBox, separacion de botones de opcion, y boton de salir
         vbox_main.addStretch()
         
         # Seccion vertical final, boton para salir
-        button_exit = QPushButton( Lang.get_text('exit') )
-        button_exit.clicked.connect(self.evt_exit)
-        vbox_main.addWidget(button_exit)
+        self.button_exit = QPushButton( Lang.get_text('exit') )
+        self.button_exit.clicked.connect(self.evt_exit)
+        vbox_main.addWidget(self.button_exit)
         
         # Fin, Mostrar todo
         self.show()
+    
+    def set_text_menu(self):
+        self.button_lang.setText( Lang.get_text('lang') )
+        self.button_see_text.setText( Lang.get_text('text') )
+        self.button_exit.setText( Lang.get_text('exit') )
+        self.setWindowTitle(Lang.get_text('app'))
         
     def evt_set_lang(self):
         self.hide()
         Dialog_Select_Language(self).exec()
+        self.set_text_menu()
         self.show()
     
     def evt_see_text(self):
@@ -101,7 +108,7 @@ class Dialog_Select_Language(QDialog):
             else:
                 Lang.set_lang( button.text() )
             self.close()
-        sys.exit()
+        #sys.exit()
 
 
 if __name__ == '__main__':
