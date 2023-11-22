@@ -42,9 +42,9 @@ class Window_Main(Gtk.Window):
         self.set_title( Lang.get_text('app') )
     
     def evt_set_lang(self, widget):
+        self.hide()
         dialog = Dialog_Select_Language(self)
         dialog.run()
-        self.hide()
         dialog.destroy()
         self.set_text()
         self.show_all()
@@ -59,7 +59,9 @@ class Window_Main(Gtk.Window):
                 f'{number}. {Lang.get_text(key)}\n'
                 '\n'
             )
+        self.hide()
         Util_Gtk.Dialog_TextView(self, text)
+        self.show_all()
     
     def evt_exit(self, widget):
         self.destroy()
