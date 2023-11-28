@@ -12,6 +12,18 @@ from deep_translator import GoogleTranslator
 import os
 
 
+list_lang = [
+    'es',
+    'en',
+    'pt',
+    'fr',
+    'ru',
+    'ar',
+    'ja',
+    'zh-CN',
+]
+
+
 def Translate(
         language_input = None,
         language_output = None,
