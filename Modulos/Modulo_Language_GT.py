@@ -5,9 +5,13 @@ from .Modulo_Language import (
     set_lang
 )
 from pathlib import Path as pathlib
+import os, sys
 
+# Obtén la ruta al directorio actual del script
+current_dir = os.path.dirname( os.path.abspath(sys.argv[0]) )
 
-lang_dir = './Languages/'
+# Construye la ruta a Languages desde el directorio que contiene el módulo
+lang_dir = os.path.join(current_dir, 'Languages')
 
 
 def Translate(
@@ -31,7 +35,9 @@ def Translate(
         pass
     
     # Verificar si existe o no el language
-    if pathlib(f'{lang_dir}Language_{language_output}.dat').exists():
+    if pathlib(
+        os.path.join( lang_dir, f'Language_{language_output}.dat' )
+    ).exists():
         # El language es igual al output
         dict_lang = Language(language_output)
     else:
@@ -119,7 +125,7 @@ def Translate(
             
             # Escribir datos traducidos
             with open(
-                f'{lang_dir}Language_{language_output}.dat',
+                os.path.join( lang_dir, f'Language_{language_output}.dat' ),
                 'a'
             ) as file_text:
                 if type(list_text[number_ready]) is list:
