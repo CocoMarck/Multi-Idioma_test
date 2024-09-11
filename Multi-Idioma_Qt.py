@@ -9,8 +9,8 @@ from PyQt6.QtWidgets import (
     QHBoxLayout
 )
 
-from Modulos import Modulo_Language as Lang
-from Interface import Modulo_Util_Qt as Util_Qt
+from data import Modulo_Language as Lang
+from interface import Modulo_Util_Qt as Util_Qt
 
 
 class Window_Main(QWidget):

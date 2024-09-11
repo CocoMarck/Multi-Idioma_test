@@ -1,5 +1,5 @@
-from Modulos import Modulo_Language as Lang
-from Interface import Modulo_Util_Gtk as Util_Gtk
+from data import Modulo_Language as Lang
+from interface import Modulo_Util_Gtk as Util_Gtk
 
 import gi
 

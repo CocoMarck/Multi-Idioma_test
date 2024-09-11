@@ -1,10 +1,10 @@
-from Modulos.Modulo_System import CleanScreen
-from Modulos.Modulo_ShowPrint import (
+from logic.Modulo_System import CleanScreen
+from interface.Modulo_ShowPrint import (
     Title,
     Separator,
     Continue
 )
-from Modulos.Modulo_Language import (
+from data.Modulo_Language import (
     get_text as Lang,
     Language,
     get_lang,
@@ -12,7 +12,7 @@ from Modulos.Modulo_Language import (
     set_lang,
     YesNo
 )
-from Modulos.Modulo_Language_GT import Translate
+from data.Modulo_Language_GT import Translate
 import sys
 
 
