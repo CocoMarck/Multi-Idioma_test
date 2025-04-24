@@ -7,6 +7,7 @@ import os
 db_format = 'db'
 db_name='language'
 db_full_path=os.path.join( '', f'{db_name}.{db_format}' )
+default_language = 'en'
 languages = [
     'en',
     'es',
@@ -67,12 +68,15 @@ def create_database():
     
     return sql_statement
 
-print( create_database() )
+#print( create_database() )
 
 
 
 
 def get_column_names():
+    '''
+    Obtener los nombres de las columnas
+    '''
     # Instrucción para seleccionar todos los nombres de las columnas. Tambien sirve para obtener los valores de las columnas.
     sql_statement = f'SELECT * FROM {db_name}'
     
@@ -91,14 +95,45 @@ print( get_column_names() )
 
 
 
-def set_tag( tag, text, lang ):
+def get_all_values():
+    '''
+    Obtener todos los valores de las columnas.
+    '''
+    # Obtener nombres de todas las columnas
+    columns = get_column_names()
+    
+    # Establecer comando para obtener todos los valores de las columnas
+    sql_statement = 'SELECT'
+    for text in columns:
+        sql_statement += f' {text},'
+    sql_statement = sql_statement[:-1]
+    sql_statement += f' FROM {db_name}'
+    print(sql_statement)
+    
+    # Ejecutar comando
+    try:
+        with sqlite3.connect( db_full_path ) as conn:
+            cur = conn.cursor()
+            cur.execute( sql_statement )
+            list_text = cur.fetchall()
+            return list_text
+    except sqlite3.OperationalError as e:
+        print(e)
+        return None
+
+print( get_all_values() )
+
+
+
+
+def insert_tag( tag, lang, text ):
     '''
     Agregar texto a la base de datos.
     
     Parametros:
         tag = str, etiqueta
-        text = str, valor de etiqueta
         lang = str, idioma donde se guardara el text
+        text = str, valor de etiqueta
     '''
     sql_statement = (
         f'INSERT INTO {db_name}({columns[1]}, {lang})\n'
@@ -116,8 +151,9 @@ def set_tag( tag, text, lang ):
     
     return sql_statement
 
-#print( set_tag( 'pc', 'Computadora personal', 'es' ) )
-#print( set_tag( 'hello-w', 'Hello World', 'en' ) )
+#print( insert_tag( 'pc','es', 'Computadora personal' ) )
+#print( insert_tag( 'hello-w', 'en', 'Hello World' ) )
+#print( insert_tag( 'text', 'es', 'Texto' ) )
 
 
 
@@ -139,9 +175,10 @@ def update_tag_text( tag, lang, text  ):
     
     return sql_statement
 
-print( update_tag_text('pc', 'en', 'Personal Computer') )
-print( update_tag_text('pc', 'es', 'Computadora Personal') )
-print( update_tag_text('hello-w', 'es', 'Hola Mundo') )
+#print( update_tag_text('pc', 'en', 'Personal Computer') )
+#print( update_tag_text('pc', 'es', 'Computadora Personal') )
+#print( update_tag_text('hello-w', 'es', 'Hola Mundo') )
+#print( update_tag_text('text', 'en', 'Text') )
 
 
 
@@ -181,20 +218,37 @@ def get_text( tag, lang=current_language()):
             
             for item in list_textlang:
                 if len(item) == 2:
-                    if tag == item[0]:
+                    if (tag == item[0]) and (item[1] != None):
                         text_return = item[1]
                         text_obtained = True
+
+            
     except sqlite3.OperationalError as e:
         print(e)
     
     # Mensaje de que no se obtuvo ningun texto.
     if text_obtained == False:
-        print('No text was obtained. Non-existent tag.')
+        if lang != default_language:
+            # Usar recursividad de funciones. Usando de nuevo get_text
+            print( 
+                f'The column "{lang}" not have "{tag}" tag. '
+                f'Searching text in "{default_language}" column'
+            )
+            text_return = get_text( tag, default_language )
+        else:
+            print('No text was obtained. Non-existent tag.')
+        
     
     
     # Retornar string
     return text_return
 
 print( get_text('hello-w') )
-print( get_text('text') )
+
+print( get_text('text', 'es') )
+print( get_text('text', 'pt') )
+
 print( get_text('pc') )
+
+print( get_text('pc', 'pt') )
+print( get_text('pc', 'en') )
