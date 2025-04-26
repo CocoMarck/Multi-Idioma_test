@@ -1,3 +1,4 @@
+from logic.Modulo_Text import *
 import sqlite3
 import os
 
@@ -20,6 +21,16 @@ columns = [
 ]
 for i in languages:
     columns.append(i)
+    
+
+
+
+def current_language():
+    return 'en'
+
+
+    
+    
 def create_database():
     '''
     Generar base de datos
@@ -126,38 +137,6 @@ print( get_all_values() )
 
 
 
-def insert_tag( tag, lang, text ):
-    '''
-    Agregar texto a la base de datos.
-    
-    Parametros:
-        tag = str, etiqueta
-        lang = str, idioma donde se guardara el text
-        text = str, valor de etiqueta
-    '''
-    sql_statement = (
-        f'INSERT INTO {db_name}({columns[1]}, {lang})\n'
-        f'VALUES("{tag}", "{text}")'
-    )
-    
-    # Ejecutar instrucción
-    try:
-        with sqlite3.connect(db_full_path) as conn:
-            cur = conn.cursor()
-            cur.execute( sql_statement )
-            print('tag added successfully')
-    except sqlite3.OperationalError as e:
-        print(e)
-    
-    return sql_statement
-
-#print( insert_tag( 'pc','es', 'Computadora personal' ) )
-#print( insert_tag( 'hello-w', 'en', 'Hello World' ) )
-#print( insert_tag( 'text', 'es', 'Texto' ) )
-
-
-
-
 def update_tag_text( tag, lang, text  ):
     # Instrucción para actualizar datos
     sql_statement = (
@@ -169,7 +148,7 @@ def update_tag_text( tag, lang, text  ):
         with sqlite3.connect(db_full_path) as conn:
             cur = conn.cursor()
             cur.execute( sql_statement )
-            print("changes completed")
+            print(f'Update of the "{tag}" tag is complete')
     except sqlite3.OperationalError as e:
         print(e)
     
@@ -183,8 +162,80 @@ def update_tag_text( tag, lang, text  ):
 
 
 
-def current_language():
-    return 'en'
+filter_abc = 'abcdefghijklmnñopqrstuvwxyz'
+filter_numbers = '1234567890'
+filter_for_tag = filter_abc+filter_numbers + '-_'
+def insert_tag( tag, lang, text ):
+    '''
+    Agregar texto a la base de datos.
+    Si ya existe el tag, no agregar absolutamente nada.
+    
+    Parametros:
+        tag = str, etiqueta
+        lang = str, idioma donde se guardara el text
+        text = str, valor de etiqueta
+    
+    # El tag no permitira saltos de lineas.
+    '''
+    # Etiqueta
+    # Determinar si el texto esta bueno o no.
+    tag = ignore_text_filter( tag, filter_for_tag )
+    
+    if tag == None or tag == '':
+        good_tag = False
+    else:
+        good_tag = True
+    
+    
+    # Determinar si el tag no existe en la tabla languages.db
+    tag_not_exists = True
+
+    column_value = get_all_values()
+    for list_value in column_value:
+        if tag == list_value[1]:
+            tag_not_exists = False
+            break
+    
+    
+    # Intentar actualizar tag
+    if tag_not_exists == False and good_tag == True:
+        print( f'The tag "{tag}" exists.' )
+        print( f'Trying to upgrade the tag "{tag}"' )
+        update_tag_text(tag, lang, text)
+    
+    
+    # Instrucción
+    sql_statement = (
+        f'INSERT INTO {db_name}({columns[1]}, {lang})\n'
+        f'VALUES("{tag}", "{text}")'
+    )
+
+    if tag_not_exists == True and good_tag == True:
+        # Ejecutar instrucción
+        try:
+            with sqlite3.connect(db_full_path) as conn:
+                cur = conn.cursor()
+                cur.execute( sql_statement )
+                print(f'The tag "{tag}" inserted successfully')
+        except sqlite3.OperationalError as e:
+            print(e)
+    
+    
+    # Devolver instrucción
+    return sql_statement
+
+print( insert_tag( 'pc','es', 'Computadora personal' ) )
+print( insert_tag( 'hello-w', 'en', 'Hello World' ) )
+print( insert_tag( 'text', 'es', 'Texto' ) )
+
+
+
+
+def delete_id( number ):
+    sql_statement = (
+        f'DELETE FROM table_name\n'
+        f'WHERE {columns[0]} = {number}'
+    )
 
 
 
