@@ -33,9 +33,16 @@ for i in languages:
     columns.append(i)
     
 
+# Filtros
+filter_abc = 'abcdefghijklmnñopqrstuvwxyz'
+filter_numbers = '1234567890'
+filter_for_tag = filter_abc+filter_numbers + '-_'
+filter_for_lang = filter_abc+filter_numbers
+    
 
 
-def current_language():
+
+def system_language():
     '''
     Obtener el lenguaje default del os. O el lenguaje establecido por el usuario.
     '''
@@ -121,11 +128,90 @@ def create_table_language():
     
     # Texto a devolver
     return text_return
+    
+
+    
+
+def set_lang( lang ):
+    '''
+    Establecer lenguage
+    '''
+    # Texto de lenguaje
+    lang = ignore_text_filter( lang.lower(), filter_for_lang )
+    
+    # Determinar si el texto esta bueno o no.
+    if lang == None or lang == '':
+        good_lang = False
+    else:
+        good_lang = True
+    
+    
+    # Instrucción
+    sql_statement = (
+        f'INSERT OR IGNORE INTO {name_table_config} ({columns_config[0]}, {columns_config[1]})\n'
+        f'VALUES(1, "{lang}")'
+    )
+
+    # Ejecutar instrucción | Establcer lenguaje
+    if good_lang == True:
+        print( f'The estructure of text "{lang}" is correct.' )
+        try:
+            with sqlite3.connect(db_full_path) as conn:
+                cur = conn.cursor()
+                cur.execute( sql_statement )
+                conn.commit()
+                print(f'The language "{lang}" inserted successfully')
+        except sqlite3.OperationalError as e:
+            print(e)
+    else:
+        print( f'The estructure of text "{lang}" is incorrect.' )
+    
+    
+    # Devolver instrucción
+    return sql_statement
 
 
 
 
-def get_column_names():
+def get_lang():
+    '''
+    Obtener el lenguaje almacenado en la tabla config.
+    
+    Situaciones a tener en cuenta
+    1. Si no hay nadota "", None o no hay 1nada en la tabla. Devuelve el lenguaje default.
+    2. Si esta el texto "default", devolver el langueje defualt.
+    
+    Si no pasa las dos situaciones anteriores, devolver lo indicado en la tabla config.
+    
+    return string
+    '''
+    sql_statement = f'SELECT {columns_config[1]} FROM {name_table_config}'
+    #print(sql_statement)
+    
+    
+    # Ejecutar instrucción
+    text = None
+    try:
+        with sqlite3.connect(db_full_path) as conn:
+            cur = conn.cursor()
+            cur.execute( sql_statement )
+            text = cur.fetchone()[0]
+    except sqlite3.OperationalError as e:
+        print(e)
+    
+    # Determinar que el texto esta bueno
+    if text != None:
+        if text == 'default':
+            text = system_language()
+    
+    # Devolver
+    return text
+
+
+
+
+
+def get_column_name():
     '''
     Obtener los nombres de las columnas
     '''
@@ -141,16 +227,25 @@ def get_column_names():
             return column_names
     except sqlite3.OperationalError as e:
         print(e)
+        
+
+
+
+def get_available_lang():
+    '''
+    Devolver todos los lenguajes disponibles
+    '''
+    return get_column_name()[2:] # Ignorar los dos primeros indices. Serian languageId y tag
 
 
 
 
-def get_all_values():
+def get_all_column_value():
     '''
     Obtener todos los valores de las columnas.
     '''
     # Obtener nombres de todas las columnas
-    columns = get_column_names()
+    columns = get_column_name()
     
     # Establecer comando para obtener todos los valores de las columnas
     sql_statement = 'SELECT'
@@ -200,9 +295,6 @@ def update_tag_text( tag, lang, text  ):
 
 
 
-filter_abc = 'abcdefghijklmnñopqrstuvwxyz'
-filter_numbers = '1234567890'
-filter_for_tag = filter_abc+filter_numbers + '-_'
 def insert_tag( tag, lang, text ):
     '''
     Agregar texto a la base de datos.
@@ -231,7 +323,7 @@ def insert_tag( tag, lang, text ):
     # Determinar si el tag no existe en la tabla languages.db
     tag_not_exists = True
 
-    column_value = get_all_values()
+    column_value = get_all_column_value()
     for list_value in column_value:
         if tag == list_value[1]:
             tag_not_exists = False
@@ -281,7 +373,7 @@ def delete_tag( tag ):
     )
     
     # Determinar que existe el tag
-    list_value = get_all_values()
+    list_value = get_all_column_value()
     exists_tag = False
     for column_value in list_value:
         if column_value[1] == tag:
@@ -306,7 +398,7 @@ def delete_tag( tag ):
 
 
 
-def get_text( tag, lang=current_language()):
+def get_text( tag, lang=get_lang() ):
     '''
     Siempre devuelve un string.
     
@@ -363,82 +455,36 @@ def get_text( tag, lang=current_language()):
 
 
 
-filter_for_lang = filter_abc+filter_numbers
-def set_lang( lang ):
-    '''
-    Establecer lenguage
-    '''
-    # Texto de lenguaje
-    lang = ignore_text_filter( lang.lower(), filter_for_lang )
-    
-    # Determinar si el texto esta bueno o no.
-    if lang == None or lang == '':
-        good_lang = False
-    else:
-        good_lang = True
-    
-    
-    # Instrucción
-    sql_statement = (
-        f'INSERT OR IGNORE INTO {name_table_config} ({columns_config[0]}, {columns_config[1]})\n'
-        f'VALUES(1, "{lang}")'
-    )
-
-    # Ejecutar instrucción | Establcer lenguaje
-    if good_lang == True:
-        print( f'The estructure of text "{lang}" is correct.' )
-        try:
-            with sqlite3.connect(db_full_path) as conn:
-                cur = conn.cursor()
-                cur.execute( sql_statement )
-                conn.commit()
-                print(f'The language "{lang}" inserted successfully')
-        except sqlite3.OperationalError as e:
-            print(e)
-    else:
-        print( f'The estructure of text "{lang}" is incorrect.' )
-    
-    
-    # Devolver instrucción
-    return sql_statement
-
-
-
-
-def get_lang():
-    '''
-    Obtener el lenguaje almacenado en la tabla config.
-    
-    Situaciones a tener en cuenta
-    1. Si no hay nadota "", None o no hay 1nada en la tabla. Devuelve el lenguaje default.
-    2. Si esta el texto "default", devolver el langueje defualt.
-    
-    Si no pasa las dos situaciones anteriores, devolver lo indicado en la tabla config.
-    '''
-    pass
-
-
-
-
 # Crear tabla
-print( create_table_language() )
+print( 'Creating data base' )
+print( create_table_language() + '\n\n' )
+
+# Obtener lenguajes disponibles
+print( 'Available languages: ' )
+print( f'{get_available_lang()}\n\n' )
 
 # Inicializar configuración
-print( set_lang( 'default' ) )
+print( 'Init config' )
+print( set_lang( 'default' ) + '\n\n' )
 
-#print( get_column_names() )
-#print( get_all_values() )
+# Obtener el lenguaje actual
+print( 'Getting current lang' )
+print( get_lang() + '\n\n' )
+
+
+#print( get_column_name() )
+#print( get_all_column_value() )
 
 #print( insert_tag( 'pc','es', 'Computadora personal' ) )
 #print( insert_tag( 'hello-w', 'en', 'Hello World' ) )
 #print( insert_tag( 'text', 'es', 'Texto' ) )
-print( insert_tag( 'see-text', 'en', 'See text' ) )
+#print( insert_tag( 'see-text', 'en', 'See text' ) )
 
 #print( update_tag_text('pc', 'en', 'Personal Computer') )
 #print( update_tag_text('pc', 'es', 'Computadora Personal') )
 #print( update_tag_text('hello-w', 'es', 'Hola Mundo') )
 #print( update_tag_text('text', 'en', 'Text') )
-#print( update_tag( 'see-text', 'es', 'Ver texto' ) )
+#print( update_tag_text( 'see-text', 'es', 'Ver texto' ) )
 
 #print( delete_tag('cocos') )
 #print( delete_tag('text') )
