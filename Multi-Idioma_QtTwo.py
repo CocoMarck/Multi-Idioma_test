@@ -52,15 +52,32 @@ class Window_Main(QWidget):
         self.button_remove = QPushButton( get_text('remove') )
         hbox.addWidget( self.button_remove )
         
+        # Actualizar texto de widgets contenidos en la ventana main
+        self.update()
+        
         # Fin, Mostrar todo
         self.show()
         
+    def update(self):
+        self.button_lang.setText( get_text('lang') )
+        self.button_see_text.setText( get_text('see-text') )
+        self.label.setText( get_text('add-or-remove-tag') )
+        self.button_add.setText( get_text('add') )
+        self.button_remove.setText( get_text('rm') )
+    
+    def set_lang():
+        # Actualizar texto de widgets contenidos en la ventana main
+        self.update()
+        
+        
     def add_or_remove_tag(self):
         print()
+        self.update()
+
     
     def see_text(self):
-        list_column = get_column_names()
-        list_value = get_all_values()
+        list_column = get_column_name()
+        list_value = get_all_column_value()
         text = ''
         
         for x in list_value:
@@ -72,7 +89,7 @@ class Window_Main(QWidget):
             parent=self,
             text=text,
             edit=False,
-            size=nums_win_textedit
+            size=nums_win_textedit,
         ).exec()
 
 
