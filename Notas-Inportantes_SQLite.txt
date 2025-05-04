@@ -1,2 +1,2 @@
-Las comillas simples, son solo para indicar string.
-Las comillas dobles, son indican columnas y string.
+Las comillas simples, solo usar para indicar string.
+Las comillas dobles, solo usar para indicar columnas.
