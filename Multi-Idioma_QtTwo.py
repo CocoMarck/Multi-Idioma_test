@@ -8,7 +8,10 @@ from PyQt6.QtWidgets import (
     QComboBox,
     QLineEdit,
     QVBoxLayout,
-    QHBoxLayout
+    QHBoxLayout,
+    QTableWidget,
+    QTableWidgetItem,
+    QAbstractItemView
 )
 
 from data.language import *
@@ -82,6 +85,28 @@ class Window_Main(QWidget):
         # VBox, separacion
         vbox_main.addStretch()
         
+        
+        
+
+        # Tabla
+        hbox = QHBoxLayout()
+        vbox_main.addLayout( hbox )
+
+        hbox.addStretch()
+        self.label_table = QLabel()
+        hbox.addWidget( self.label_table )
+        hbox.addStretch()
+        
+        self.table = QTableWidget(self)
+        self.table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+        vbox_main.addWidget(self.table)
+        
+        
+        
+        
+        # VBox, separacion
+        #vbox_main.addStretch()
+        
 
 
 
@@ -91,25 +116,25 @@ class Window_Main(QWidget):
         vbox_main.addWidget(self.button_see_text)
         
         # Actualizar texto de widgets contenidos en la ventana main
-        self.start_combobox()
         self.update()
         
         # Fin, Mostrar todo
         self.show()
         
-    def set_text(self):
+    def init_text(self):
         '''
         Establecer el texto de todos los widgets que necesitan texto.
         '''
-        self.button_see_text.setText( get_text('see-text', get_lang()) )
-        self.button_rm_tag.setText( get_text('rm-tag', get_lang()) )
-        self.button_add_tag.setText( get_text('add-tag', get_lang()) )
-        self.label_set_lang.setText( get_text('set-lang', get_lang()) )
-        self.label_tag.setText( get_text('tag', get_lang()) )
-        self.label_tag_value.setText( get_text('value', get_lang()) )
-        self.setWindowTitle( get_text('app', get_lang()) )
+        self.button_see_text.setText( get_text('see-text') )
+        self.button_rm_tag.setText( get_text('rm-tag') )
+        self.button_add_tag.setText( get_text('add-tag') )
+        self.label_set_lang.setText( get_text('set-lang') )
+        self.label_tag.setText( get_text('tag') )
+        self.label_tag_value.setText( get_text('value') )
+        self.label_table.setText( get_text('db') )
+        self.setWindowTitle( get_text('app') )
     
-    def start_combobox(self):
+    def init_combobox(self):
         '''
         Establecer opciones a los combobox.
         '''
@@ -128,22 +153,38 @@ class Window_Main(QWidget):
         for tag in get_all_tag():
             print(tag)
             self.combobox_tag.addItem(tag)
+    
+    def init_table(self):
+        self.table.clear()
+        column_name = get_column_name()
+        column_value_list = get_all_column_value()
+        self.table.setColumnCount( len(column_name) )
+        self.table.setHorizontalHeaderLabels( column_name )
+        self.table.setRowCount( len(column_value_list) )
+        row_number = 0
+        for column_value in column_value_list:
+            for index in range(0, len(column_value) ):
+                self.table.setItem(
+                    row_number, index, QTableWidgetItem( str(column_value[index]) )
+                )
+            row_number += 1
 
         
     def update(self):
         '''
         Actualizar todos los datos posibles.
         '''
-        self.set_text()
-        self.start_combobox()
+        self.init_text()
+        self.init_combobox()
+        self.init_table()
 
     
     def set_lang(self):
         # Actualizar texto de widgets contenidos en la ventana main
         print( self.combobox_lang.currentText() )
         print( update_lang( self.combobox_lang.currentText() ) )
-        self.set_text()
-        self.update()
+        self.init_text()
+        self.init_combobox()
     
     def add_tag(self):
         print( self.combobox_lang.currentText() )
