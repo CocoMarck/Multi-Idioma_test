@@ -11,7 +11,11 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QTableWidget,
     QTableWidgetItem,
-    QAbstractItemView
+    QAbstractItemView,
+    QMessageBox,
+
+    QSpacerItem,
+    QSizePolicy
 )
 
 from data.language import *
@@ -40,8 +44,6 @@ class Window_Main(QWidget):
         hbox.addWidget(self.combobox_lang)
 
 
-
-
         # Seccion vertical, Boton agregar tag
         hbox = QHBoxLayout()
         vbox_main.addLayout(hbox)
@@ -65,13 +67,12 @@ class Window_Main(QWidget):
         hbox.addWidget( self.entry_tag_value )
         
 
-
-
         # Sección vertical Boton remover
         hbox = QHBoxLayout()
         vbox_main.addLayout(hbox)
         
         self.button_rm_tag = QPushButton( )
+        self.button_rm_tag.clicked.connect( self.remove_tag )
         hbox.addWidget( self.button_rm_tag )
         
         hbox.addStretch()
@@ -79,13 +80,25 @@ class Window_Main(QWidget):
         self.combobox_tag = QComboBox( )
         hbox.addWidget( self.combobox_tag )
         
-
-
+        
+        # Sección vertical boton obtener tag.
+        hbox = QHBoxLayout()
+        vbox_main.addLayout(hbox)
+        
+        self.button_get_text = QPushButton()
+        self.button_get_text.clicked.connect( self.get_text )
+        hbox.addWidget(self.button_get_text)
+        
+        hbox.addStretch()
+        
+        self.label_get_text_tag = QLabel( )
+        self.entry_get_text_tag = QLineEdit( )
+        hbox.addWidget( self.label_get_text_tag )
+        hbox.addWidget(self.entry_get_text_tag)
+        
 
         # VBox, separacion
-        vbox_main.addStretch()
-        
-        
+        #vbox_main.addStretch()
         
 
         # Tabla
@@ -96,18 +109,16 @@ class Window_Main(QWidget):
         self.label_table = QLabel()
         hbox.addWidget( self.label_table )
         hbox.addStretch()
-        
+
         self.table = QTableWidget(self)
-        self.table.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
+        self.table.setEditTriggers( QAbstractItemView.EditTrigger.NoEditTriggers )
+        #self.table.setMinimumSize(636, 300) # Ajusta el tamaño según lo necesites
+        #self.table.setSizePolicy( QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding )
         vbox_main.addWidget(self.table)
-        
-        
         
         
         # VBox, separacion
         #vbox_main.addStretch()
-        
-
 
 
         # Seccion vertical | Ver texto
@@ -128,10 +139,14 @@ class Window_Main(QWidget):
         self.button_see_text.setText( get_text('see-text') )
         self.button_rm_tag.setText( get_text('rm-tag') )
         self.button_add_tag.setText( get_text('add-tag') )
+        self.button_get_text.setText( get_text('get-text') )
+        
         self.label_set_lang.setText( get_text('set-lang') )
         self.label_tag.setText( get_text('tag') )
         self.label_tag_value.setText( get_text('value') )
         self.label_table.setText( get_text('db') )
+        self.label_get_text_tag.setText( get_text('tag') )
+        
         self.setWindowTitle( get_text('app') )
     
     def init_combobox(self):
@@ -197,6 +212,56 @@ class Window_Main(QWidget):
         self.entry_tag.clear()
         self.entry_tag_value.clear()
         self.update()
+    
+    def remove_tag(self):
+        # Tag a eliminar
+        tag = self.combobox_tag.currentText()
+        message = (
+            f'{get_text("quest-you-sure")}\n'
+            f'{get_text("it-be-rm")}: {tag}'
+        )
+        
+        # Preguntar si estas seguro
+        input_quest = QMessageBox.question(
+            self,
+            get_text('rm-tag'),
+            message,
+            QMessageBox.StandardButton.Yes |
+            QMessageBox.StandardButton.No
+        )
+        if input_quest == QMessageBox.StandardButton.Yes:
+            # Eliminar tag
+            delete_tag( tag )
+            
+            # Restablecer contador en la tabla.
+            reindex_table_language()
+            
+            self.update()
+        
+        
+    def get_text(self):
+        # Obtener texto
+        text = get_text( self.entry_get_text_tag.text(), self.combobox_lang.currentText() )
+
+        if text != '':
+            # Mostrar mensaje
+            print(text)
+            
+            QMessageBox.information(
+                self,
+                get_text('text'), # titulo
+                text # Texto de contenido
+            )
+        '''
+        else:
+            # Error, datos malos
+            QMessageBox.critical(
+                self,
+                get_text('error'),
+                get_text('bad-params')
+            )
+        '''
+        
 
     
     def see_text(self):

@@ -260,7 +260,6 @@ def get_lang():
 
 
 
-
 def get_column_name():
     '''
     Obtener todos los nombres de las columnas de la tabla language
@@ -281,15 +280,16 @@ def get_column_name():
 
 
 
-def get_available_lang():
+def get_available_lang( return_default=True ):
     '''
     Devolver todos los lenguajes disponibles, en la tabla language
     '''
     return_list = get_column_name()[2:] 
     # Ignorar los dos primeros indices. Serian languageId y tag
 
-    return_list.append( default_config )
-    # Agregar a la lista, la opcion default.
+    if return_default == True:
+        return_list.append( default_config )
+        # Agregar a la lista, la opcion default.
 
     return return_list
 
@@ -383,12 +383,12 @@ def insert_tag( tag, lang, text ):
     El tag tiene que ser con puras letras minusculas.
     El tag tiene puede tener caracteres del abecedario (abc) y; "-" "_"
     '''
-    # Establecer lang defualt
+    # Establecer lang default
     if lang == default_config: lang = system_language()
     
     # Etiqueta
     # Determinar si el texto esta bueno o no.
-    tag = ignore_text_filter( tag, filter_for_tag )
+    tag = ignore_text_filter( tag.lower(), filter_for_tag )
     
     if tag == None or tag == '':
         good_tag = False
@@ -438,6 +438,54 @@ def insert_tag( tag, lang, text ):
 
 
 
+def reindex_table_language( ):
+    '''
+    Restablecer id's, basado en los id totales de la tabla language.db
+    '''
+    # Establecer en lenguajes texto
+    columns_text = f'{columns[1]}, '
+    for i in get_available_lang( False ):
+        columns_text += f"{i}, "
+    columns_text = columns_text[:-2]
+    
+
+    # Insturcciónes a ejecutar
+    name_temp_table = 'temp_table'
+
+    sql_statements = [
+    (
+    f"CREATE TEMP TABLE {name_temp_table} AS SELECT {columns_text}\n"
+    f"FROM {db_name} ORDER BY {columns[0]};"
+    ),
+    f"DELETE FROM {db_name};",
+    f"DELETE FROM SQLITE_SEQUENCE WHERE name = '{db_name}';",
+    f"INSERT INTO language ({columns_text}) SELECT {columns_text} FROM {name_temp_table};",
+    f"DROP TABLE {name_temp_table};"
+    ]
+    
+    # Ejecutar instrucciones
+    with sqlite3.connect(db_full_path) as conn:
+        cur = conn.cursor()
+        for statement in sql_statements:
+            try:
+                cur.execute( statement )
+                print(f'Pass:\n{statement}')
+            except:
+                print(f'Error: {e}\n{statement}')
+        conn.commit()
+
+        
+    # Instrucciónes a retornar.
+    sql_statement = ''
+    for x in sql_statements:
+        sql_statement += x + '\n'
+    sql_statement = sql_statement[:-1]
+
+    return sql_statement
+
+
+
+
 def delete_tag( tag ):
     '''
     Eliminación de tag.
@@ -476,7 +524,7 @@ def delete_tag( tag ):
 
 
 
-def get_text( tag, lang=get_lang() ):
+def get_text( tag, lang=None ):
     # Recordatorio: Ponerle un WHERE, al sql_statement, para evitar hacer un bucle de busqueda.
     '''
     Siempre devuelve un string.
@@ -489,6 +537,10 @@ def get_text( tag, lang=get_lang() ):
     
     return string
     '''
+    # Obtener lenguaje seleccionado en la base de datos.
+    if lang == None:
+        lang = get_lang()
+    
     # Establecer lang defualt
     if lang == default_config: lang = system_language()
     
@@ -591,3 +643,4 @@ print(
 
 #print( get_text('hello-w', 'chinote') )
 print( get_text('tagote', 'chinote') )
+print( reindex_table_language() )
