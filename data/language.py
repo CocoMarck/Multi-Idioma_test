@@ -180,7 +180,7 @@ def update_lang( lang ):
 
 def set_lang( lang ):
     '''
-    Establecer lenguage.
+    Establecer lenguage. Si ya esta establecido, lo remplaza.
     
     Filtros del texto:
     - El texto sere en minusculas
@@ -200,7 +200,8 @@ def set_lang( lang ):
     # Instrucción
     sql_statement = (
         f"INSERT OR IGNORE INTO {name_table_config} ({columns_config[0]}, {columns_config[1]})\n"
-        f"VALUES(1, '{lang}')"
+        f"VALUES(1, '{lang}')\n"
+        f"ON CONFLICT({columns_config[0]}) DO UPDATE SET {columns_config[1]}='{lang}';"
     )
 
     # Ejecutar instrucción | Establcer lenguaje
