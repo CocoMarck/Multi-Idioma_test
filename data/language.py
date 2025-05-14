@@ -547,7 +547,12 @@ def get_text( tag, lang=None ):
     
     # Instrucción, seleccionar resultado de columnas "text" y "lang"
     # lang puede ser = en, es, pt. etc....
-    sql_statement = f'SELECT {columns[1]}, {lang} FROM {db_name}'
+    sql_statement = (
+        f'''
+SELECT {lang} FROM {db_name}
+WHERE {columns[1]} = '{tag}'
+        '''
+    )
 
     # Variables: String/Texto a retornar : Bool texto obtenido o no
     text_return = tag
@@ -558,13 +563,12 @@ def get_text( tag, lang=None ):
         with sqlite3.connect(db_full_path) as conn:
             cur = conn.cursor()
             cur.execute( sql_statement )
-            list_textlang = cur.fetchall()
-            
-            for item in list_textlang:
-                if len(item) == 2:
-                    if (tag == item[0]) and (item[1] != None):
-                        text_return = item[1]
+            list_text = cur.fetchall()
+            for text in list_text:
+                for i in text:
+                    if isinstance(i, str):
                         text_obtained = True
+                        text_return = i
 
             
     except sqlite3.OperationalError as e:
