@@ -56,10 +56,10 @@ def system_language():
     lang_default = lang_default[0]
     
     # Para windows
-    #if get_system() == 'win':
-    #    import pycountry
-    #    object_country = pycountry.languages.get(name=lang_default)
-    #    lang_default = object_country.alpha_2
+    if get_system() == 'win':
+        import pycountry
+        object_country = pycountry.languages.get(name=lang_default)
+        lang_default = object_country.alpha_2
     
     return lang_default
 
@@ -593,59 +593,38 @@ WHERE {columns[1]} = '{tag}'
 
 
 
+def language_init():
+    try:
+        # Crear tabla
+        print( 'Creating data base' )
+        print( create_table_language() + '\n\n' )
 
-# Crear tabla
-print( 'Creating data base' )
-print( create_table_language() + '\n\n' )
+        # Obtener lenguajes disponibles
+        print( 'Available languages: ' )
+        print( f'{get_available_lang()}\n\n' )
 
-# Obtener lenguajes disponibles
-print( 'Available languages: ' )
-print( f'{get_available_lang()}\n\n' )
+        # Inicializar configuración
+        print( 'Init config' )
+        #print( set_lang( 'default' ) + '\n\n' )
 
-# Inicializar configuración
-print( 'Init config' )
-#print( set_lang( 'default' ) + '\n\n' )
-
-# Obtener el lenguaje actual
-print( 'Getting current lang' )
-print( get_lang() + '\n\n' )
-
-
-# Filtros del los textos
-print(
-    'Filters for the texts\n'
-    f'- For the tag: {filter_for_tag}\n'
-    f'- For the language: {filter_for_lang}\n\n'
-)
+        # Obtener el lenguaje actual
+        print( 'Getting current lang' )
+        print( get_lang() + '\n\n' )
 
 
-#print( get_column_name() )
-#print( get_all_column_value() )
+        # Filtros del los textos
+        print(
+            'Filters for the texts\n'
+            f'- For the tag: {filter_for_tag}\n'
+            f'- For the language: {filter_for_lang}\n\n'
+        )
 
-#print( insert_tag( 'pc','es', 'Computadora personal' ) )
-#print( insert_tag( 'hello-w', 'en', 'Hello World' ) )
-#print( insert_tag( 'text', 'es', 'Texto' ) )
-#print( insert_tag( 'see-text', 'en', 'See text' ) )
+        # Acomodar id's.
+        print( reindex_table_language() )
+        
+        return True
+    except:
+        print('Error')
+        return False
 
-#print( update_tag_text('pc', 'en', 'Personal Computer') )
-#print( update_tag_text('pc', 'es', 'Computadora Personal') )
-#print( update_tag_text('hello-w', 'es', 'Hola Mundo') )
-#print( update_tag_text('text', 'en', 'Text') )
-#print( update_tag_text( 'see-text', 'es', 'Ver texto' ) )
-
-#print( delete_tag('cocos') )
-#print( delete_tag('text') )
-
-#print( get_text('hello-w') )
-
-#print( get_text('text', 'es') )
-#print( get_text('text', 'pt') )
-
-#print( get_text('pc') )
-
-#print( get_text('pc', 'pt') )
-#print( get_text('pc', 'en') )
-
-#print( get_text('hello-w', 'chinote') )
-print( get_text('tagote', 'chinote') )
-print( reindex_table_language() )
+language_init()
