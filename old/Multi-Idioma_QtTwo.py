@@ -197,7 +197,7 @@ class Window_Main(QWidget):
     def set_lang(self):
         # Actualizar texto de widgets contenidos en la ventana main
         print( self.combobox_lang.currentText() )
-        print( update_lang( self.combobox_lang.currentText() ) )
+        print( set_lang( self.combobox_lang.currentText() ) )
         self.init_text()
         self.init_combobox()
     

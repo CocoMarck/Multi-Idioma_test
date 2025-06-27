@@ -14,8 +14,8 @@ num_font = get_display_number(divisor=120)
 num_space_padding = int(num_font/3)
 
 nums_win_main = [
-    get_display_number(multipler=0.2, based='width'),
-    get_display_number(multipler=0.15, based='height')
+    get_display_number(multipler=0.4, based='width'),
+    get_display_number(multipler=0.4, based='height')
 ]
 
 

@@ -594,6 +594,10 @@ WHERE {columns[1]} = '{tag}'
 
 
 def language_init():
+    '''
+    Iniciar todo lo necesario para establecer los datos.
+    Probar funciones, que si jalan, es porque esta funcionando bien el programa.
+    '''
     try:
         # Crear tabla
         print( 'Creating data base' )
