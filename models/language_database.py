@@ -1,7 +1,7 @@
-from .standard_database import StandardDataBase
+from .standard_database import StandardDatabase
 from .database_names import TABLE_LANGUAGE_NAMES, TABLE_CONFIG_NAMES
 
-class LanguageDataBase( StandardDataBase ):
+class LanguageDatabase( StandardDatabase ):
     def __init__(self):
         super().__init__( name_database="language", name_dir_data="data"  )
         

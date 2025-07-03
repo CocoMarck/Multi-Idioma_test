@@ -8,16 +8,16 @@ from .logging_controller import LoggingController
 
 class TableController( LoggingController ):
     def __init__( 
-        self, table: models.StandardTable, verbose: bool=True, return_message: bool=False,
-        log_level: str="warning", save_log: bool=True
+        self, table: models.StandardTable, verbose: bool=True, log_level: str="warning", save_log: bool=True,
+        only_the_value: bool=True
     ):
         self.table = table
         self.name = table.table
         
         # Log
         super().__init__( 
-            name=f"table_{self.name.lower()}", verbose=verbose, return_message=return_message,
-            log_level=log_level, save_log=save_log
+            name=f"table_{self.name.lower()}", verbose=verbose, log_level=log_level, save_log=save_log,
+            only_the_value=only_the_value
         )
     
         

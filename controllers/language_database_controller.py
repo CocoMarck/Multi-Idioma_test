@@ -1,9 +1,8 @@
-from models import LanguageDataBase
-from .database_controller import DataBaseController
+from models import LanguageDatabase
+from .database_controller import DatabaseController
 
-class LanguageDataBaseController( DataBaseController ):
+class LanguageDatabaseController( DatabaseController ):
     def __init__(self, log_level="warning"):
         super().__init__( 
-            database=LanguageDataBase(), verbose=True, return_message=False, save_log=True,
-            log_level=log_level
+            database=LanguageDatabase(), verbose=True, save_log=True, log_level=log_level, only_the_value=True
         )
