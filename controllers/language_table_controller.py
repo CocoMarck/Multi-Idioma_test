@@ -31,7 +31,8 @@ class LanguageTableController( TableController ):
         return ignore_text_filter( text.lower(), FILTER_FOR_TAG )
     
     def language_filter( self, text:str ):
-        return ignore_text_filter( text.lower(), FILTER_FOR_LANG )
+        return text
+        #return ignore_text_filter( text.lower(), FILTER_FOR_LANG )
         
     
     # Funciones chidas

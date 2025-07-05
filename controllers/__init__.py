@@ -2,3 +2,4 @@ from .database_controller import DatabaseController
 from .logging_controller import LoggingController
 from .language_database_controller import LanguageDatabaseController
 from .language_table_controller import LanguageTableController
+from .language_config_table_controller import LanguageConfigTableController

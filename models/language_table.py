@@ -1,14 +1,14 @@
 from .standard_table import StandardTable
 from .language_database import LanguageDatabase
 
-from .database_names import TABLE_LANGUAGE_NAMES
+from .database_names import LANGUAGE_TABLE_NAMES
 
 
 
 
 class LanguageTable( StandardTable ):
     def __init__(self):
-        super().__init__( database=LanguageDatabase(), table=TABLE_LANGUAGE_NAMES['table'] )
+        super().__init__( database=LanguageDatabase(), table=LANGUAGE_TABLE_NAMES['table'] )
     
 
     def select_tag(self, tag: str, language: str) -> (tuple, str):
@@ -16,8 +16,8 @@ class LanguageTable( StandardTable ):
         Instrucción obtener texto de etiqueta
         '''
         sql_statement = (
-            f"SELECT {TABLE_LANGUAGE_NAMES[language]} FROM {self.table} "
-            f"WHERE {TABLE_LANGUAGE_NAMES['tag']}='{tag}';"
+            f"SELECT {LANGUAGE_TABLE_NAMES[language]} FROM {self.table} "
+            f"WHERE {LANGUAGE_TABLE_NAMES['tag']}='{tag}';"
         )
 
         return self.execute_and_return_values(
@@ -31,7 +31,7 @@ class LanguageTable( StandardTable ):
         '''
         sql_statement = (
             f"INSERT OR IGNORE INTO {self.table} "
-            f"({TABLE_LANGUAGE_NAMES['tag']}, {TABLE_LANGUAGE_NAMES[language]}) "
+            f"({LANGUAGE_TABLE_NAMES['tag']}, {LANGUAGE_TABLE_NAMES[language]}) "
             f"VALUES('{tag}', '{text}');"
         )
         
@@ -45,7 +45,7 @@ class LanguageTable( StandardTable ):
         Instrucción actualizar etiqueta
         '''
         sql_statement = (
-            f"UPDATE {self.table} SET {language}='{text}' WHERE {TABLE_LANGUAGE_NAMES['tag']}='{tag}';"
+            f"UPDATE {self.table} SET {language}='{text}' WHERE {LANGUAGE_TABLE_NAMES['tag']}='{tag}';"
         )
         
         return self.execute_and_return_values(
@@ -57,4 +57,4 @@ class LanguageTable( StandardTable ):
         '''
         Intrucción eliminar etiqueta
         '''
-        return self.delete_row_by_column_value( column=TABLE_LANGUAGE_NAMES['id'], value=languageId )
+        return self.delete_row_by_column_value( column=LANGUAGE_TABLE_NAMES['id'], value=languageId )

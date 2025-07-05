@@ -1,23 +1,33 @@
 from .standard_database import StandardDatabase
-from .database_names import TABLE_LANGUAGE_NAMES, TABLE_CONFIG_NAMES
+from .database_names import LANGUAGES, LANGUAGE_TABLE_NAMES, LANGUAGE_CONFIG_TABLE_NAMES
 
 class LanguageDatabase( StandardDatabase ):
     def __init__(self):
         super().__init__( name_database="language", name_dir_data="data"  )
         
-
+        # Campos languages
+        language_table_fields = [
+            [ LANGUAGE_TABLE_NAMES['id'], 'INTEGER', 'PRIMARY KEY AUTOINCREMENT' ],
+            [ LANGUAGE_TABLE_NAMES['tag'], 'TEXT', 'UNIQUE' ],
+        ]
+        for key in LANGUAGES.keys():
+            language_table_fields.append( [ LANGUAGES[key], 'TEXT' ] )
+        
+        # Diccionario de tablas a crear
         self.dictionary_of_tables = {
-            TABLE_LANGUAGE_NAMES['table'] : [
-                [ TABLE_LANGUAGE_NAMES['id'], 'integer', 'primary key autoincrement' ],
-                [ TABLE_LANGUAGE_NAMES['tag'], 'text', 'unique' ],
-                [ TABLE_LANGUAGE_NAMES['en'], 'text' ],
-                [ TABLE_LANGUAGE_NAMES['es'], 'text' ],
-                [ TABLE_LANGUAGE_NAMES['pt'], 'text' ],
-                [ TABLE_LANGUAGE_NAMES['ru'], 'text' ]
-            ],
+            LANGUAGE_TABLE_NAMES['table'] : language_table_fields,
 
-            TABLE_CONFIG_NAMES['table']: [
-                [ TABLE_CONFIG_NAMES['id'], 'integer', 'primary key autoincrement' ],
-                [ TABLE_CONFIG_NAMES['lang'], 'text' ]
+            LANGUAGE_CONFIG_TABLE_NAMES['table']: [
+                [ LANGUAGE_CONFIG_TABLE_NAMES['id'], 'INTEGER', 'PRIMARY KEY AUTOINCREMENT' ],
+                [ LANGUAGE_CONFIG_TABLE_NAMES['language'], 'TEXT' ]
             ]
         }
+        
+        # Instrucciones adicionales
+        self.instructions_after_creating_tables = [
+            (
+            f"INSERT OR IGNORE INTO {LANGUAGE_CONFIG_TABLE_NAMES['table']} "
+            f"({LANGUAGE_CONFIG_TABLE_NAMES['id']}, {LANGUAGE_CONFIG_TABLE_NAMES['language']}) "
+            f"VALUES(1, 'default');"
+            )
+        ]
