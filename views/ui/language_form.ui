@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <!-- Clase inicio -->
+ <class>language_form</class>
+
+ <widget class="QWidget" name="centralWidget">
+  
+  <!-- Tabla --->
+  <item>
+   <widget class="QTableWidget" name="table">
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+  </item>
+  
+ </widget>
+ 
+ <!-- Clase cierre -->
+ <resources/>
+ <connections/>
+</ui>

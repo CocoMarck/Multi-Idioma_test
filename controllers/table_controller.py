@@ -20,6 +20,14 @@ class TableController( LoggingController ):
             only_the_value=only_the_value
         )
     
+    
+    def structure_sql_message(self, message:str, sql_statement:str, commit:bool):
+        '''
+        Estructurar mensaje
+        '''
+        final_message = f"{message} | [SQL] {sql_statement} | commit={commit}"
+        return final_message
+    
         
     def get_all_columns(self):
         '''

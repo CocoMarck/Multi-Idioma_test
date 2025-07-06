@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LanguageApp</class>
+ 
+  <!-- Clase main Inicio -->
+ <widget class="QMainWindow" name="LanguageApp">
+ 
+  <!-- Menu -->
+  <widget class="QMenuBar" name="menubar">
+   <widget class="QMenu" name="menu_setting"></widget>
+   <addaction name="menu_setting"/>
+  </widget>
+
+  <widget class="QStatusBar" name="statusbar"/>
+ 
+  <!-- Widget central -->
+  <widget class="QWidget" name="centralwidget">
+   <!-- Pestañas -->
+   <widget class="QTabWidget" name="tab_widget">
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+   </widget>
+ 
+  </widget>
+ </widget>
+
+ <!-- Clase main cierre -->
+ <resources/>
+ <connections/>
+</ui>

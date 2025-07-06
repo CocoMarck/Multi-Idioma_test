@@ -8,6 +8,8 @@ LANGUAGES = {
     "ru": "ru"
 }
 DEFAULT_LANGUAGE = LANGUAGES['en']
+NAME_SYSTEM_LANGUAGE = "system"
+
 
 
 LANGUAGE_TABLE_NAMES = {

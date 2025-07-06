@@ -16,7 +16,7 @@ class LanguageTable( StandardTable ):
         Instrucción obtener texto de etiqueta
         '''
         sql_statement = (
-            f"SELECT {LANGUAGE_TABLE_NAMES[language]} FROM {self.table} "
+            f"SELECT {language} FROM {self.table} "
             f"WHERE {LANGUAGE_TABLE_NAMES['tag']}='{tag}';"
         )
 
@@ -31,7 +31,7 @@ class LanguageTable( StandardTable ):
         '''
         sql_statement = (
             f"INSERT OR IGNORE INTO {self.table} "
-            f"({LANGUAGE_TABLE_NAMES['tag']}, {LANGUAGE_TABLE_NAMES[language]}) "
+            f"({LANGUAGE_TABLE_NAMES['tag']}, {language}) "
             f"VALUES('{tag}', '{text}');"
         )
         
@@ -48,6 +48,19 @@ class LanguageTable( StandardTable ):
             f"UPDATE {self.table} SET {language}='{text}' WHERE {LANGUAGE_TABLE_NAMES['tag']}='{tag}';"
         )
         
+        return self.execute_and_return_values(
+            sql_statement=sql_statement, commit=True, return_type="bool"
+        )
+    
+    
+    def update_row(self, languageId: int, tag:str, language:str, text:str) -> (bool,str,bool):
+        '''
+        Actualizar fila completa. Util si un tag puesto no tienen sentido.
+        '''
+        sql_statement = (
+            f"UPDATE {self.table} SET {LANGUAGE_TABLE_NAMES['tag']}='{tag}', {language}='{text}' "
+            f"WHERE {LANGUAGE_TABLE_NAMES['id']}={languageId};"
+        )
         return self.execute_and_return_values(
             sql_statement=sql_statement, commit=True, return_type="bool"
         )
