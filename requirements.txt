@@ -1,3 +1,4 @@
-PyGtk
-PyQt
+PyQt6
+sqlite3
 screeninfo
+pycountry
