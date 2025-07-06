@@ -10,12 +10,12 @@ La inforamación almacenada esta en una base de datos `sqlite3`
 
 # Dependencias
 
-### Instalación con pip
+## Instalación con pip
 ```bash
 pip install PyQt6 pysqlite3 screeninfo pycountry
 ```
 
-# Instalación en Debian 12
+## Instalación en Debian 12
 ```bash
 python3 install sqlite3 python3-screeninfo python3-pycountry python3-pyqt6 pyqt-distutils
 ```
