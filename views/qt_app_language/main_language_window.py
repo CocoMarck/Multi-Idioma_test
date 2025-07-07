@@ -6,6 +6,7 @@ from PyQt6.QtCore import QRect
 
 from utils import ResourceLoader
 from utils.wrappers.language_wrapper import get_text
+from .language_form import LanguageForm
 
 import sys, os
 
@@ -32,5 +33,5 @@ class LanguageApp( QtWidgets.QMainWindow ):
         
         self.menu_setting.setTitle( get_text("setting") )
         
-        self.language_form = QtWidgets.QWidget()
+        self.language_form = LanguageForm()
         self.tab_widget.addTab( self.language_form, get_text("table") )

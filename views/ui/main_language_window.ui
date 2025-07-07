@@ -15,15 +15,22 @@
  
   <!-- Widget central -->
   <widget class="QWidget" name="centralwidget">
-   <!-- Pestañas -->
-   <widget class="QTabWidget" name="tab_widget">
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-   </widget>
+  
+   <layout class="QVBoxLayout" name="vbox_main"> <!-- Para centrar todo -->
+     
+    <item>
+     <!-- Pestañas -->
+     <widget class="QTabWidget" name="tab_widget">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+     </widget>
+    </item>
+  
+   </layout> <!-- Para centrar todo -->
  
   </widget>
  </widget>

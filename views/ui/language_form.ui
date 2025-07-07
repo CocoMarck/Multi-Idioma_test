@@ -1,19 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <!-- Clase inicio -->
- <class>language_form</class>
+ <class>LanguageForm</class>
 
  <widget class="QWidget" name="centralWidget">
+  <layout class="QVBoxLayout" name="vbox_main">
   
-  <!-- Tabla --->
-  <item>
-   <widget class="QTableWidget" name="table">
-    <property name="wordWrap">
-     <bool>true</bool>
-    </property>
-   </widget>
-  </item>
+   <!-- Formulario -->
+   <item>
+    <layout class="QFormLayout" name="form">
+
+     <item row="0" column="0">
+      <widget class="QLabel" name="id_label">
+       <property name="text"><string>Id</string></property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="id_enty">
+      </widget>
+     </item>
+     
+     <item row="1" column="0">
+      <widget class="QLabel" name="tag_label">
+       <property name="text"><string>Tag</string></property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="tag_entry">
+      </widget>
+     </item>
+     
+     <item row="2" column="0">
+      <widget class="QLabel" name="text_label">
+       <property name="text"><string>Texto</string></property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="text_entry">
+      </widget>
+     </item>
+
+    </layout>
+   </item>
+   
+   
+   <!-- Botones -->
+   <item>
+    <layout class="QHBoxLayout" name="button_hbox">
+
+     <item>
+      <widget class="QPushButton" name="save_button">
+       <property name="text"> <string>Guardar</string> </property>
+      </widget>
+     </item>
+     
+     <item>
+      <widget class="QPushButton" name="filter_button">
+       <property name="text"> <string>Filtrar</string> </property>
+      </widget>
+     </item>
+     
+     <item>
+      <widget class="QPushButton" name="refresh_button">
+       <property name="text"> <string>Refrescar</string> </property>
+      </widget>
+     </item>
+
+    </layout>
+   </item>
+   
+   
+   
+   
+   <!-- Tabla -->
+   <item>
+    <widget class="QTableWidget" name="table">
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
   
+  </layout>
  </widget>
  
  <!-- Clase cierre -->

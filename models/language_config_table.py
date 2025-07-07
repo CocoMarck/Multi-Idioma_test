@@ -1,12 +1,13 @@
 from .standard_table import StandardTable
 from .language_database import LanguageDatabase
-from .database_names import LANGUAGE_CONFIG_TABLE_NAMES, LANGUAGES, DEFAULT_LANGUAGE, NAME_SYSTEM_LANGUAGE
+from .database_names import (
+    LANGUAGE_CONFIG_TABLE_NAMES, LANGUAGES, DEFAULT_LANGUAGE, NAME_DEFAULT_LANGUAGE, NAME_SYSTEM_LANGUAGE
+)
+
+
+
 
 from core.system_util import get_system
-
-
-
-
 import locale
 import pycountry
 def system_language():
@@ -109,18 +110,33 @@ class LanguageConfigTable( StandardTable ):
         if isinstance(value, tuple):
             language = value[0]
         else:
-            language = self.default_language
-            
-        # Filtrar lenguaje
-        if language == NAME_SYSTEM_LANGUAGE:
             language = self.get_system_language()
-        
-        # Determinar que exista
-        if self.language_exists( language ):
-            warning = False
-        else:
+            
+        # Filtrar lenguaje | Lenguaje default
+        if language == NAME_DEFAULT_LANGUAGE:
+            language = self.default_language
+        elif language == NAME_SYSTEM_LANGUAGE:
+            language = self.get_system_language()
+
+        # Determinar que exista el lenguaje
+        warning = False
+        if not self.language_exists( language ):
             warning = True
             language = self.default_language
 
         # Devolver
         return language, sql_statement, commit, warning
+    
+    
+    def set_system_language(self):
+        '''
+        Establecer lenguaje del sistema
+        '''
+        return self.update_language( NAME_SYSTEM_LANGUAGE )
+    
+    
+    def set_default_language(self):
+        '''
+        Establecer lenguaje default
+        '''
+        return self.update_language( NAME_DEFAULT_LANGUAGE )
