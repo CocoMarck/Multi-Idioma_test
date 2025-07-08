@@ -76,17 +76,19 @@ class LanguageTableController( TableController ):
     def insert_tag(self, tag: str, language: str=None, text: str=str) -> bool:
         filtered_tag = self.tag_filter( tag )
         filtered_language = self.language_filter(language)
-    
-        value, sql_statement, commit = self.table.insert_tag( 
-            tag=filtered_tag, language=filtered_language, text=text
-        )
-        if value:
-            log_type = "info"
-            message = "Good insert"
-        else:
-            log_type = "error"
-            message = "Bad insert"
-        message = self.structure_sql_message( message, sql_statement, commit )
+        
+        value = False; message = "Bad parameters"; log_type="error"
+        if isinstance(filtered_tag, str) and isinstance(filtered_language, str):
+            value, sql_statement, commit = self.table.insert_tag( 
+                tag=filtered_tag, language=filtered_language, text=text
+            )
+            if value:
+                log_type = "info"
+                message = "Good insert"
+            else:
+                log_type = "error"
+                message = "Bad insert"
+            message = self.structure_sql_message( message, sql_statement, commit )
         
         return self.return_value( value=value, message=message, log_type=log_type)
     
@@ -95,48 +97,60 @@ class LanguageTableController( TableController ):
         filtered_tag = self.tag_filter(tag)
         filtered_language = self.language_filter(language)
         
-        value, sql_statement, commit = self.table.update_tag( 
-            tag=filtered_tag, language=filtered_language, text=text
-        )
-        if value:
-            log_type = "info"
-            message = "Good update"
-        else:
-            log_type = "error"
-            message = "Bad update"
-        message = self.structure_sql_message( message, sql_statement, commit )
+        value = False; message = "Bad parameters"; log_type="error"
+        if isinstance(filtered_tag, str) and isinstance(filtered_language, str):
+            value, sql_statement, commit = self.table.update_tag( 
+                tag=filtered_tag, language=filtered_language, text=text
+            )
+            if value:
+                log_type = "info"
+                message = "Good update"
+            else:
+                log_type = "error"
+                message = "Bad update"
+            message = self.structure_sql_message( message, sql_statement, commit )
         
         return self.return_value( value=value, message=message, log_type=log_type )
     
     
     def update_row(self, languageId: int=1, tag:str="", language: str=None, text: str="") -> bool:
+        tag = self.tag_filter(tag)
         language = self.language_filter(language)
-        value, sql_statement, commit = self.table.update_row(
-            languageId=languageId, tag=tag, language=language, text=text
-        )
-        if value:
-            log_type = "info"
-            message = "Good update"
-        else:
-            log_type = "error"
-            message = "Bad update"
-        message = self.structure_sql_message( message, sql_statement, commit )
+        
+        value = False; message = "Bad parameters"; log_type="error"
+        if isinstance(tag, str) and isinstance(language, str):
+            value, sql_statement, commit = self.table.update_row(
+                languageId=languageId, tag=tag, language=language, text=text
+            )
+            if value:
+                log_type = "info"
+                message = "Good update"
+            else:
+                log_type = "error"
+                message = "Bad update"
+            message = self.structure_sql_message( message, sql_statement, commit )
         
         return self.return_value( value=value, message=message, log_type=log_type )
     
     
-    def save_tag(self, tag:str, language: str=None, text: str="") -> bool:
-        filtered_tag = self.tag_filter(tag)
-        filtered_language = self.language_filter(language)
-        
-        # Determinar que exista el tag
-        value, sql_statement, commit = self.table.select_tag(
-            tag=filtered_tag, language=filtered_language
-        )
-        exists_text = ( isinstance(value, tuple) )
-        
-        # Devolver
-        if exists_text:
-            return self.update_tag( tag=tag, language=filtered_language, text=text )
+    def save_tag(self, languageId:int=None, tag:str=None, language: str=None, text: str="") -> bool:
+        '''
+        No es necesario establecer el ID, pero sire si se quiere cambiar el texto del tag.
+        '''
+        # Guardar por medio del id
+        if isinstance(languageId, int):
+            return self.update_row( languageId=languageId, tag=tag, language=language, text=text )
+
+        # Guardar por meddio del tag
         else:
-            return self.insert_tag( tag=tag, language=filtered_language, text=text )
+            # Determinar que exista el tag
+            value, sql_statement, commit = self.table.select_tag(
+                tag=self.tag_filter(tag), language=self.language_filter(language)
+            )
+            exists_text = ( isinstance(value, tuple) )
+            
+            # Devolver
+            if exists_text:
+                return self.update_tag( tag=tag, language=language, text=text )
+            else:
+                return self.insert_tag( tag=tag, language=language, text=text )
