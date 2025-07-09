@@ -7,6 +7,20 @@ from .table_controller import TableController
 class LanguageConfigTableController( TableController ):
     def __init__(self, log_level="warning" ):
         super().__init__( table=LanguageConfigTable(), log_level=log_level )
+    
+    
+    
+    def get_list_of_languages(self):
+        languages = self.table.get_list_of_languages()
+        if languages == []:
+            log_type = "error"
+            message = "No languages were detected"
+        else:
+            log_type = "info"
+            message = "There are languages"
+
+        return self.return_value( value=languages, message=message, log_type=log_type)
+        
         
     
     def select_language(self):

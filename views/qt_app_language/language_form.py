@@ -12,9 +12,7 @@ from controllers import LanguageTableController
 
 # Recursos
 resource_loader = ResourceLoader()
-dir_views = resource_loader.get_base_path( 'views' )
-dir_ui = dir_views.joinpath( 'ui' )
-file_ui = dir_ui.joinpath( 'language_form.ui' )
+file_ui = resource_loader.ui_dir.joinpath( 'language_form.ui' )
 
 
 language_table_controller = LanguageTableController()
@@ -64,10 +62,9 @@ class LanguageForm( QtWidgets.QWidget ):
         for row in self.table_controller.get_all_values():
             self.combobox_tag.addItem( row[1], userData=row[0] ) # tag, id
             
-        language_number = 2
-        for language in self.table_controller.get_all_columns()[language_number:]:
-            self.combobox_language.addItem( language, userData=language_number )
-            language_number += 1
+        languages_dict = self.table_controller.get_languages()
+        for key in languages_dict.keys():
+            self.combobox_language.addItem( languages_dict[key], userData=key )
             
             
     def refresh_parameter(self):

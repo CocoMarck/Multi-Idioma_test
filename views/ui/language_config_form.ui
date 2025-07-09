@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <!-- Clase inicio -->
+ <class>LanguageConfigForm</class>
+
+ <!-- Layout principal para centrar todo -->
+ <widget class="QWidget" name="centralWidget">
+  <layout class="QVBoxLayout" name="vbox_main">
+   
+   <!-- Formulario -->
+   <item>
+    <layout class="QFormLayout" name="form">
+    
+     <item row="0" column="0">
+      <widget class="QLabel" name="language_label">
+       <property name="text"><string>Lenguaje actual:</string></property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="current_language_label" />
+     </item>
+
+     <item row="1" column="0">
+      <widget class="QLabel" name="select_language_label">
+       <property name="text"><string>Lenguaje</string></property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QComboBox" name="language_combobox"/>
+     </item>
+    
+    </layout>
+   </item>
+
+   <!-- Tabla -->
+   <item>
+    <widget class="QTableWidget" name="table">
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+
+  </layout>
+ </widget>
+ 
+ <!-- Clase cierre -->
+ <resources/>
+ <connections/>
+</ui>

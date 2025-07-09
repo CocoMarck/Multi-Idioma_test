@@ -6,7 +6,8 @@ from PyQt6.QtCore import QRect
 
 from utils import ResourceLoader
 from utils.wrappers.language_wrapper import get_text
-from .language_form import LanguageForm
+from .language_form import LanguageForm 
+from .language_config_form import LanguageConfigForm
 
 import sys, os
 
@@ -14,9 +15,7 @@ import sys, os
 
 # Directorio
 resource_loader = ResourceLoader()
-dir_views = resource_loader.get_base_path( 'views' )
-dir_ui = dir_views.joinpath( 'ui' )
-file_ui = dir_ui.joinpath( 'main_language_window.ui' )
+file_ui = resource_loader.ui_dir.joinpath( 'main_language_window.ui' )
 
 
 
@@ -34,4 +33,7 @@ class LanguageApp( QtWidgets.QMainWindow ):
         self.menu_setting.setTitle( get_text("setting") )
         
         self.language_form = LanguageForm()
-        self.tab_widget.addTab( self.language_form, get_text("table") )
+        self.tab_widget.addTab( self.language_form, get_text("language-form") )
+        
+        self.language_config_form = LanguageConfigForm()
+        self.tab_widget.addTab( self.language_config_form, get_text("language-config-form") )

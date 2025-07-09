@@ -10,6 +10,20 @@ class LanguageTable( StandardTable ):
     def __init__(self):
         super().__init__( database=LanguageDatabase(), table=LANGUAGE_TABLE_NAMES['table'] )
     
+        # Columna donde empiezan los lenguajes
+        self.COLUMN_WHERE_LANGUAGES_BEGIN = 2
+    
+    def get_languages(self):
+        '''
+        Obtener lenguajes disponibles. Devuelve un dict, con numbero de columna y lenguaje.
+        '''
+        language_dict = {}
+        language_number = self.COLUMN_WHERE_LANGUAGES_BEGIN
+        for language in self.get_all_columns()[language_number:]:
+            language_dict.update( {language_number: language} )
+            language_number += 1
+        return language_dict
+    
 
     def select_tag(self, tag: str, language: str) -> (tuple, str):
         '''

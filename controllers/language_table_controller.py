@@ -25,6 +25,8 @@ class LanguageTableController( TableController ):
             table=LanguageTable(), verbose=True, log_level=log_level, save_log=True, only_the_value=True
         )
         self.language_config_table = LanguageConfigTable()
+        
+        self.COLUMN_WHERE_LANGUAGES_BEGIN = self.table.COLUMN_WHERE_LANGUAGES_BEGIN
     
     
     # Filtros de texto
@@ -36,6 +38,18 @@ class LanguageTableController( TableController ):
         Si no existe el lenguaje se pone el default, se establece el lenguaje default.
         '''
         return self.language_config_table.language_filter(language=text)
+    
+    
+    def get_languages(self):
+        languages = self.table.get_languages()
+        if languages == {}:
+            log_type = "error"
+            message = "No detect anything language"
+        else:
+            log_type = "info"
+            message = "Good languages"
+            
+        return self.return_value( value=languages, message=message, log_type=log_type )
         
     
     # Funciones chidas

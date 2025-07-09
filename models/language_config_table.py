@@ -41,6 +41,16 @@ class LanguageConfigTable( StandardTable ):
     
     def get_system_language(self) -> str:
         return system_language()
+        
+    
+    def get_list_of_languages(self) -> list:
+        '''
+        Devuelve los lenguajes disponibles. Contendo el default, y el system
+        '''
+        language_list = [ NAME_DEFAULT_LANGUAGE, NAME_SYSTEM_LANGUAGE ]
+        for key in LANGUAGES.keys():
+            language_list.append( LANGUAGES[key] )
+        return language_list
     
     
     def language_exists(self, language:str) -> bool:
