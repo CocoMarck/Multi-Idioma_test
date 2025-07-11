@@ -1,5 +1,5 @@
 from .standard_database import StandardDatabase
-from .database_names import LANGUAGES, LANGUAGE_TABLE_NAMES, LANGUAGE_CONFIG_TABLE_NAMES, NAME_SYSTEM_LANGUAGE
+from .model_names.language_names import LANGUAGES, LANGUAGE_TABLE_NAMES, LANGUAGE_CONFIG_TABLE_NAMES, NAME_SYSTEM_LANGUAGE
 
 class LanguageDatabase( StandardDatabase ):
     def __init__(self):

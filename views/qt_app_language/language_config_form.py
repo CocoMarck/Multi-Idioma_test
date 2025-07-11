@@ -24,6 +24,8 @@ class LanguageConfigForm( QtWidgets.QWidget ):
         self.setWindowTitle( get_text("language-config-form") )
         uic.loadUi( file_ui, self )
         
+        self.language_combobox.activated.connect( self.update_language )
+        
         self.table_controller = LanguageConfigTableController()
         
         self.refresh_all()
@@ -39,6 +41,8 @@ class LanguageConfigForm( QtWidgets.QWidget ):
         self.language_combobox.clear()
         for language in self.table_controller.get_list_of_languages():
             self.language_combobox.addItem( language )
+        
+        self.language_combobox.setCurrentText( self.table_controller.select_language() )
         
 
     def refresh_table(self):
@@ -62,3 +66,10 @@ class LanguageConfigForm( QtWidgets.QWidget ):
         self.refresh_text()
         self.refresh_table()
         self.refresh_combobox()
+    
+    
+    def update_language(self):
+        self.table_controller.update_language( self.language_combobox.currentText() )
+        self.refresh_table()
+        self.refresh_combobox()
+        self.refresh_text()

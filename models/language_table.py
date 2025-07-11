@@ -1,7 +1,7 @@
 from .standard_table import StandardTable
 from .language_database import LanguageDatabase
 
-from .database_names import LANGUAGE_TABLE_NAMES
+from .model_names.language_names import LANGUAGE_TABLE_NAMES
 
 
 

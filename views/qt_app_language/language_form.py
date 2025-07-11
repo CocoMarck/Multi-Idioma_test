@@ -52,19 +52,31 @@ class LanguageForm( QtWidgets.QWidget ):
         self.tag_label.setText( get_text('tag') )
         self.text_label.setText( get_text('text') )
         self.save_button.setText( get_text('save') )
-        self.filter_button.setText( get_text('filter') )
         self.refresh_button.setText( get_text('refresh') )
     
     
     def refresh_combobox(self):
+        # Obtener index acutal.
+        tag_index = self.combobox_tag.currentIndex()
+        language_index = self.combobox_language.currentIndex()
+
+        # Limpiar tag y language
         self.combobox_tag.clear()
         self.combobox_language.clear()
+        
+        # Tag
         for row in self.table_controller.get_all_values():
             self.combobox_tag.addItem( row[1], userData=row[0] ) # tag, id
-            
+        if tag_index != -1:
+            self.combobox_tag.setCurrentIndex( tag_index )
+        
+        # Language
         languages_dict = self.table_controller.get_languages()
         for key in languages_dict.keys():
             self.combobox_language.addItem( languages_dict[key], userData=key )
+        
+        if language_index != -1:
+            self.combobox_language.setCurrentIndex( language_index )
             
             
     def refresh_parameter(self):

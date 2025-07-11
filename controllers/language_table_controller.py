@@ -1,8 +1,8 @@
 from models import LanguageTable, LanguageConfigTable
 from .table_controller import TableController
-from models.database_names import DEFAULT_LANGUAGE
+from models.model_names.language_names import DEFAULT_LANGUAGE
 
-from core.text_util import ignore_text_filter
+from core.text_util import ignore_text_filter, text_or_none
 
 
 
@@ -31,7 +31,12 @@ class LanguageTableController( TableController ):
     
     # Filtros de texto
     def tag_filter( self, text:str ):
-        return ignore_text_filter( text.lower(), FILTER_FOR_TAG )
+        text = ignore_text_filter( text.lower(), FILTER_FOR_TAG )
+        return text_or_none(text)
+    
+    def text_filter(self, text:str=None):
+        return text_or_none(text)
+    
     
     def language_filter( self, text:str=None ):
         '''
@@ -90,8 +95,9 @@ class LanguageTableController( TableController ):
     def insert_tag(self, tag: str, language: str=None, text: str=str) -> bool:
         filtered_tag = self.tag_filter( tag )
         filtered_language = self.language_filter(language)
+        text = self.text_filter(text)
         
-        value = False; message = "Bad parameters"; log_type="error"
+        value = False; message = f"Bad parameters; tag, language, or text"; log_type="error"
         if isinstance(filtered_tag, str) and isinstance(filtered_language, str):
             value, sql_statement, commit = self.table.insert_tag( 
                 tag=filtered_tag, language=filtered_language, text=text
@@ -110,8 +116,9 @@ class LanguageTableController( TableController ):
     def update_tag(self, tag:str, language: str="en", text: str="") -> bool:
         filtered_tag = self.tag_filter(tag)
         filtered_language = self.language_filter(language)
+        text = self.text_filter(text)
         
-        value = False; message = "Bad parameters"; log_type="error"
+        value = False; message = f"Bad parameters; tag, language, or text"; log_type="error"
         if isinstance(filtered_tag, str) and isinstance(filtered_language, str):
             value, sql_statement, commit = self.table.update_tag( 
                 tag=filtered_tag, language=filtered_language, text=text
@@ -131,7 +138,7 @@ class LanguageTableController( TableController ):
         tag = self.tag_filter(tag)
         language = self.language_filter(language)
         
-        value = False; message = "Bad parameters"; log_type="error"
+        value = False; message = f"Bad parameters; tag, language, or text"; log_type="error"
         if isinstance(tag, str) and isinstance(language, str):
             value, sql_statement, commit = self.table.update_row(
                 languageId=languageId, tag=tag, language=language, text=text

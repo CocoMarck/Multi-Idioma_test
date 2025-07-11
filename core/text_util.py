@@ -320,7 +320,9 @@ def not_repeat_item( list=None ) -> list:
     
 def text_or_none( text: str ) -> str | None:
     # Determinar que el texto no este vacio "". Si lo esta, devuelve None, y si no el text/string.
-    if bool( text.strip() ) == True:
-        return text
-    else:
-        return None
+    return_value = None
+    if isinstance(text, str):
+        if bool( text.strip() ) == True:
+            return_value = text
+
+    return return_value

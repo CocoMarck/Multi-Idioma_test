@@ -7,9 +7,13 @@
  
   <!-- Menu -->
   <widget class="QMenuBar" name="menubar">
-   <widget class="QMenu" name="menu_setting"></widget>
+   <widget class="QMenu" name="menu_setting"/>
    <addaction name="menu_setting"/>
+
+   <widget class="QAction" name="action_update_database"/>
+   <addaction name="action_update_database"/>
   </widget>
+  
 
   <widget class="QStatusBar" name="statusbar"/>
  

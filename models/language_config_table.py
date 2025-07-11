@@ -1,6 +1,6 @@
 from .standard_table import StandardTable
 from .language_database import LanguageDatabase
-from .database_names import (
+from .model_names.language_names import (
     LANGUAGE_CONFIG_TABLE_NAMES, LANGUAGES, DEFAULT_LANGUAGE, NAME_DEFAULT_LANGUAGE, NAME_SYSTEM_LANGUAGE
 )
 
