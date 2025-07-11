@@ -1,6 +1,6 @@
 from PyQt6 import QtWidgets, uic
 from PyQt6.QtWidgets import (
-    QTableWidget, QTableWidgetItem
+    QTableWidget, QTableWidgetItem, QSizePolicy
 )
 from PyQt6.QtCore import QRect
 
@@ -8,6 +8,10 @@ from utils import ResourceLoader
 from utils.wrappers.language_wrapper import get_text
 from .language_form import LanguageForm 
 from .language_config_form import LanguageConfigForm
+
+from views.interface.interface_number_language import *
+from views.interface.css_util import text_widget_style, get_list_text_widget
+
 
 import sys, os
 
@@ -20,11 +24,31 @@ file_ui = resource_loader.ui_dir.joinpath( 'main_language_window.ui' )
 
 
 
+# Estilo
+font = "Liberation Mono"
+qss_style = ''
+for widget in get_list_text_widget( 'Qt' ):
+    qss_style += text_widget_style(
+        widget=widget, font=font, font_size=num_font, 
+        margin_based_font=False, padding=num_space_padding, idented=4,
+        margin_xy=num_margin_xy
+    )
+# Agregar limite de ancho de combobox.
+qss_style += (
+    "\nQComboBox{\n"
+    f"    min-width: {num_combobox_width}px;\n"
+    f"    max-width: {num_combobox_width}px;\n"
+    "}"
+)
+
+
+
+
 class LanguageApp( QtWidgets.QMainWindow ):
     def __init__(self):
         super().__init__()
         
-        self.resize( 960, 540 )
+        self.resize( nums_win_main[0], nums_win_main[1] )
         self.setWindowTitle( get_text('language') )
         uic.loadUi(file_ui, self)
         

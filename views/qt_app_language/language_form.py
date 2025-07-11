@@ -7,6 +7,8 @@ from utils import ResourceLoader
 from utils.wrappers.language_wrapper import get_text
 from core.text_util import ignore_text_filter, PREFIX_NUMBER
 
+from views.interface.interface_number_language import *
+
 from controllers import LanguageTableController
 
 
@@ -117,7 +119,11 @@ class LanguageForm( QtWidgets.QWidget ):
         for column in all_columns:
             for row in range(0, len(all_values)):
                 final_text = str( all_values[row][number] )
+                
                 self.table.setItem( row, number, QTableWidgetItem( final_text ) )
+                # Establecer ancho de filas tipo string.
+                if isinstance( all_values[row][number], str ):
+                    self.table.setColumnWidth(number, num_text_column_width)
             number += 1
         
     
