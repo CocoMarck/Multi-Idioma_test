@@ -20,8 +20,8 @@ Idiomas disponibles en el sistema.
 **Campos clave**:
 
 - `id`
-- `code` -> "es", "en", "fr"
-- `name` -> "Español", "English"
+- `code` -> "system", "es", "en", "fr"
+- `name` -> "Syestem Language", "Español", "English"
 - Campos de control...
 
 ---
@@ -35,7 +35,7 @@ Idioma activo por app / entorno.
 ### Columnas creadas por defecto
 - `0 | "current_language_id" | Null`
 - `1 | "default_language_id" | 0`
-> `default_language_id`: Por decisión primeriza, `0 = "en"`.
+> `default_language_id`: Por decisión primeriza, `0 = "system"`.
 
 Nombres de los `key` como `snake_case`. Teoricamente, solo se necesitaran las configs creadas por defecto.
 

@@ -1,0 +1,36 @@
+CREATE TABLE languages (
+    language_id   INTEGER PRIMARY KEY,
+    code          TEXT NOT NULL UNIQUE,
+    created_at    TEXT DEFAULT CURRENT_TIMESTAMP,
+    updated_at    TEXT DEFAULT CURRENT_TIMESTAMP,
+    deleted_at    TEXT
+);
+
+CREATE TABLE tags (
+    tag_id        INTEGER PRIMARY KEY,
+    tag_key       TEXT NOT NULL UNIQUE,
+    created_at    TEXT DEFAULT CURRENT_TIMESTAMP,
+    updated_at    TEXT DEFAULT CURRENT_TIMESTAMP,
+    deleted_at    TEXT
+);
+
+PRAGMA foreign_keys = ON;
+
+CREATE TABLE translations (
+    translation_id INTEGER PRIMARY KEY,
+    tag_id         INTEGER NOT NULL,
+    language_id    INTEGER NOT NULL,
+    value          TEXT NOT NULL,
+    created_at     TEXT DEFAULT CURRENT_TIMESTAMP,
+    updated_at     TEXT DEFAULT CURRENT_TIMESTAMP,
+    deleted_at     TEXT,
+    FOREIGN KEY(tag_id) REFERENCES tags(tag_id),
+    FOREIGN KEY(language_id) REFERENCES languages(language_id)
+);
+
+CREATE TABLE settings (
+    setting_id     INTEGER PRIMARY KEY,
+    parameter_name TEXT NOT NULL UNIQUE,
+    language_id    INTEGER NOT NULL,
+    FOREIGN KEY(language_id) REFERENCES languages(language_id)
+);
