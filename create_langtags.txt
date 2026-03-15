@@ -1,16 +1,16 @@
 CREATE TABLE languages (
     language_id   INTEGER PRIMARY KEY,
     code          TEXT NOT NULL UNIQUE,
-    created_at    TEXT DEFAULT CURRENT_TIMESTAMP,
-    updated_at    TEXT DEFAULT CURRENT_TIMESTAMP,
+    created_at    TEXT,
+    updated_at    TEXT,
     deleted_at    TEXT
 );
 
 CREATE TABLE tags (
     tag_id        INTEGER PRIMARY KEY,
     tag_key       TEXT NOT NULL UNIQUE,
-    created_at    TEXT DEFAULT CURRENT_TIMESTAMP,
-    updated_at    TEXT DEFAULT CURRENT_TIMESTAMP,
+    created_at    TEXT,
+    updated_at    TEXT,
     deleted_at    TEXT
 );
 
@@ -21,8 +21,8 @@ CREATE TABLE translations (
     tag_id         INTEGER NOT NULL,
     language_id    INTEGER NOT NULL,
     value          TEXT NOT NULL,
-    created_at     TEXT DEFAULT CURRENT_TIMESTAMP,
-    updated_at     TEXT DEFAULT CURRENT_TIMESTAMP,
+    created_at     TEXT,
+    updated_at     TEXT,
     deleted_at     TEXT,
     FOREIGN KEY(tag_id) REFERENCES tags(tag_id),
     FOREIGN KEY(language_id) REFERENCES languages(language_id)
