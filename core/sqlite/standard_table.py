@@ -1,11 +1,12 @@
 from .standard_database import StandardDatabase
+import sqlite3
 
 class StandardTable():
     def __init__(self, database: StandardDatabase, name:str ):
         self.database = database
         self.name = name
 
-    def get_cursor(self):
+    def get_cursor(self) -> sqlite3.Cursor:
         cursor = self.database.execute( statement=f"SELECT * FROM '{self.name}';", commit=False )
         return cursor
 

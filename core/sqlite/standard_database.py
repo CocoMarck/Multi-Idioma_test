@@ -13,7 +13,7 @@ class StandardDatabase():
     def _connect(self):
         return sqlite3.connect( self.get_path() )
 
-    def execute( self, statement:str, commit: bool, params: tuple=() ):
+    def execute( self, statement:str, commit: bool, params: tuple=() ) -> sqlite3.Cursor:
         '''
         Devuelve un cursor
         '''
@@ -52,8 +52,8 @@ class StandardDatabase():
 
     def get_table_names(self):
         tables = []
-        for name, _ in self.get_tables():
-            tables.append( name )
+        for cols in self.get_tables():
+            tables.append( cols[0] )
         return tables
 
     def table_exists(self, table: str) -> bool:
