@@ -1,17 +1,18 @@
 from .base_repository import BaseRepository
 from .language_repository import LanguageRepository
 from .tag_repository import TagRepository
+from utils.datetime_util import get_datetime_now
 
 class TranslationRepository(BaseRepository):
     def __init__(
         self, *args, language_repository:LanguageRepository, tag_repository:TagRepository, **kwargs
     ):
-        super().__init__(*args, column_id="translation_id", column_value="value", **kwargs):
+        super().__init__(*args, column_id="translation_id", column_value="value", **kwargs)
 
         self.language_repository = language_repository
         self.tag_repository = tag_repository
 
-    def update_value(self, translation_id:int, language_id:int, tag_id:int, value: str):
+    def update_value(self, translation_id:int, tag_id:int, language_id:int, value: str):
         try:
             cursor = self.database.execute(
                 statement=(
@@ -25,7 +26,7 @@ class TranslationRepository(BaseRepository):
         except:
             return False
 
-    def insert_value(self, language_id:int, tag_id:int, value: str):
+    def insert_value(self, tag_id:int, language_id:int, value: str):
         try:
             cursor = self.database.execute(
                 statement=(
@@ -50,7 +51,7 @@ class TranslationRepository(BaseRepository):
         except:
             return False
 
-    def get_translation_id(self, language_id:int, tag_id:int ) -> int | None:
+    def get_translation_id(self, tag_id:int, language_id:int ) -> int | None:
         try:
             cursor = self.database.execute(
                 statement=f"SELECT {self._COLUMN_ID} FROM {self.table.name} WHERE language_id=? AND tag_id=? LIMIT 1;",
@@ -61,23 +62,23 @@ class TranslationRepository(BaseRepository):
         except:
             return None
 
-    def save_translation(self, language_code:str, tag_name:str, value:str):
+    def save_value(self, tag_name:str, language_code:str, value:str):
         language_id = self.language_repository.get_code_id(language_code)
         tag_id = self.tag_repository.get_name_id(tag_name)
-        translation_id = self.get_translation_id( language_id, tag_id )
+        translation_id = self.get_translation_id( tag_id, language_id )
 
         updated = False
         inserted = False
         if translation_id is not None:
-            updated = self.update_value( translation_id, language_id, tag_id, value )
+            updated = self.update_value( translation_id, tag_id, language_id, value )
         if updated == False:
-            inserted = self.insert_value( language_id, tag_id, value )
+            inserted = self.insert_value( tag_id, language_id, value )
         return updated or inserted
 
-    def toggle_translation_state(self, language_code:str, tag_name:str):
+    def toggle_translation_state(self, tag_name:str, language_code:str):
         language_id = self.language_repository.get_code_id(language_code)
         tag_id = self.tag_repository.get_name_id(tag_name)
-        translation_id = self.get_translation_id( language_id, tag_id )
+        translation_id = self.get_translation_id( tag_id, language_id )
         if translation_id is not None:
             deleted = self.is_deleted( translation_id )
             if deleted:
@@ -86,25 +87,23 @@ class TranslationRepository(BaseRepository):
                 return self.deactivate( translation_id )
         return False
 
-    def get_translation_state(self, language_code:str, tag_name:str) -> bool:
+    def get_translation_state(self, tag_name:str, language_code:str) -> bool:
         language_id = self.language_repository.get_code_id(language_code)
         tag_id = self.tag_repository.get_name_id(tag_name)
-        translation_id = self.get_translation_id( language_id, tag_id )
-        return self.is_deleted( translation_id )
+        translation_id = self.get_translation_id( tag_id, language_id )
+        return not self.is_deleted( translation_id )
 
-    def get_value(self, language_code:str, tag_name:str) -> str | None:
+    def get_value(self, tag_name:str, language_code:str) -> str | None:
+        language_id = self.language_repository.get_code_id(language_code)
+        tag_id = self.tag_repository.get_name_id(tag_name)
+        translation_id = self.get_translation_id( tag_id, language_id )
         try:
-            language_id = self.language_repository.get_code_id( language_code, tag_name )
-            tag_id = self.tag_repository.get_name_id(tag_name)
-
-            if language_id is None or tag_id is None:
-                return None
-
             cursor = self.database.execute(
-                statement=f"SELECT {self._COLUMN_VALUE} FROM {self.table.name} WHERE language_id=? AND tag_id=? AND deleted_at IS NULL LIMIT 1;",
-                commit=False, params=(language_id, tag_id)
+                statement=f"SELECT {self._COLUMN_VALUE} FROM {self.table.name} WHERE {self._COLUMN_ID}=? AND deleted_at IS NULL LIMIT 1;",
+                commit=False, params=(translation_id,)
             )
             row = cursor.fetchone()
             return row[0] if row else None
-        except:
+        except Exception as e:
+            print(f"Error in get_value: {e}")
             return None

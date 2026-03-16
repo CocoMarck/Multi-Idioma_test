@@ -82,7 +82,7 @@ class BaseRepository:
         try:
             cursor = self.database.execute(
                 statement=f"UPDATE {self.table.name} SET deleted_at=NULL WHERE {self._COLUMN_ID}=?;",
-                commit=True, params=(value_id)
+                commit=True, params=(value_id,)
             )
             return True
         except:
@@ -111,4 +111,4 @@ class BaseRepository:
 
     def get_value_state(self, value: str) -> bool:
         value_id = self.get_value_id(value)
-        return self.is_deleted( value_id )
+        return not self.is_deleted( value_id )
