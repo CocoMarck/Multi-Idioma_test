@@ -1,6 +1,110 @@
-import sqlite3
-from models.langtags import Translation
+from .base_repository import BaseRepository
+from .language_repository import LanguageRepository
+from .tag_repository import TagRepository
 
-class TranslationRepository:
-    def __init__(self, conn):
-        self.conn = conn
+class TranslationRepository(BaseRepository):
+    def __init__(
+        self, *args, language_repository:LanguageRepository, tag_repository:TagRepository, **kwargs
+    ):
+        super().__init__(*args, column_id="translation_id", column_value="value", **kwargs):
+
+        self.language_repository = language_repository
+        self.tag_repository = tag_repository
+
+    def update_value(self, translation_id:int, language_id:int, tag_id:int, value: str):
+        try:
+            cursor = self.database.execute(
+                statement=(
+                    f"UPDATE {self.table.name} SET language_id=?, tag_id=?, {self._COLUMN_VALUE}=?, updated_at=? WHERE {self._COLUMN_ID}=?;"
+                ),  commit=True,
+                params=(
+                    language_id, tag_id, value, get_datetime_now(), translation_id
+                )
+            )
+            return True
+        except:
+            return False
+
+    def insert_value(self, language_id:int, tag_id:int, value: str):
+        try:
+            cursor = self.database.execute(
+                statement=(
+                    f"INSERT INTO {self.table.name} (language_id,tag_id,{self._COLUMN_VALUE},created_at) VALUES(?,?,?,?);"
+                ),
+                commit=True, params=(language_id,tag_id,value,get_datetime_now())
+            )
+            return True
+        except:
+            return False
+
+
+    def translation_exists(self, translation_id:int, language_id:str, tag_id:int ) -> bool:
+        try:
+            cursor = self.database.execute(
+                statement=(
+                    f'SELECT 1 FROM {self.table.name} WHERE language_id=? AND tag_id=? AND {self._COLUMN_ID}=? LIMIT 1;'
+                ),
+                commit=False, params=(language_id, tag_id, translation_id)
+            )
+            return cursor.fetchone() is not None
+        except:
+            return False
+
+    def get_translation_id(self, language_id:int, tag_id:int ) -> int | None:
+        try:
+            cursor = self.database.execute(
+                statement=f"SELECT {self._COLUMN_ID} FROM {self.table.name} WHERE language_id=? AND tag_id=? LIMIT 1;",
+                commit=False, params=(language_id,tag_id)
+            )
+            row = cursor.fetchone()
+            return row[0] if row else None
+        except:
+            return None
+
+    def save_translation(self, language_code:str, tag_name:str, value:str):
+        language_id = self.language_repository.get_code_id(language_code)
+        tag_id = self.tag_repository.get_name_id(tag_name)
+        translation_id = self.get_translation_id( language_id, tag_id )
+
+        updated = False
+        inserted = False
+        if translation_id is not None:
+            updated = self.update_value( translation_id, language_id, tag_id, value )
+        if updated == False:
+            inserted = self.insert_value( language_id, tag_id, value )
+        return updated or inserted
+
+    def toggle_translation_state(self, language_code:str, tag_name:str):
+        language_id = self.language_repository.get_code_id(language_code)
+        tag_id = self.tag_repository.get_name_id(tag_name)
+        translation_id = self.get_translation_id( language_id, tag_id )
+        if translation_id is not None:
+            deleted = self.is_deleted( translation_id )
+            if deleted:
+                return self.activate( translation_id )
+            else:
+                return self.deactivate( translation_id )
+        return False
+
+    def get_translation_state(self, language_code:str, tag_name:str) -> bool:
+        language_id = self.language_repository.get_code_id(language_code)
+        tag_id = self.tag_repository.get_name_id(tag_name)
+        translation_id = self.get_translation_id( language_id, tag_id )
+        return self.is_deleted( translation_id )
+
+    def get_value(self, language_code:str, tag_name:str) -> str | None:
+        try:
+            language_id = self.language_repository.get_code_id( language_code, tag_name )
+            tag_id = self.tag_repository.get_name_id(tag_name)
+
+            if language_id is None or tag_id is None:
+                return None
+
+            cursor = self.database.execute(
+                statement=f"SELECT {self._COLUMN_VALUE} FROM {self.table.name} WHERE language_id=? AND tag_id=? AND deleted_at IS NULL LIMIT 1;",
+                commit=False, params=(language_id, tag_id)
+            )
+            row = cursor.fetchone()
+            return row[0] if row else None
+        except:
+            return None
