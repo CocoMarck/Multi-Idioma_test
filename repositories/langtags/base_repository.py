@@ -34,6 +34,18 @@ class BaseRepository:
         except:
             return False
 
+    def exists(self, value_id:int) -> bool:
+        try:
+            cursor = self.database.execute(
+                statement=(
+                    f'SELECT 1 FROM {self.table.name} WHERE {self._COLUMN_ID}=? LIMIT 1;'
+                ),
+                commit=False, params=(value_id,)
+            )
+            return cursor.fetchone() is not None
+        except:
+            return False
+
     def value_exists(self, value_id:int, value: str) -> bool:
         try:
             cursor = self.database.execute(
@@ -45,6 +57,16 @@ class BaseRepository:
             return cursor.fetchone() is not None
         except:
             return False
+
+    def get_row(self, row_id: int) -> list:
+        try:
+            cursor = self.database.execute(
+                statement=f"SELECT * FROM {self.table.name} WHERE {self._COLUMN_ID}=? LIMIT 1;",
+                commit=False, params=(row_id,)
+            )
+            return cursor.fetchone()
+        except:
+            return []
 
     def get_value_id(self, value:str) -> int | None:
         try:

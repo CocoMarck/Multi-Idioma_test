@@ -1,8 +1,13 @@
 from core.sqlite.standard_database import StandardDatabase
 from core.sqlite.standard_table import StandardTable
+
 from repositories.langtags.language_repository import LanguageRepository
 from repositories.langtags.tag_repository import TagRepository
 from repositories.langtags.translation_repository import TranslationRepository
+
+from models.langtags.language import Language
+from controllers.langtags.language_controller import LanguageController
+
 import pathlib
 
 # Usando méotods de infrestructura.
@@ -47,3 +52,28 @@ print(
     translation_table.get_columns(),
     translation_table.get_column_values()
 )
+
+
+language_model = Language()
+language_controller = LanguageController(language_repository, language_model)
+language_controller.get_code_row( "es" )
+print(
+    language_model.language_id,
+    language_model.code,
+    language_model.created_at,
+    language_model.updated_at,
+    language_model.deleted_at,
+    language_controller.is_deleted()
+)
+
+
+from PyQt6.QtWidgets import QApplication
+from views.langtags.main_window import MainWindow
+import sys
+
+if __name__ == '__main__':
+    app = QApplication( sys.argv )
+    #app.setStyleSheet( STYLE_QSS )
+    window = MainWindow( language_controller )
+    window.show()
+    sys.exit( app.exec() )

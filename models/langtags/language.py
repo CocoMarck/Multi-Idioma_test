@@ -1,4 +1,4 @@
-from .control_fields
+from .control_fields import ControlFields
 
 class Language(ControlFields):
     def __init__(self):
