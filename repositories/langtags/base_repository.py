@@ -64,7 +64,8 @@ class BaseRepository:
                 statement=f"SELECT * FROM {self.table.name} WHERE {self._COLUMN_ID}=? LIMIT 1;",
                 commit=False, params=(row_id,)
             )
-            return cursor.fetchone()
+            row = cursor.fetchone()
+            return row if row else []
         except:
             return []
 
