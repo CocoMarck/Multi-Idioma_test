@@ -16,11 +16,11 @@ class LanguageForm( QtWidgets.QWidget ):
         uic.loadUi( LANGUAGE_FORM_UI, self )
 
         self.controller = controller
-        self.table  = self.controller.table
+        self.model  = self.controller.model
 
         # Texto
-        self.entry_language_id.setText( str(self.table.language_id) )
-        self.entry_code.setText( str(self.table.code) )
-        self.label_created_at.setText( str(self.table.created_at) )
-        self.label_updated_at.setText( str(self.table.updated_at) )
-        self.label_deleted_at.setText( str(self.table.deleted_at) )
+        self.entry_language_id.setText( str(self.model.language_id) )
+        self.entry_code.setText( str(self.model.code) )
+        self.label_created_at.setText( str(self.model.created_at) )
+        self.label_updated_at.setText( str(self.model.updated_at) )
+        self.label_deleted_at.setText( str(self.model.deleted_at) )
