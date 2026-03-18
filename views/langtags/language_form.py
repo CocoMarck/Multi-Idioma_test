@@ -1,6 +1,9 @@
 from PyQt6 import QtWidgets, uic
 from PyQt6.QtWidgets import QTableWidgetItem
 
+# Text util
+from core.text_util import PREFIX_NUMBER, ignore_text_filter
+
 # Rutas
 from config.paths import LANGUAGE_FORM_UI
 
@@ -27,6 +30,7 @@ class LanguageForm( QtWidgets.QWidget ):
         self.entry_language_id.textChanged.connect( self.on_language_id )
         self.entry_code.textChanged.connect( self.on_code )
         self.button_refresh.clicked.connect( self.refresh_parameters )
+        self.button_save.clicked.connect( self.on_save )
 
     def refresh_table(self):
         columns = self.controller.get_columns()
@@ -56,13 +60,25 @@ class LanguageForm( QtWidgets.QWidget ):
             p.clear()
 
     def refresh_parameters(self):
-        self.entry_language_id.setText( str(self.model.language_id) )
-        self.entry_code.setText( str(self.model.code) )
-        self.label_created_at.setText( str(self.model.created_at) )
-        self.label_updated_at.setText( str(self.model.updated_at) )
-        self.label_deleted_at.setText( str(self.model.deleted_at) )
+        self.entry_language_id.setText(
+            str(self.model.language_id) if self.model.language_id else ""
+        )
+        self.entry_code.setText(
+            str(self.model.code) if self.model.code else ""
+        )
+        self.label_created_at.setText(
+            str(self.model.created_at) if self.model.created_at else ""
+        )
+        self.label_updated_at.setText(
+            str(self.model.updated_at) if self.model.updated_at else ""
+        )
+        self.label_deleted_at.setText(
+            str(self.model.deleted_at) if self.model.deleted_at else ""
+        )
 
     def on_language_id(self, text):
+        text = ignore_text_filter( text, PREFIX_NUMBER )
+        self.entry_language_id.setText( text )
         if text:
             try:
                 self.controller.get_row( int(text) )
@@ -71,9 +87,23 @@ class LanguageForm( QtWidgets.QWidget ):
         else:
             self.clear_parameters( [self.entry_language_id] )
 
-
     def on_code(self, text):
-        if self.controller.get_code_row( text ):
+        if not (self.entry_language_id.text()):
+            if self.controller.get_code_row( text ):
+                self.refresh_parameters()
+            else:
+                self.clear_parameters( [self.entry_code] )
+
+    def on_save(self):
+        row_id = None
+        code = None
+        if self.entry_language_id.text():
+            row_id = int( self.entry_language_id.text() )
+            code = self.entry_code.text()
+        elif self.entry_code.text():
+            code = self.entry_code.text()
+        if code:
+            self.controller.save( row_id, code )
             self.refresh_parameters()
-        else:
-            self.clear_parameters( [self.entry_code] )
+            self.refresh_table()
+

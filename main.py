@@ -56,15 +56,6 @@ print(
 
 language_model = Language()
 language_controller = LanguageController(language_repository, language_model)
-language_controller.get_code_row( "es" )
-print(
-    language_model.language_id,
-    language_model.code,
-    language_model.created_at,
-    language_model.updated_at,
-    language_model.deleted_at,
-    language_controller.is_deleted()
-)
 
 
 from PyQt6.QtWidgets import QApplication

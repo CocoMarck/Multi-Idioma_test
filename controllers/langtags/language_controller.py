@@ -30,23 +30,26 @@ class LanguageController:
         code_id = self.repository.get_code_id( code )
         return self.get_row( code_id )
 
-    def update(self) -> bool:
-        if self.repository.update_code( self.model.language_id, self.model.code ):
-            self.get_row( self.model.language_id )
+    def update(self, language_id, code) -> bool:
+        if self.repository.update_code( language_id, code ):
+            self.get_row( language_id )
             return True
         return False
 
-    def insert(self) -> bool:
-        if isinstance(self.model.code, str):
-            if self.repository.insert_code( self.model.code ):
-                self.get_code_row( self.model.code )
+    def insert(self, code) -> bool:
+        if isinstance(code, str):
+            if self.repository.insert_code( code ):
+                self.get_code_row( code )
                 return True
         return False
 
-    def save(self):
-        if self.repository.exists( self.model.language_id ):
-            return self.update()
-        return self.insert()
+    def save(self, language_id, code):
+        if self.repository.exists( language_id ):
+            return self.update( language_id, code)
+        return self.insert( code )
 
-    def is_deleted(self):
+    def is_deleted(self, language_id):
+        return self.repository.is_deleted( language_id )
+
+    def is_model_deleted(self):
         return self.repository.is_deleted( self.model.language_id )
