@@ -11,24 +11,28 @@ class BaseRepository:
         self._COLUMN_ID = column_id
         self._COLUMN_VALUE = column_value
 
-    def update_value(self, value_id:int, value: str):
+    def update_value(self, value_id:int, value: str, is_deleted:bool):
         try:
             cursor = self.database.execute(
                 statement=(
-                    f"UPDATE {self.table.name} SET {self._COLUMN_VALUE}=?, updated_at=? WHERE {self._COLUMN_ID}=?;"
-                ),  commit=True, params=(value,get_datetime_now(),value_id)
+                    f"UPDATE {self.table.name} SET {self._COLUMN_VALUE}=?, updated_at=?, deleted_at=? WHERE {self._COLUMN_ID}=?;"
+                ),  commit=True, params=(
+                    value, get_datetime_now(), (get_datetime_now() if is_deleted else None), value_id
+                )
             )
             return True
         except:
             return False
 
-    def insert_value(self, value:str):
+    def insert_value(self, value:str, is_deleted:bool):
         try:
             cursor = self.database.execute(
                 statement=(
-                    f"INSERT INTO {self.table.name} ({self._COLUMN_VALUE},created_at) VALUES(?, ?);"
+                    f"INSERT INTO {self.table.name} ({self._COLUMN_VALUE},created_at,deleted_at) VALUES(?, ?, ?);"
                 ),
-                commit=True, params=(value,get_datetime_now())
+                commit=True, params=(
+                    value, get_datetime_now(), (get_datetime_now() if is_deleted else None)
+                )
             )
             return True
         except:
@@ -80,15 +84,18 @@ class BaseRepository:
         except:
             return None
 
-    def save_value(self, value:str):
-        value_id = self.get_value_id(value)
-        updated = False
+    def save(self, value_id:int=None, value:str=None, is_deleted:bool=False):
         inserted = False
+        updated = False
         if value_id is not None:
-            updated = self.update_value( value_id, value )
+            updated = self.update_value( value_id, value, is_deleted )
         if updated == False:
-            inserted = self.insert_value( value )
+            inserted = self.insert_value( value, is_deleted )
         return updated or inserted
+
+    def save_value(self, value:str, is_deleted:bool):
+        value_id = self.get_value_id(value)
+        return self.save( value_id, value, is_deleted )
 
 
     def deactivate(self, value_id: int):
@@ -122,15 +129,19 @@ class BaseRepository:
         except:
             return False
 
-    def toggle_value_state(self, value: str):
-        value_id = self.get_value_id(value)
-        if value_id is not None:
-            deleted = self.is_deleted( value_id )
+
+    def toggle_row_state(self, value_id: int):
+        deleted = self.is_deleted( value_id )
+        if isinstance(value_id, int):
             if deleted:
                 return self.activate( value_id )
             else:
                 return self.deactivate( value_id )
         return False
+
+    def toggle_value_state(self, value: str):
+        value_id = self.get_value_id(value)
+        return self.toggle_row_state( value_id )
 
     def get_value_state(self, value: str) -> bool:
         value_id = self.get_value_id(value)

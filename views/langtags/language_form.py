@@ -29,7 +29,7 @@ class LanguageForm( QtWidgets.QWidget ):
         # Connects
         self.entry_language_id.textChanged.connect( self.on_language_id )
         self.entry_code.textChanged.connect( self.on_code )
-        self.button_refresh.clicked.connect( self.refresh_parameters )
+        self.button_refresh.clicked.connect( self.on_refresh )
         self.button_save.clicked.connect( self.on_save )
 
     def refresh_table(self):
@@ -58,6 +58,7 @@ class LanguageForm( QtWidgets.QWidget ):
             if p in ignore_parameters:
                 continue
             p.clear()
+        self.checkbox_is_deleted.setChecked( False )
 
     def refresh_parameters(self):
         self.entry_language_id.setText(
@@ -75,6 +76,7 @@ class LanguageForm( QtWidgets.QWidget ):
         self.label_deleted_at.setText(
             str(self.model.deleted_at) if self.model.deleted_at else ""
         )
+        self.checkbox_is_deleted.setChecked( self.controller.is_model_deleted() )
 
     def on_language_id(self, text):
         text = ignore_text_filter( text, PREFIX_NUMBER )
@@ -97,13 +99,18 @@ class LanguageForm( QtWidgets.QWidget ):
     def on_save(self):
         row_id = None
         code = None
+        is_deleted = self.checkbox_is_deleted.isChecked()
         if self.entry_language_id.text():
             row_id = int( self.entry_language_id.text() )
             code = self.entry_code.text()
         elif self.entry_code.text():
             code = self.entry_code.text()
         if code:
-            self.controller.save( row_id, code )
-            self.refresh_parameters()
-            self.refresh_table()
+            save = self.controller.save( row_id, code, is_deleted )
+            if save:
+                self.refresh_parameters()
+                self.refresh_table()
 
+    def on_refresh(self):
+        self.refresh_parameters()
+        self.refresh_table()

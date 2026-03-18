@@ -13,6 +13,12 @@ class LanguageController:
     def get_column_values(self):
         return self.repository.table.get_column_values()
 
+    def activate_model(self):
+        return self.repository.activate( self.model.language_id )
+
+    def deactivate_model(self):
+        return self.repository.deactivate( self.model.language_id )
+
     # Especificas
     def get_row(self, code_id) -> bool:
         row = self.repository.get_row( code_id )
@@ -30,26 +36,32 @@ class LanguageController:
         code_id = self.repository.get_code_id( code )
         return self.get_row( code_id )
 
-    def update(self, language_id, code) -> bool:
-        if self.repository.update_code( language_id, code ):
+    def update(self, language_id, code, is_deleted) -> bool:
+        if self.repository.update_code( language_id, code, is_deleted ):
             self.get_row( language_id )
             return True
         return False
 
     def insert(self, code) -> bool:
         if isinstance(code, str):
-            if self.repository.insert_code( code ):
+            if self.repository.insert_code( code, is_deleted ):
                 self.get_code_row( code )
                 return True
         return False
 
-    def save(self, language_id, code):
+    def save(self, language_id, code, is_deleted):
+        save = self.repository.save( language_id, code, is_deleted )
         if self.repository.exists( language_id ):
-            return self.update( language_id, code)
-        return self.insert( code )
+            self.get_row( language_id )
+        else:
+            self.get_code_row( code )
+        return save
 
     def is_deleted(self, language_id):
         return self.repository.is_deleted( language_id )
 
     def is_model_deleted(self):
         return self.repository.is_deleted( self.model.language_id )
+
+    def toggle_model_state(self):
+        return self.repository.toggle_row_state( self.model.language_id )
