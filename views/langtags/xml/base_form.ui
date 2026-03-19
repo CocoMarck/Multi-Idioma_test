@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <!-- Clase inicio -->
- <class>LanguageForm</class>
+ <class>BaseForm</class>
 
  <widget class="QWidget" name="centralWidget">
   <layout class="QVBoxLayout" name="vbox_main">
@@ -11,51 +11,58 @@
     <layout class="QGridLayout" name="form">
 
      <item row="0" column="0">
-      <widget class="QLabel" name="label_language_id">
-       <property name="text"><string>language_id</string></property>
+      <widget class="QLabel" name="label_id">
+       <property name="text"><string>id</string></property>
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QLineEdit" name="entry_language_id">
+      <widget class="QLineEdit" name="entry_id">
       </widget>
      </item>
 
      <item row="0" column="2">
-      <widget class="QComboBox" name="combobox_code"/>
+      <widget class="QComboBox" name="combobox_values"/>
      </item>
 
      <item row="1" column="0">
-      <widget class="QLabel" name="label_code">
-       <property name="text"><string>code</string></property>
+      <widget class="QLabel" name="label_value">
+       <property name="text"><string>value</string></property>
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLineEdit" name="entry_code">
+      <widget class="QLineEdit" name="entry_value">
       </widget>
      </item>
 
      <item row="2" column="0">
-      <widget class="QLabel" name="label_created_at">
-       <property name="text"><string>created_at</string></property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLabel" name="label_updated_at">
-       <property name="text"><string>updated_at</string></property>
-      </widget>
-     </item>
-     <item row="2" column="2">
-      <widget class="QLabel" name="label_deleted_at">
-       <property name="text"><string>deleted_at</string></property>
-      </widget>
-     </item>
-
-     <item row="3" column="0">
       <widget class="QCheckBox" name="checkbox_is_deleted">
        <property name="text"><string>is_deleted</string></property>
       </widget>
      </item>
 
+    </layout>
+   </item>
+
+   <!-- Item -->
+   <item>
+    <layout class="QHBoxLayout">
+     <item>
+      <widget class="QLabel" name="label_created_at">
+       <property name="text"><string>created_at</string></property>
+      </widget>
+     </item>
+
+     <item>
+      <widget class="QLabel" name="label_updated_at">
+       <property name="text"><string>updated_at</string></property>
+      </widget>
+     </item>
+
+     <item>
+      <widget class="QLabel" name="label_deleted_at">
+       <property name="text"><string>deleted_at</string></property>
+      </widget>
+      </item>
     </layout>
    </item>
 
@@ -78,8 +85,6 @@
 
     </layout>
    </item>
-
-
 
 
    <!-- Tabla -->

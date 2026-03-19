@@ -1,3 +1,8 @@
+from PyQt6.QtWidgets import QApplication
+from views.langtags.main_window import MainWindow
+import sys
+
+# DB
 from core.sqlite.standard_database import StandardDatabase
 from core.sqlite.standard_table import StandardTable
 
@@ -6,65 +11,36 @@ from repositories.langtags.tag_repository import TagRepository
 from repositories.langtags.translation_repository import TranslationRepository
 
 from models.langtags.language import Language
+from models.langtags.tag import Tag
 from controllers.langtags.language_controller import LanguageController
+from controllers.langtags.tag_controller import TagController
 
 import pathlib
 
 # Usando méotods de infrestructura.
-db = StandardDatabase(
-    directory=pathlib.Path('data'), name='langtags.sqlite'
-)
+db = StandardDatabase( directory=pathlib.Path('data'), name='langtags.sqlite' )
 table_language = StandardTable(
     database=db, name="languages"
 )
 language_repository = LanguageRepository( table=table_language )
-#language_repository.save_code( 'es' )
-#language_repository.save_code( 'en' )
-#language_repository.toggle_code_state( 'en' )
-#language_repository.save_code( 'ru' )
-#language_repository.toggle_code_state( 'ru' )
-#language_repository.get_code_state( 'ru' )
 
 tag_table = StandardTable( database=db, name="tags" )
 tag_repository = TagRepository( table=tag_table )
-#tag_repository.save_name( 'exit' )
-#tag_repository.toggle_name_state( 'exit' )
 
 translation_table = StandardTable( database=db, name="translations" )
 translation_repository = TranslationRepository(
     table=translation_table, language_repository=language_repository, tag_repository=tag_repository
 )
-#translation_repository.save_value( "exit", "es", "Salir" )
-#translation_repository.save_value( "exit", "en", "Exit" )
-print( translation_repository.get_value( "exit", "es" ) )
-print( translation_repository.get_value( "exit", "en" ) )
-#translation_repository.toggle_translation_state( "exit", "es" )
-#print( translation_repository.get_translation_state( "exit", "es" ) )
-
-print(
-    db.get_table_names(),
-    db.table_exists( 'languages' ),
-    db.get_path(),
-    table_language.get_columns(),
-    table_language.get_column_values(),
-    tag_table.get_columns(),
-    tag_table.get_column_values(),
-    translation_table.get_columns(),
-    translation_table.get_column_values()
-)
-
 
 language_model = Language()
 language_controller = LanguageController(language_repository, language_model)
+tag_model = Tag()
+tag_controller = TagController(tag_repository, tag_model)
 
-
-from PyQt6.QtWidgets import QApplication
-from views.langtags.main_window import MainWindow
-import sys
 
 if __name__ == '__main__':
     app = QApplication( sys.argv )
     #app.setStyleSheet( STYLE_QSS )
-    window = MainWindow( language_controller )
+    window = MainWindow( language_controller, tag_controller )
     window.show()
     sys.exit( app.exec() )
