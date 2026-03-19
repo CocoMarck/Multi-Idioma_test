@@ -1,6 +1,9 @@
 import sqlite3
 import pathlib
 
+# Local
+from core.text_util import read_text
+
 class StandardDatabase():
     def __init__(self, directory: pathlib.Path, name: str  ):
         self.directory = directory
@@ -9,6 +12,9 @@ class StandardDatabase():
     def get_path(self):
         path = self.directory.joinpath( self.name )
         return path
+
+    def exists(self):
+        return self.get_path().exists()
 
     def _connect(self):
         return sqlite3.connect( self.get_path() )
@@ -28,6 +34,12 @@ class StandardDatabase():
                 conn.rollback()
 
             return cursor
+
+    def init_schema(self, schema_file):
+        sql_script = read_text( schema_file, 'ModeText', "utf-8" )
+        conn = self._connect()
+        conn.executescript( sql_script )
+        conn.commit()
 
     def create_file(self):
         if self.get_path().exists():

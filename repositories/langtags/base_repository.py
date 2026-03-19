@@ -28,7 +28,7 @@ class BaseRepository:
         try:
             cursor = self.database.execute(
                 statement=(
-                    f"INSERT INTO {self.table.name} ({self._COLUMN_VALUE},created_at,deleted_at) VALUES(?, ?, ?);"
+                    f"INSERT INTO {self.table.name} ({self._COLUMN_VALUE},created_at,updated_at,deleted_at) VALUES(?, ?, NULL, ?);"
                 ),
                 commit=True, params=(
                     value, get_datetime_now(), (get_datetime_now() if is_deleted else None)
