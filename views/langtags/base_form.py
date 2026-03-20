@@ -95,6 +95,9 @@ class BaseForm( QtWidgets.QWidget ):
                 self.refresh_parameters()
             else:
                 self.clear_parameters( [self.entry_value] )
+        else:
+            if not text:
+                self.clear_parameters( [self.entry_value] )
 
     def on_save(self):
         row_id = None

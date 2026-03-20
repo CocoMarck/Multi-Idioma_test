@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <!-- Clase inicio -->
+ <class>TranslationForm</class>
+
+ <widget class="QWidget" name="centralWidget">
+  <layout class="QVBoxLayout" name="vbox_main">
+
+   <!-- Formulario -->
+   <item>
+    <layout class="QGridLayout" name="form">
+
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_translation_id">
+       <property name="text"><string>translation_id</string></property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="entry_translation_id">
+      </widget>
+     </item>
+
+     <item row="0" column="2">
+      <widget class="QComboBox" name="combobox_tags"/>
+     </item>
+     <item row="0" column="4">
+         <widget class="QComboBox" name="combobox_languages"/>
+     </item>
+
+     <item row="1" column="0">
+         <widget class="QLabel" name="label_tag">
+             <property name="text"><string>tag</string></property>
+         </widget>
+     </item>
+     <item row="1" column="1">
+         <widget class="QLineEdit" name="entry_tag">
+         </widget>
+     </item>
+
+     <item row="1" column="2">
+         <widget class="QLabel" name="label_language">
+             <property name="text"><string>language</string></property>
+         </widget>
+     </item>
+     <item row="1" column="3">
+         <widget class="QLineEdit" name="entry_language">
+         </widget>
+     </item>
+
+     <item row="1" column="4">
+      <widget class="QLabel" name="label_value">
+       <property name="text"><string>value</string></property>
+      </widget>
+     </item>
+     <item row="1" column="5">
+      <widget class="QLineEdit" name="entry_value">
+      </widget>
+     </item>
+
+     <item row="2" column="0">
+      <widget class="QCheckBox" name="checkbox_is_deleted">
+       <property name="text"><string>is_deleted</string></property>
+      </widget>
+     </item>
+
+    </layout>
+   </item>
+
+   <!-- Item -->
+   <item>
+    <layout class="QHBoxLayout">
+     <item>
+      <widget class="QLabel" name="label_created_at">
+       <property name="text"><string>created_at</string></property>
+      </widget>
+     </item>
+
+     <item>
+      <widget class="QLabel" name="label_updated_at">
+       <property name="text"><string>updated_at</string></property>
+      </widget>
+     </item>
+
+     <item>
+      <widget class="QLabel" name="label_deleted_at">
+       <property name="text"><string>deleted_at</string></property>
+      </widget>
+      </item>
+    </layout>
+   </item>
+
+
+   <!-- Botones -->
+   <item>
+    <layout class="QHBoxLayout" name="button_hbox">
+
+     <item>
+      <widget class="QPushButton" name="button_save">
+       <property name="text"> <string>save</string> </property>
+      </widget>
+     </item>
+
+     <item>
+      <widget class="QPushButton" name="button_refresh">
+       <property name="text"> <string>refresh</string> </property>
+      </widget>
+     </item>
+
+    </layout>
+   </item>
+
+
+   <!-- Tabla -->
+   <item>
+    <widget class="QTableWidget" name="table">
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+
+  </layout>
+ </widget>
+
+ <!-- Clase cierre -->
+ <resources/>
+ <connections/>
+</ui>

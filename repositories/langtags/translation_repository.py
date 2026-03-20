@@ -12,27 +12,33 @@ class TranslationRepository(BaseRepository):
         self.language_repository = language_repository
         self.tag_repository = tag_repository
 
-    def update_value(self, translation_id:int, tag_id:int, language_id:int, value: str):
+    def update_value(
+        self, translation_id:int, tag_id:int, language_id:int, value: str, is_deleted:bool=False
+    ):
         try:
             cursor = self.database.execute(
                 statement=(
-                    f"UPDATE {self.table.name} SET language_id=?, tag_id=?, {self._COLUMN_VALUE}=?, updated_at=? WHERE {self._COLUMN_ID}=?;"
+                    f"UPDATE {self.table.name} SET tag_id=?, language_id=?, {self._COLUMN_VALUE}=?, updated_at=?, deleted_at=? WHERE {self._COLUMN_ID}=?;"
                 ),  commit=True,
                 params=(
-                    language_id, tag_id, value, get_datetime_now(), translation_id
+                    tag_id, language_id, value, get_datetime_now(),
+                    (get_datetime_now() if is_deleted else None), translation_id
                 )
             )
             return True
         except:
             return False
 
-    def insert_value(self, tag_id:int, language_id:int, value: str):
+    def insert_value(self, tag_id:int, language_id:int, value: str, is_deleted:bool=False):
         try:
             cursor = self.database.execute(
                 statement=(
-                    f"INSERT INTO {self.table.name} (language_id,tag_id,{self._COLUMN_VALUE},created_at) VALUES(?,?,?,?);"
+                    f"INSERT INTO {self.table.name} (tag_id,language_id,{self._COLUMN_VALUE},created_at,deleted_at) VALUES(?,?,?,?,?);"
                 ),
-                commit=True, params=(language_id,tag_id,value,get_datetime_now())
+                commit=True, params=(
+                    tag_id,language_id,value,get_datetime_now(),
+                    (get_datetime_now() if is_deleted else None)
+                )
             )
             return True
         except:
@@ -43,9 +49,9 @@ class TranslationRepository(BaseRepository):
         try:
             cursor = self.database.execute(
                 statement=(
-                    f'SELECT 1 FROM {self.table.name} WHERE language_id=? AND tag_id=? AND {self._COLUMN_ID}=? LIMIT 1;'
+                    f'SELECT 1 FROM {self.table.name} WHERE tag_id=? AND language_id=? AND {self._COLUMN_ID}=? LIMIT 1;'
                 ),
-                commit=False, params=(language_id, tag_id, translation_id)
+                commit=False, params=(tag_id,language_id,translation_id)
             )
             return cursor.fetchone() is not None
         except:
@@ -54,26 +60,35 @@ class TranslationRepository(BaseRepository):
     def get_translation_id(self, tag_id:int, language_id:int ) -> int | None:
         try:
             cursor = self.database.execute(
-                statement=f"SELECT {self._COLUMN_ID} FROM {self.table.name} WHERE language_id=? AND tag_id=? LIMIT 1;",
-                commit=False, params=(language_id,tag_id)
+                statement=f"SELECT {self._COLUMN_ID} FROM {self.table.name} WHERE tag_id=? AND language_id=? LIMIT 1;",
+                commit=False, params=(tag_id,language_id)
             )
             row = cursor.fetchone()
             return row[0] if row else None
         except:
             return None
 
-    def save_value(self, tag_name:str, language_code:str, value:str):
+    def save(
+        self, translation_id:int, tag_id:int, language_id:int, value:str, is_deleted:bool=False
+    ):
+        exists_language_id = self.language_repository.exists(language_id)
+        exists_tag_id = self.tag_repository.exists(tag_id)
+
+        updated = False
+        inserted = False
+        if exists_language_id and exists_tag_id:
+            if self.exists( translation_id ):
+                updated = self.update_value( translation_id, tag_id, language_id, value, is_deleted )
+            if updated == False:
+                inserted = self.insert_value( tag_id, language_id, value, is_deleted )
+        return updated or inserted
+
+    def save_value(self, tag_name:str, language_code:str, value:str, is_deleted:bool=False):
         language_id = self.language_repository.get_code_id(language_code)
         tag_id = self.tag_repository.get_name_id(tag_name)
         translation_id = self.get_translation_id( tag_id, language_id )
 
-        updated = False
-        inserted = False
-        if translation_id is not None:
-            updated = self.update_value( translation_id, tag_id, language_id, value )
-        if updated == False:
-            inserted = self.insert_value( tag_id, language_id, value )
-        return updated or inserted
+        return self.save( translation_id, tag_id, language_id, value, is_deleted)
 
     def toggle_translation_state(self, tag_name:str, language_code:str):
         language_id = self.language_repository.get_code_id(language_code)

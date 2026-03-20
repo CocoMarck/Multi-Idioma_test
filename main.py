@@ -10,6 +10,7 @@ from core.sqlite.standard_table import StandardTable
 # Models
 from models.langtags.language import Language
 from models.langtags.tag import Tag
+from models.langtags.translation import Translation
 
 # Repostories
 from repositories.langtags.language_repository import LanguageRepository
@@ -19,6 +20,7 @@ from repositories.langtags.translation_repository import TranslationRepository
 # Controllers
 from controllers.langtags.language_controller import LanguageController
 from controllers.langtags.tag_controller import TagController
+from controllers.langtags.translation_controller import TranslationController
 
 # Window
 from views.langtags.main_window import MainWindow
@@ -49,11 +51,13 @@ translation_table = StandardTable( database=db, name="translations" )
 translation_repository = TranslationRepository(
     table=translation_table, language_repository=language_repository, tag_repository=tag_repository
 )
+translation_model = Translation()
+translation_controller = TranslationController( translation_repository, translation_model )
 
 # Generación de DB
 if __name__ == '__main__':
     app = QApplication( sys.argv )
     #app.setStyleSheet( STYLE_QSS )
-    window = MainWindow( language_controller, tag_controller )
+    window = MainWindow( tag_controller, language_controller, translation_controller  )
     window.show()
     sys.exit( app.exec() )
