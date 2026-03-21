@@ -133,3 +133,30 @@ class TranslationRepository(BaseRepository):
         except Exception as e:
             print(f"Error in get_value: {e}")
             return None
+
+    def get_view_cursor(self):
+        statement=(
+            f"SELECT\n"
+            f"    t.translation_id,\n"
+            f"    g.name AS tag_name,\n"
+            f"    l.code AS language_code,\n"
+            f"    t.value,\n"
+            f"    t.created_at,\n"
+            f"    t.updated_at,\n"
+            f"    t.deleted_at\n"
+            f"FROM '{self.table.name}' t\n"
+            f"JOIN '{self.tag_repository.table.name}' g ON t.tag_id = g.tag_id\n"
+            f"JOIN '{self.language_repository.table.name}' l ON t.language_id = l.language_id;"
+        )
+        return self.database.execute( statement=statement, commit=False )
+
+    def get_view_rows(self):
+        cursor = self.get_view_cursor()
+        return list( cursor.fetchall() )
+
+    def get_view_columns(self):
+        cursor = self.get_view_cursor()
+        columns = []
+        for cols in cursor.description:
+            columns.append( cols[0] )
+        return columns

@@ -39,7 +39,7 @@ class BaseForm( QtWidgets.QWidget ):
         self.table.setHorizontalHeaderLabels( columns )
         self.table.resizeColumnsToContents()
 
-        values = self.controller.get_column_values()
+        values = self.controller.get_rows()
         self.table.setRowCount( len(values) )
         for index in range(0, len(columns)):
             for row in range(0, len(values) ):

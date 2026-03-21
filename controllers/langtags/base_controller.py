@@ -14,8 +14,8 @@ class BaseController:
     def get_columns(self):
         return self.repository.table.get_columns()
 
-    def get_column_values(self):
-        return self.repository.table.get_column_values()
+    def get_rows(self):
+        return self.repository.table.get_rows()
 
     # Optención de datos para modelo
     def get_row(self, value_id) -> bool:

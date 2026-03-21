@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+    <!-- Clase inicio -->
+    <class>GetTextForm</class>
+
+    <widget class="QWidget" name="centralWidget">
+        <layout class="QVBoxLayout" name="vbox_main">
+
+            <!-- Formulario -->
+            <item>
+                <layout class="QGridLayout" name="form">
+
+                    <item row="0" column="0">
+                        <widget class="QLabel" name="label_tag_name">
+                            <property name="text"><string>tag_name</string></property>
+                        </widget>
+                    </item>
+                    <item row="0" column="1">
+                        <widget class="QLineEdit" name="entry_tag_name">
+                        </widget>
+                    </item>
+
+                    <item row="0" column="2">
+                        <widget class="QLabel" name="label_language_code">
+                            <property name="text"><string>language_code</string></property>
+                        </widget>
+                    </item>
+                    <item row="0" column="3">
+                        <widget class="QLineEdit" name="entry_language_code">
+                        </widget>
+                    </item>
+
+                </layout>
+            </item>
+
+            <item>
+                <widget class="QLabel" name="label_get_text">
+                </widget>
+            </item>
+
+            <item>
+                <widget class="QPushButton" name="button_get_text">
+                    <property name="text"> <string>get_text</string> </property>
+                </widget>
+            </item>
+
+
+            <!-- Tabla -->
+            <item>
+                <widget class="QTableWidget" name="table">
+                    <property name="wordWrap">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </item>
+
+        </layout>
+    </widget>
+
+    <!-- Clase cierre -->
+    <resources/>
+    <connections/>
+</ui>

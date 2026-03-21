@@ -42,6 +42,13 @@ class TranslationController(BaseController):
             self.get_translation_row( tag_name, language_code )
         return save
 
+    def get_view_rows(self):
+        return self.repository.get_view_rows()
+
+    def get_view_columns(self):
+        return self.repository.get_view_columns()
+
+
     def get_value(self, tag_name, language_code):
         return self.repository.get_value(tag_name, language_code)
 

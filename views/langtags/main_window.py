@@ -12,6 +12,7 @@ from controllers.langtags.translation_controller import TranslationController
 from .language_form import LanguageForm
 from .tag_form import TagForm
 from .translation_form import TranslationForm
+from .get_text_form import GetTextForm
 
 # Ventana
 class MainWindow( QtWidgets.QMainWindow ):
@@ -31,5 +32,8 @@ class MainWindow( QtWidgets.QMainWindow ):
 
         self.translation_form = TranslationForm( translation_controller )
         self.tab_widget.addTab( self.translation_form, 'translation-form' )
+
+        self.get_text_form = GetTextForm( translation_controller )
+        self.tab_widget.addTab( self.get_text_form, 'get-text-form' )
 
         #self.tab_widget.currentChanged.connect(self.on_tab_changed)

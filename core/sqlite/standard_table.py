@@ -17,7 +17,7 @@ class StandardTable():
             columns.append( cols[0] )
         return columns
 
-    def get_column_values(self) -> list:
+    def get_rows(self) -> list:
         cursor = self.get_cursor()
         return list( cursor.fetchall() )
 

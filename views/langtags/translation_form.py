@@ -31,6 +31,7 @@ class TranslationForm( QtWidgets.QWidget ):
         self.button_save.clicked.connect( self.on_save )
         self.entry_tag.textChanged.connect( self.get_translation_row )
         self.entry_language.textChanged.connect( self.get_translation_row )
+        self.button_refresh.clicked.connect( self.refresh_table )
 
     def refresh_table(self):
         columns = self.controller.get_columns()
@@ -39,7 +40,7 @@ class TranslationForm( QtWidgets.QWidget ):
         self.table.setHorizontalHeaderLabels( columns )
         self.table.resizeColumnsToContents()
 
-        values = self.controller.get_column_values()
+        values = self.controller.get_rows()
         self.table.setRowCount( len(values) )
         for index in range(0, len(columns)):
             for row in range(0, len(values) ):
