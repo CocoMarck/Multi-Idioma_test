@@ -24,7 +24,13 @@ class TranslationForm( QtWidgets.QWidget ):
 
         self.refresh_table()
 
+        self._PARAMETERS = [
+            self.label_translation_id_text, self.entry_tag, self.entry_language, self.entry_value, self.label_created_at, self.label_updated_at, self.label_deleted_at
+        ]
+
         self.button_save.clicked.connect( self.on_save )
+        self.entry_tag.textChanged.connect( self.get_translation_row )
+        self.entry_language.textChanged.connect( self.get_translation_row )
 
     def refresh_table(self):
         columns = self.controller.get_columns()
@@ -43,6 +49,52 @@ class TranslationForm( QtWidgets.QWidget ):
                 if isinstance(value, str):
                     self.table.setColumnWidth(index, 140)
 
+    def refresh_parameters(self):
+        self.label_translation_id_text.setText(
+            str(self.model.translation_id) if self.model.translation_id else ""
+        )
+        self.entry_tag.setText(
+            str(self.controller.get_tag_name( self.model.tag_id ))
+        )
+        self.entry_language.setText(
+            str(self.controller.get_language_code( self.model.language_id ))
+        )
+        self.entry_value.setText(
+            str(self.model.value) if self.model.value else ""
+        )
+        self.label_created_at.setText(
+            str(self.model.created_at) if self.model.created_at else ""
+        )
+        self.label_updated_at.setText(
+            str(self.model.updated_at) if self.model.updated_at else ""
+        )
+        self.label_deleted_at.setText(
+            str(self.model.deleted_at) if self.model.deleted_at else ""
+        )
+        self.checkbox_is_deleted.setChecked( self.controller.is_model_deleted() )
+
+    def clear_parameters(self, ignore_parameters=[]):
+        for p in self._PARAMETERS:
+            if p in ignore_parameters:
+                continue
+            p.clear()
+        self.checkbox_is_deleted.setChecked( False )
+
+    def get_translation_row( self):
+        tag = self.entry_tag.text()
+        language = self.entry_language.text()
+
+        getting_row = False
+        if tag and language:
+            getting_row = self.controller.get_translation_row( tag, language )
+
+        if getting_row:
+            self.refresh_parameters()
+        else:
+            self.clear_parameters( [self.entry_tag, self.entry_language] )
+
+        return getting_row
+
     def on_save(self):
         row_id = None
         tag_name = self.entry_tag.text()
@@ -54,5 +106,5 @@ class TranslationForm( QtWidgets.QWidget ):
         if value:
             save = self.controller.save_value( tag_name, language_code, value, is_deleted )
             if save:
-                #self.refresh_parameters()
+                self.refresh_parameters()
                 self.refresh_table()

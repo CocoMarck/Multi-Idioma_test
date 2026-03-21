@@ -84,6 +84,17 @@ class BaseRepository:
         except:
             return None
 
+    def get_value_with_id(self, value_id):
+        try:
+            cursor = self.database.execute(
+                statement=f"SELECT {self._COLUMN_VALUE} FROM {self.table.name} WHERE {self._COLUMN_ID}=? LIMIT 1;",
+                commit=False, params=(value_id,)
+            )
+            row = cursor.fetchone()
+            return row[0] if row else None
+        except:
+            return None
+
     def save(self, value_id:int=None, value:str=None, is_deleted:bool=False):
         inserted = False
         updated = False

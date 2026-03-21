@@ -26,10 +26,10 @@ from controllers.langtags.translation_controller import TranslationController
 from views.langtags.main_window import MainWindow
 
 # Paths
-from config.paths import SCHEMAS_LANGTAGS_FILES
+from config.paths import SCHEMAS_LANGTAGS_FILES, DATA_DIR, LANGTAGS_FILENAME
 
 # Creación de db si no exite.
-db = StandardDatabase( directory=pathlib.Path('data'), name='langtags.sqlite' )
+db = StandardDatabase( directory=DATA_DIR, name=LANGTAGS_FILENAME )
 if not db.exists():
     print('Creando base de datos y aplicando schemas...')
     db.execute( 'PRAGMA foreign_keys = ON;', commit=True )

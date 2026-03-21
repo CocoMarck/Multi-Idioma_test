@@ -61,3 +61,6 @@ class BaseController:
 
     def is_model_deleted(self):
         return self.is_deleted( getattr(self.model, self._ATTRIBUTES['id']) )
+
+    def exists(self, value_id):
+        return self.repository.exists( value_id )

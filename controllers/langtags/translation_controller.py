@@ -19,8 +19,14 @@ class TranslationController(BaseController):
             return False
 
     def get_translation_row(self, tag_name, language_code) -> bool:
-        value_id = self.repository.get_translation_id( tag_name, language_code )
+        value_id = self.repository.get_translation_id_with_strings( tag_name, language_code )
         return self.get_row( value_id )
+
+    def get_language_code(self, language_id):
+        return self.repository.get_language_code(language_id)
+
+    def get_tag_name(self, tag_id):
+        return self.repository.get_tag_name(tag_id)
 
     def save(self, value_id, tag_id, language_id, value, is_deleted):
         save = self.repository.save( value_id, tag_id, langauge_id, value, is_deleted )
@@ -35,3 +41,12 @@ class TranslationController(BaseController):
         if save:
             self.get_translation_row( tag_name, language_code )
         return save
+
+    def get_value(self, tag_name, language_code):
+        return self.repository.get_value(tag_name, language_code)
+
+    def get_text(self, tag_name:str=None, language_code:str=None):
+        value = self.repository.get_value( tag_name, language_code )
+        if value != None:
+            return value
+        return tag_name

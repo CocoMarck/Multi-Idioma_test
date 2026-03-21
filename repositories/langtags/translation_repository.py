@@ -61,12 +61,17 @@ class TranslationRepository(BaseRepository):
         try:
             cursor = self.database.execute(
                 statement=f"SELECT {self._COLUMN_ID} FROM {self.table.name} WHERE tag_id=? AND language_id=? LIMIT 1;",
-                commit=False, params=(tag_id,language_id)
+                commit=False, params=(tag_id,language_id,)
             )
             row = cursor.fetchone()
             return row[0] if row else None
         except:
             return None
+
+    def get_translation_id_with_strings(self, tag_name, language_code):
+        tag_id = self.tag_repository.get_value_id( tag_name )
+        language_id = self.language_repository.get_value_id( language_code )
+        return self.get_translation_id( tag_id, language_id )
 
     def save(
         self, translation_id:int, tag_id:int, language_id:int, value:str, is_deleted:bool=False
@@ -107,6 +112,12 @@ class TranslationRepository(BaseRepository):
         tag_id = self.tag_repository.get_name_id(tag_name)
         translation_id = self.get_translation_id( tag_id, language_id )
         return not self.is_deleted( translation_id )
+
+    def get_language_code(self, language_id) -> str:
+        return self.language_repository.get_value_with_id( language_id )
+
+    def get_tag_name(self, tag_id):
+        return self.tag_repository.get_value_with_id( tag_id )
 
     def get_value(self, tag_name:str, language_code:str) -> str | None:
         language_id = self.language_repository.get_code_id(language_code)
