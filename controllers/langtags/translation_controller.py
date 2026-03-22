@@ -48,12 +48,8 @@ class TranslationController(BaseController):
     def get_view_columns(self):
         return self.repository.get_view_columns()
 
-
     def get_value(self, tag_name, language_code):
         return self.repository.get_value(tag_name, language_code)
 
     def get_text(self, tag_name:str=None, language_code:str=None):
-        value = self.repository.get_value( tag_name, language_code )
-        if value != None:
-            return value
-        return tag_name
+        return self.repository.get_text( tag_name, language_code )

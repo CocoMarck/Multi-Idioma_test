@@ -1,16 +1,22 @@
 from .base_repository import BaseRepository
 from .language_repository import LanguageRepository
 from .tag_repository import TagRepository
+from .setting_repository import SettingRepository
 from utils.datetime_util import get_datetime_now
+from core.locale_util import system_language
 
 class TranslationRepository(BaseRepository):
     def __init__(
-        self, *args, language_repository:LanguageRepository, tag_repository:TagRepository, **kwargs
+        self, *args,
+        language_repository:LanguageRepository, tag_repository:TagRepository,
+        setting_repository: SettingRepository,
+        **kwargs
     ):
         super().__init__(*args, column_id="translation_id", column_value="value", **kwargs)
 
         self.language_repository = language_repository
         self.tag_repository = tag_repository
+        self.setting_repository = setting_repository
 
     def update_value(
         self, translation_id:int, tag_id:int, language_id:int, value: str, is_deleted:bool=False
@@ -133,6 +139,23 @@ class TranslationRepository(BaseRepository):
         except Exception as e:
             print(f"Error in get_value: {e}")
             return None
+
+    def get_text(self, tag_name:str=None, language_code:str=None):
+        if not language_code:
+            if self.setting_repository.is_current_language_system():
+                system_language_code = system_language()
+                if self.language_repository.get_value_id(system_language_code) is not None:
+                    language_code = system_language_code
+            else:
+                if self.setting_repository.is_current_language_default():
+                    language_code = self.setting_repository.select_default_language_code()
+                else:
+                    language_code = self.setting_repository.select_current_language_code()
+
+        value = self.get_value( tag_name, language_code )
+        if value != None:
+            return value
+        return tag_name
 
     def get_view_cursor(self):
         statement=(

@@ -11,11 +11,13 @@ from core.sqlite.standard_table import StandardTable
 from models.langtags.language import Language
 from models.langtags.tag import Tag
 from models.langtags.translation import Translation
+from models.langtags.setting import Setting
 
 # Repostories
 from repositories.langtags.language_repository import LanguageRepository
 from repositories.langtags.tag_repository import TagRepository
 from repositories.langtags.translation_repository import TranslationRepository
+from repositories.langtags.setting_repository import SettingRepository
 
 # Controllers
 from controllers.langtags.language_controller import LanguageController
@@ -47,9 +49,13 @@ tag_repository = TagRepository( table=tag_table )
 tag_model = Tag()
 tag_controller = TagController(tag_repository, tag_model)
 
+setting_table = StandardTable( database=db, name="settings" )
+setting_repository = SettingRepository( setting_table )
+
 translation_table = StandardTable( database=db, name="translations" )
 translation_repository = TranslationRepository(
-    table=translation_table, language_repository=language_repository, tag_repository=tag_repository
+    table=translation_table, language_repository=language_repository, tag_repository=tag_repository,
+    setting_repository=setting_repository
 )
 translation_model = Translation()
 translation_controller = TranslationController( translation_repository, translation_model )
