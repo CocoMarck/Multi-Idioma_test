@@ -1,8 +1,14 @@
+# Repository
 from .base_repository import BaseRepository
 from .language_repository import LanguageRepository
 from .tag_repository import TagRepository
 from .setting_repository import SettingRepository
+
+# Utils
 from utils.datetime_util import get_datetime_now
+from utils.text_util import in_kebab_format
+
+# Core
 from core.locale_util import system_language
 
 class TranslationRepository(BaseRepository):
@@ -141,18 +147,19 @@ class TranslationRepository(BaseRepository):
             return None
 
     def get_text(self, tag_name:str=None, language_code:str=None):
+        '''
+        Obtener texto si o si.
+        '''
         if not language_code:
             if self.setting_repository.is_current_language_system():
-                system_language_code = system_language()
-                if self.language_repository.get_value_id(system_language_code) is not None:
-                    language_code = system_language_code
+                language_code = system_language()
             else:
-                if self.setting_repository.is_current_language_default():
-                    language_code = self.setting_repository.select_default_language_code()
-                else:
-                    language_code = self.setting_repository.select_current_language_code()
+                language_code = self.setting_repository.select_current_language_code()
 
-        value = self.get_value( tag_name, language_code )
+        if self.language_repository.get_code_id(language_code) is None:
+            language_code = self.setting_repository.select_default_language_code()
+
+        value = self.get_value( in_kebab_format(tag_name), language_code )
         if value != None:
             return value
         return tag_name

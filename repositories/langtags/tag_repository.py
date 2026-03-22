@@ -2,7 +2,7 @@ from .base_repository import BaseRepository
 
 class TagRepository(BaseRepository):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, column_id="tag_id", column_value="name", **kwargs)
+        super().__init__(*args, column_id="tag_id", column_value="name", kebab_case=True, **kwargs)
 
     def update_name(self, tag_id:int, name:str):
         return self.update_value( tag_id, name )

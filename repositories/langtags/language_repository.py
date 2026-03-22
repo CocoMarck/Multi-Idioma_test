@@ -2,7 +2,7 @@ from .base_repository import BaseRepository
 
 class LanguageRepository(BaseRepository):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, column_id="language_id", column_value="code", **kwargs)
+        super().__init__(*args, column_id="language_id", column_value="code", kebab_case=True, **kwargs)
 
     def update_code(self, language_id:int, code:str):
         return self.update_value( language_id, code )
