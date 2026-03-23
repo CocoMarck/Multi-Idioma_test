@@ -18,7 +18,7 @@ class TranslationRepository(BaseRepository):
         setting_repository: SettingRepository,
         **kwargs
     ):
-        super().__init__(*args, column_id="translation_id", column_value="value", **kwargs)
+        super().__init__(*args, column_id="translation_id", column_value="value", kebab_case=False, **kwargs)
 
         self.language_repository = language_repository
         self.tag_repository = tag_repository
@@ -156,10 +156,16 @@ class TranslationRepository(BaseRepository):
             else:
                 language_code = self.setting_repository.select_current_language_code()
 
+        # Es none
         if self.language_repository.get_code_id(language_code) is None:
             language_code = self.setting_repository.select_default_language_code()
 
-        value = self.get_value( in_kebab_format(tag_name), language_code )
+        # Obtener texto
+        tag_name = in_kebab_format(tag_name)
+        value = self.get_value( tag_name, language_code )
+        if value == None:
+            language_code = self.setting_repository.select_default_language_code()
+        value = self.get_value( tag_name, language_code )
         if value != None:
             return value
         return tag_name

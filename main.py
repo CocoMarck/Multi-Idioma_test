@@ -23,6 +23,7 @@ from repositories.langtags.setting_repository import SettingRepository
 from controllers.langtags.language_controller import LanguageController
 from controllers.langtags.tag_controller import TagController
 from controllers.langtags.translation_controller import TranslationController
+from controllers.langtags.setting_controller import SettingController
 
 # Window
 from views.langtags.main_window import MainWindow
@@ -51,6 +52,9 @@ tag_controller = TagController(tag_repository, tag_model)
 
 setting_table = StandardTable( database=db, name="settings" )
 setting_repository = SettingRepository( setting_table )
+setting_model = Setting()
+setting_controller = SettingController( setting_repository, setting_model )
+setting_controller.get_current_language_model()
 
 translation_table = StandardTable( database=db, name="translations" )
 translation_repository = TranslationRepository(
@@ -64,6 +68,6 @@ translation_controller = TranslationController( translation_repository, translat
 if __name__ == '__main__':
     app = QApplication( sys.argv )
     #app.setStyleSheet( STYLE_QSS )
-    window = MainWindow( tag_controller, language_controller, translation_controller  )
+    window = MainWindow( tag_controller, language_controller, translation_controller, setting_controller )
     window.show()
     sys.exit( app.exec() )

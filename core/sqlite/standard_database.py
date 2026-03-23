@@ -2,7 +2,7 @@ import sqlite3
 import pathlib
 
 # Local
-from core.text_util import read_text
+from utils.text_util import read_text
 
 class StandardDatabase():
     def __init__(self, directory: pathlib.Path, name: str  ):
