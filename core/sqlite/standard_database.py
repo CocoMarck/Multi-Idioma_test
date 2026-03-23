@@ -37,6 +37,7 @@ class StandardDatabase():
 
     def init_schema(self, schema_file):
         sql_script = read_text( schema_file, 'ModeText', "utf-8" )
+        print(sql_script)
         conn = self._connect()
         conn.executescript( sql_script )
         conn.commit()

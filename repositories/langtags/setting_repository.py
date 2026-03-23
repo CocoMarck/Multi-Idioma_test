@@ -137,7 +137,9 @@ class SettingRepository():
         return current_id == default_id
 
     def get_language_codes(self) -> list:
-        parameters = [ self._PARAMETER_DEFAULT_LANGUAGE, self._PARAMETER_SYSTEM_LANGUAGE ]
+        parameters = [
+            self._PARAMETER_SYSTEM_LANGUAGE#, self._PARAMETER_DEFAULT_LANGUAGE,
+        ]
         try:
             cursor = self.database.execute(
                 statement="SELECT code FROM languages;", commit=False
@@ -151,7 +153,7 @@ class SettingRepository():
 
     def get_language_ids(self):
         parameters = [
-            self.select_system_language_id(), self.select_default_language_id()
+            self.select_system_language_id()#, self.select_default_language_id()
         ]
         try:
             cursor = self.database.execute(

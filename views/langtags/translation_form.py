@@ -10,19 +10,24 @@ from config.paths import TRANSLATION_FORM_UI
 # Controller
 from controllers.langtags.translation_controller import TranslationController
 
+# Text
+from utils.translation_util import get_text
+
 # Formulario
 class TranslationForm( QtWidgets.QWidget ):
     def __init__(self, controller: TranslationController, title='translation-form' ):
         super().__init__()
 
+        self._TITLE = title
+
         self.resize( 16*64, 9*64 )
-        self.setWindowTitle( title )
         uic.loadUi( TRANSLATION_FORM_UI, self )
 
         self.controller = controller
         self.model = self.controller.model
 
         self.refresh_table()
+        self.refresh_text()
 
         self._PARAMETERS = [
             self.label_translation_id_text, self.entry_tag, self.entry_language, self.entry_value, self.label_created_at, self.label_updated_at, self.label_deleted_at
@@ -32,6 +37,17 @@ class TranslationForm( QtWidgets.QWidget ):
         self.entry_tag.textChanged.connect( self.get_translation_row )
         self.entry_language.textChanged.connect( self.get_translation_row )
         self.button_refresh.clicked.connect( self.refresh_table )
+
+    def refresh_text(self):
+        self.setWindowTitle( get_text(self._TITLE) )
+
+        self.label_tag.setText( get_text('tag') )
+        self.label_language.setText( get_text('language') )
+        self.label_value.setText( get_text('value') )
+
+        self.checkbox_is_deleted.setText( get_text('is-deleted') )
+        self.button_save.setText( get_text('save') )
+        self.button_refresh.setText( get_text('refresh') )
 
     def refresh_table(self):
         columns = self.controller.get_columns()
@@ -73,6 +89,10 @@ class TranslationForm( QtWidgets.QWidget ):
             str(self.model.deleted_at) if self.model.deleted_at else ""
         )
         self.checkbox_is_deleted.setChecked( self.controller.is_model_deleted() )
+
+    def refresh_all(self):
+        self.refresh_table()
+        self.refresh_text()
 
     def clear_parameters(self, ignore_parameters=[]):
         for p in self._PARAMETERS:

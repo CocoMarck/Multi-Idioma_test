@@ -1,8 +1,12 @@
+from .text_filter import ignore_text_filter
+from .text_constants import PREFIX_SPACE, PREFIX_ABC, PREFIX_NUMBER
+
+PREFIX_KEBAB_CASE = PREFIX_ABC+PREFIX_NUMBER+"-"
 def in_kebab_format(text):
     '''
     Formatear texto, tipo `kebab-case`
     '''
-    return text.lower().replace(' ', '-')
+    return ignore_text_filter( text.lower().replace(' ', '-'), PREFIX_KEBAB_CASE)
 
 
 def only_one_char( char=str, text=str ) -> str:

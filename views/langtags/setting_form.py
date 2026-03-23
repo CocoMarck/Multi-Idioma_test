@@ -10,13 +10,17 @@ from config.paths import SETTING_FORM_UI
 # Controller
 from controllers.langtags.translation_controller import TranslationController
 
+# Text
+from utils.translation_util import get_text
+
 # Formulario
 class SettingForm( QtWidgets.QWidget ):
     def __init__(self, controller: TranslationController, title='setting-form' ):
         super().__init__()
 
+        self._TITLE = title
+
         self.resize( 16*64, 9*64 )
-        self.setWindowTitle( title )
         uic.loadUi( SETTING_FORM_UI, self )
 
         self.controller = controller
@@ -24,12 +28,18 @@ class SettingForm( QtWidgets.QWidget ):
 
         self.refresh_table()
         self.refresh_parameters()
+        self.refresh_text()
 
-        self.combobox_languages.currentTextChanged.connect( self.on_languages )
+        self.combobox_languages.currentIndexChanged.connect( self.on_languages )
 
+    def refresh_text(self):
+        self.setWindowTitle( get_text(self._TITLE) )
+
+        self.label_current_language.setText( get_text('current-language') )
 
     def refresh_table(self):
         columns = self.controller.get_columns()
+
         self.table.clear()
         self.table.setColumnCount( len(columns) )
         self.table.setHorizontalHeaderLabels( columns )
@@ -50,14 +60,19 @@ class SettingForm( QtWidgets.QWidget ):
         self.combobox_languages.clear()
         for code in dictionary:
             self.combobox_languages.insertItem(dictionary[code], code)
+
         return dictionary
+
 
     def refresh_parameters(self):
         dictionary = self.refresh_languages()
         self.controller.get_current_language_model()
-        code = self.controller.select_current_language_code()
-        self.combobox_languages.setCurrentIndex( dictionary[code] )
+        self.combobox_languages.setCurrentIndex( self.model.language_id )
 
-    def on_languages(self, text):
-        self.controller.update_current_language_code( text )
+    def refresh_all(self):
+        self.refresh_table()
+        self.refresh_text()
+
+    def on_languages(self, index):
+        self.controller.update_current_language_id( index )
         self.refresh_table()

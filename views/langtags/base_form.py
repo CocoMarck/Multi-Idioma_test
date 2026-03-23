@@ -2,7 +2,7 @@ from PyQt6 import QtWidgets, uic
 from PyQt6.QtWidgets import QTableWidgetItem
 
 # Text util
-from core.text_util import PREFIX_NUMBER, ignore_text_filter
+from utils.text_util import PREFIX_NUMBER, ignore_text_filter
 
 # Rutas
 from config.paths import BASE_FORM_UI
@@ -10,13 +10,17 @@ from config.paths import BASE_FORM_UI
 # Controller
 from controllers.langtags.base_controller import BaseController
 
+# Text
+from utils.translation_util import get_text
+
 # Formulario
 class BaseForm( QtWidgets.QWidget ):
     def __init__(self, controller: BaseController, title='base-form' ):
         super().__init__()
 
+        self._TITLE = title
+
         self.resize( 16*64, 9*64 )
-        self.setWindowTitle( title )
         uic.loadUi( BASE_FORM_UI, self )
 
         self.controller = controller
@@ -25,12 +29,21 @@ class BaseForm( QtWidgets.QWidget ):
         # Tables
         self.refresh_table()
         self.refresh_parameters()
+        self.refresh_text()
 
         # Connects
         self.entry_id.textChanged.connect( self.on_id )
         self.entry_value.textChanged.connect( self.on_value )
         self.button_refresh.clicked.connect( self.on_refresh )
         self.button_save.clicked.connect( self.on_save )
+
+    def refresh_text(self):
+        self.setWindowTitle( get_text(self._TITLE) )
+        self.label_id.setText( get_text('id') )
+        self.label_value.setText( get_text('value') )
+        self.checkbox_is_deleted.setText( get_text('is-deleted') )
+        self.button_save.setText( get_text('save') )
+        self.button_refresh.setText( get_text('refresh') )
 
     def refresh_table(self):
         columns = self.controller.get_columns()
@@ -77,6 +90,10 @@ class BaseForm( QtWidgets.QWidget ):
                 continue
             p.clear()
         self.checkbox_is_deleted.setChecked( False )
+
+    def refresh_all(self):
+        self.refresh_table()
+        self.refresh_text()
 
     def on_id(self, text):
         text = ignore_text_filter( text, PREFIX_NUMBER )

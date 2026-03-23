@@ -1,3 +1,5 @@
+from pathlib import Path as pathlib
+
 def read_text(
         file_and_path='', option='ModeList', encoding="utf-8"
     ):
