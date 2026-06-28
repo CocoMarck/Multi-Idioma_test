@@ -129,7 +129,7 @@ namespace Core.Sqlite {
 
         public bool CreateFile(){
             if ( !Exists() ){
-                using SqliteConnection connection = Connect();
+                SqliteConnection connection = Connect();
                 connection.Open();
                 connection.Close();
                 return true;
