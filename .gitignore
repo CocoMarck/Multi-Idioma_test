@@ -1,0 +1,17 @@
+# Build
+bin/
+obj/
+*.exe
+*.dll
+
+# DB
+*.sqlite
+
+# Logs & temp
+*.log
+*.tmp
+*.cache
+
+# OS-specific
+.DS_Store
+Thumbs.db
