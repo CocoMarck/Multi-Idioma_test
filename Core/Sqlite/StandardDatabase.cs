@@ -45,60 +45,78 @@ namespace Core.Sqlite {
             }
         }
 
-        public SqliteDataReader Query(string statement, params object[] parameters){
+        public SqliteDataReader Query(string sql, params object[] parameters){
             /*
+            Para commit y consultas.
             using var reader = db.Query("SELECT * FROM demo");
             while (reader.Read()){
                 Console.WriteLine($"{reader.GetInt32(0)} - {reader.GetString(1)}");
             }
             */
-            var connection = Connect();
+            SqliteConnection connection = Connect();
             connection.Open();
 
-            using var command = connection.CreateCommand();
-            command.CommandText = statement;
+            var command = connection.CreateCommand();
+            command.CommandText = sql;
 
             for (int i=0; i < parameters.Length; i++){
-                command.Parameters.AddWithValue($"@p{i}", parameters[1]);
+                command.Parameters.AddWithValue($"@p{i}", parameters[i]);
             }
 
             return command.ExecuteReader( CommandBehavior.CloseConnection );
         }
 
-        public SqliteDataReader Execute(string statement, bool commit, params object[] parameters ){
+        public void Execute(string sql, bool commit, params object[] parameters ){
             /*
-            // Ejemplo con rollback
-            using var reader = db.ExecuteQuery("SELECT * FROM demo WHERE nombre=@p0", false, "Simon");
-
-            while (reader.Read()){
-                Console.WriteLine($"{reader.GetInt32(0)} - {reader.GetString(1)}");
-            }
+            Un execute sin reader, porque no se puede para el rollback logic.
             */
-            var connection = Connect();
+            using SqliteConnection connection = Connect();
             connection.Open();
-
             using var transaction = connection.BeginTransaction();
             using var command = connection.CreateCommand();
-            command.CommandText = statement;
+            command.CommandText = sql;
             command.Transaction = transaction;
 
-            // Agregar parámetros
-            for (int i = 0; i < parameters.Length; i++){
+            for (int i = 0; i < parameters.Length; i++)
                 command.Parameters.AddWithValue($"@p{i}", parameters[i]);
-            }
 
-            var reader = command.ExecuteReader();
+            command.ExecuteNonQuery();
 
-            if (commit){
-                transaction.Commit();
-            } else {
-                transaction.Rollback();
-            }
-
-            // Reader necesita que la conexión siga viva
-            return reader;
+            if (commit) transaction.Commit();
+            else transaction.Rollback();
         }
 
+        // Methods util querys
+        public SqliteDataReader GetTables(){
+            return Query(
+                sql: "SELECT name FROM sqlite_master WHERE type='table';"
+            );
+        }
+
+        public string[] GetTableNames(){
+            var tableNames = new List<string>();
+            using var reader = GetTables();
+            while (reader.Read()){
+                tableNames.Add(reader.GetString(0));
+            }
+            return tableNames.ToArray();
+        }
+
+        public bool ExistingTable(string name){
+            return GetTableNames().Contains(name);
+        }
+
+        public bool DropTable(string name){
+            Execute( $"DROP TABLE \"{name}\";", commit:true);
+            return (ExistingTable(name) == false);
+        }
+
+        public bool DropTables(){
+            foreach (string name in GetTableNames()){
+                DropTable(name);
+            }
+            return GetTableNames().Length == 0;
+        }
 
         // Mehtods File
         public string GetPath(){
@@ -111,9 +129,17 @@ namespace Core.Sqlite {
 
         public bool CreateFile(){
             if ( !Exists() ){
-                using var connection = Connect();
+                using SqliteConnection connection = Connect();
                 connection.Open();
                 connection.Close();
+                return true;
+            }
+            return false;
+        }
+
+        public bool DeleteFile(){
+            if (Exists()){
+                File.Delete( GetPath() );
                 return true;
             }
             return false;

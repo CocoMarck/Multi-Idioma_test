@@ -15,7 +15,7 @@ public static class Program {
         Console.WriteLine( $"Create DB: {createDB}");
         try {
             db.Execute(
-                statement:"PRAGMA foreign_keys = ON;", commit:true
+                sql:"PRAGMA foreign_keys = ON;", commit:true
             );
         } catch (Exception e)
         {
@@ -25,6 +25,9 @@ public static class Program {
             // Crear DB si no existe, y poner sus schemas we.
             Console.WriteLine( $"Schema: `{file}`" );
             db.LoadSchemaFromFile( file );
+        }
+        foreach (string name in db.GetTableNames()){
+            Console.WriteLine( name );
         }
     }
     //
