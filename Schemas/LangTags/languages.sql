@@ -3,5 +3,6 @@ CREATE TABLE languages (
     code          TEXT NOT NULL UNIQUE,
     created_at    TEXT,
     updated_at    TEXT,
-    deleted_at    TEXT
+    deleted_at    TEXT,
+    is_active     INTEGER NOT NULL DEFAULT 1
 );

@@ -1,6 +1,7 @@
 // CSharp
 using static System.Console;
 using System.IO;
+using System.Data;
 
 // SQLite
 using Microsoft.Data.Sqlite;
@@ -43,6 +44,61 @@ namespace Core.Sqlite {
                 return false;
             }
         }
+
+        public SqliteDataReader Query(string statement, params object[] parameters){
+            /*
+            using var reader = db.Query("SELECT * FROM demo");
+            while (reader.Read()){
+                Console.WriteLine($"{reader.GetInt32(0)} - {reader.GetString(1)}");
+            }
+            */
+            var connection = Connect();
+            connection.Open();
+
+            using var command = connection.CreateCommand();
+            command.CommandText = statement;
+
+            for (int i=0; i < parameters.Length; i++){
+                command.Parameters.AddWithValue($"@p{i}", parameters[1]);
+            }
+
+            return command.ExecuteReader( CommandBehavior.CloseConnection );
+        }
+
+        public SqliteDataReader Execute(string statement, bool commit, params object[] parameters ){
+            /*
+            // Ejemplo con rollback
+            using var reader = db.ExecuteQuery("SELECT * FROM demo WHERE nombre=@p0", false, "Simon");
+
+            while (reader.Read()){
+                Console.WriteLine($"{reader.GetInt32(0)} - {reader.GetString(1)}");
+            }
+            */
+            var connection = Connect();
+            connection.Open();
+
+            using var transaction = connection.BeginTransaction();
+            using var command = connection.CreateCommand();
+            command.CommandText = statement;
+            command.Transaction = transaction;
+
+            // Agregar parámetros
+            for (int i = 0; i < parameters.Length; i++){
+                command.Parameters.AddWithValue($"@p{i}", parameters[i]);
+            }
+
+            var reader = command.ExecuteReader();
+
+            if (commit){
+                transaction.Commit();
+            } else {
+                transaction.Rollback();
+            }
+
+            // Reader necesita que la conexión siga viva
+            return reader;
+        }
+
 
         // Mehtods File
         public string GetPath(){

@@ -1,3 +1,5 @@
+PRAGMA foreign_keys = ON;
+
 CREATE TABLE translations (
     translation_id INTEGER PRIMARY KEY,
     tag_id         INTEGER NOT NULL,
@@ -6,6 +8,7 @@ CREATE TABLE translations (
     created_at     TEXT,
     updated_at     TEXT,
     deleted_at     TEXT,
+    is_active      INTEGER NOT NULL DEFAULT 1,
     FOREIGN KEY(tag_id) REFERENCES tags(tag_id),
     FOREIGN KEY(language_id) REFERENCES languages(language_id)
 );

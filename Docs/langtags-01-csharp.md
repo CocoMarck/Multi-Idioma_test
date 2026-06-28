@@ -40,10 +40,15 @@ CREATE TABLE languages (
     code          TEXT NOT NULL UNIQUE,
     created_at    TEXT,
     updated_at    TEXT,
-    deleted_at    TEXT.
+    deleted_at    TEXT,
     is_active     INTEGER NOT NULL DEFAULT 1
 );
-
+CREATE TABLE settings (
+    setting_id     INTEGER PRIMARY KEY,
+    parameter_name TEXT NOT NULL UNIQUE,
+    language_id    INTEGER NOT NULL DEFAULT 1,
+    FOREIGN KEY(language_id) REFERENCES languages(language_id)
+);
 CREATE TABLE tags (
     tag_id        INTEGER PRIMARY KEY,
     name          TEXT NOT NULL UNIQUE,
@@ -52,7 +57,6 @@ CREATE TABLE tags (
     deleted_at    TEXT
     is_active     INTEGER NOT NULL DEFAULT 1
 );
-
 PRAGMA foreign_keys = ON;
 
 CREATE TABLE translations (
@@ -63,15 +67,8 @@ CREATE TABLE translations (
     created_at     TEXT,
     updated_at     TEXT,
     deleted_at     TEXT,
-    is_active      INTEGER NOT NULL DEFAULT 1
+    is_active      INTEGER NOT NULL DEFAULT 1,
     FOREIGN KEY(tag_id) REFERENCES tags(tag_id),
-    FOREIGN KEY(language_id) REFERENCES languages(language_id)
-);
-
-CREATE TABLE settings (
-    setting_id     INTEGER PRIMARY KEY,
-    parameter_name TEXT NOT NULL UNIQUE,
-    language_id    INTEGER NOT NULL DEFAULT 1
     FOREIGN KEY(language_id) REFERENCES languages(language_id)
 );
 ```

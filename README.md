@@ -6,5 +6,5 @@ dotnet run
 
 Dependencias:
 ```bash
-dotnet add package SQLitePCLRaw.lib.e_sqlite3 --version 2.1.11
+dotnet add package Microsoft.Data.Sqlite
 ```
