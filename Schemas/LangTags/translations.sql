@@ -10,5 +10,6 @@ CREATE TABLE translations (
     deleted_at     TEXT,
     is_active      INTEGER NOT NULL DEFAULT 1,
     FOREIGN KEY(tag_id) REFERENCES tags(tag_id),
-    FOREIGN KEY(language_id) REFERENCES languages(language_id)
+    FOREIGN KEY(language_id) REFERENCES languages(language_id),
+    UNIQUE(tag_id, language_id)
 );

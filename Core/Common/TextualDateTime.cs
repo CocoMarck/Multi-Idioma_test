@@ -1,4 +1,4 @@
-namespace Utils.Text {
+namespace Core.Common {
     public static class TextualDateTime
     {
         public const string FORMAT = "yyyy-MM-ddTHH:mm:ss";

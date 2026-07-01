@@ -13,6 +13,9 @@ public static class Program {
         var paths = new Paths();
         var db = new StandardDatabase(paths.DATA_DIR, "LangTags.sqlite");
         var languageRepository = new LanguageRepository(db);
+        var tagRepository = new TagRepository(db);
+        var translationRepository = new TranslationRepository(
+            db, tagRepository, languageRepository);
 
         // Init DB
         Console.WriteLine( $"Config dir: `{paths.CONFIG_DIR}`" );
@@ -43,6 +46,23 @@ public static class Program {
         languageRepository.Save("ru", true);
         languageRepository.Deactivate(4);
         Console.WriteLine( languageRepository.Table.CountRows() );
+
+        tagRepository.Save("Hello   ", true );
+        tagRepository.Save("happy moment", true);
+        tagRepository.Save("Exit", true);
+        tagRepository.Save("Settings", true);
+        tagRepository.Save("Trajectories", true);
+        Console.WriteLine( tagRepository.Table.CountRows() );
+
+        translationRepository.SaveByTagNameAndLanguageCode(
+            "hello", "en", "Hello");
+        translationRepository.SaveByTagNameAndLanguageCode(
+            "trajectories", "en", "Trajectories");
+        translationRepository.SaveByTagNameAndLanguageCode(
+            "hello", "es", "Hola");
+        translationRepository.SaveByTagNameAndLanguageCode(
+            "trajectories", "es", "Trayectorias");
+        Console.WriteLine( translationRepository.Table.CountRows() );
     }
     //
 }

@@ -17,7 +17,6 @@ namespace Core.Sqlite {
         // Propiedades
         public string Name {
             get { return _name; }
-            set { _name = value;}
         }
 
         // Methods
