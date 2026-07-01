@@ -39,6 +39,9 @@ public static class Program {
         // Save first values
         languageRepository.Save("en", true);
         languageRepository.Save("es", true);
+        languageRepository.Save("pt", false);
+        languageRepository.Save("ru", true);
+        languageRepository.Deactivate(4);
         Console.WriteLine( languageRepository.Table.CountRows() );
     }
     //
