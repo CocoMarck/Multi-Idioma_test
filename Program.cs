@@ -1,5 +1,10 @@
-using Microsoft.Data.Sqlite;
+// Repositories
+using Repositories.LangTags;
+
+// Core
 using Core.Sqlite;
+
+// Config
 using Config;
 
 public static class Program {
@@ -7,6 +12,7 @@ public static class Program {
         // Objects
         var paths = new Paths();
         var db = new StandardDatabase(paths.DATA_DIR, "LangTags.sqlite");
+        var languageRepository = new LanguageRepository(db);
 
         // Init DB
         Console.WriteLine( $"Config dir: `{paths.CONFIG_DIR}`" );
@@ -29,6 +35,11 @@ public static class Program {
         foreach (string name in db.GetTableNames()){
             Console.WriteLine( name );
         }
+
+        // Save first values
+        languageRepository.Save("en", true);
+        languageRepository.Save("es", true);
+        Console.WriteLine( languageRepository.Table.CountRows() );
     }
     //
 }
