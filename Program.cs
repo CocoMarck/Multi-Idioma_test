@@ -19,8 +19,10 @@ public static class Program {
         var tagRepository = new TagRepository(db);
         var translationRepository = new TranslationRepository(
             db, tagRepository, languageRepository);
+        var settingRepository = new SettingRepository(
+            db, languageRepository);
         var langTagsService = new LangTagsService(
-            languageRepository, tagRepository, translationRepository);
+            languageRepository, tagRepository, translationRepository, settingRepository);
 
         // Init DB
         Console.WriteLine( $"Config dir: `{paths.CONFIG_DIR}`" );
@@ -58,6 +60,15 @@ public static class Program {
         tagRepository.Save("Settings", true);
         tagRepository.Save("Trajectories", true);
         Console.WriteLine( tagRepository.Table.CountRows() );
+
+        settingRepository.InitParameters();
+        //settingRepository.UpdateSelectedLanguageCode("es");
+        //settingRepository.EstablishDefaultLanguage();
+        settingRepository.EstablishSystemLanguage();
+        Console.WriteLine( settingRepository.GetDefaultLanguageCode() );
+        Console.WriteLine( settingRepository.GetSelectedLanguageCode() );
+        Console.WriteLine( settingRepository.GetSystemLanguageId() );
+        Console.WriteLine( settingRepository.Table.CountRows() );
 
         translationRepository.SaveByTagNameAndLanguageCode(
             "hello", "en", "Hello");
