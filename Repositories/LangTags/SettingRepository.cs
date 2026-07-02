@@ -29,7 +29,7 @@ namespace Repositories.LangTags
             {
                 Save("selected_language", 1);
             }
-            if (!ExistsByParameterName("default_language"))
+            if (!ExistsByParameterName("system_language"))
             {
                 Save("system_language", 0);
             }
