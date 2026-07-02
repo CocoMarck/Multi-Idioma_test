@@ -89,6 +89,21 @@ namespace Repositories.LangTags {
             int languageId = _languageRepository.GetIdByCode(languageCode);
             return GetIdByTagIdAndLanguageId(tagId, languageId);
         }
+        public string GetValueByTagIdAndLanguageId(int tagId, int languageId)
+        {
+            using var reader = _db.Query(
+                sql: "SELECT value FROM translations WHERE tag_id=@p0 AND language_id=@p1 LIMIT 1;",
+                tagId, languageId
+            );
+            reader.Read();
+            return reader.GetString(0);
+        }
+        public string GetValueByTagNameAndLanguageCode(string tagName, string languageCode)
+        {
+            int tagId = _tagRepository.GetIdByName(tagName);
+            int languageId = _languageRepository.GetIdByCode(languageCode);
+            return GetValueByTagIdAndLanguageId(tagId, languageId);
+        }
 
         public void SaveByTagIdAndLanguageId(
             int tagId, int languageId, string value, bool isActive=true, int? translationId=null

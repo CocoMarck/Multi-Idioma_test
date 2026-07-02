@@ -4,6 +4,9 @@ using Repositories.LangTags;
 // Core
 using Core.Sqlite;
 
+// Services
+using Services.LangTags;
+
 // Config
 using Config;
 
@@ -16,6 +19,8 @@ public static class Program {
         var tagRepository = new TagRepository(db);
         var translationRepository = new TranslationRepository(
             db, tagRepository, languageRepository);
+        var langTagsService = new LangTagsService(
+            languageRepository, tagRepository, translationRepository);
 
         // Init DB
         Console.WriteLine( $"Config dir: `{paths.CONFIG_DIR}`" );
@@ -62,7 +67,21 @@ public static class Program {
             "hello", "es", "Hola");
         translationRepository.SaveByTagNameAndLanguageCode(
             "trajectories", "es", "Trayectorias");
+        translationRepository.SaveByTagNameAndLanguageCode(
+            "happy-moment", "es", "Momento feliz");
+        translationRepository.SaveByTagNameAndLanguageCode(
+            "happy-moment", "en", "Happy moment");
         Console.WriteLine( translationRepository.Table.CountRows() );
+
+        Console.WriteLine(
+            langTagsService.GetText("hello") + "\n" +
+            langTagsService.GetText("Hello", "es") + "\n" +
+            langTagsService.GetText("TrajectOries", "en") + "\n" +
+            langTagsService.GetText("trajectories", "es") + "\n" +
+            langTagsService.GetText("Happy Moment") + "\n" +
+            langTagsService.GetText("Happy Moment", "es")  + "\n" +
+            langTagsService.GetText("Este texto no existe...") 
+        );
     }
     //
 }
