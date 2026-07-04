@@ -1,1 +1,3 @@
 Microsoft.Data.Sqlite
+Microsoft.Extensions.Logging
+Microsoft.Extensions.Logging.Console
