@@ -33,7 +33,7 @@ namespace Controllers.LangTags {
                     _logger.LogInformation($"Code inserted `{code}`");
                 }
             } catch (Exception e){
-                _logger.LogError(e, "");
+                _logger.LogError(e, $"Error inserted `{code}`");
             }
         }
 
@@ -45,7 +45,7 @@ namespace Controllers.LangTags {
                     _logger.LogInformation($"Code updated `{code}`");
                 }
             } catch (Exception e){
-                _logger.LogError(e, "");
+                _logger.LogError(e, $"Error updated `{code}`");
             }
         }
 
@@ -57,7 +57,7 @@ namespace Controllers.LangTags {
                     _logger.LogInformation($"Code deleted `{id}`");
                 }
             } catch (Exception e){
-                _logger.LogError(e, "");
+                _logger.LogError(e, $"Error deleted `{id}`");
             }
         }
 
@@ -69,7 +69,7 @@ namespace Controllers.LangTags {
                     _logger.LogInformation($"Code activated `{id}`");
                 }
             } catch (Exception e){
-                _logger.LogError(e, "Error activating `{id}`");
+                _logger.LogError(e, $"Error activated `{id}`");
             }
         }
         public string? GetCode(int id){
@@ -82,7 +82,7 @@ namespace Controllers.LangTags {
         public string[] GetColumnNames() {
             try {
                 return _repository.Table.GetColumnNames();
-            } catch (Exception e)
+            } catch
             {
                 return new string[0];
             }
@@ -91,7 +91,7 @@ namespace Controllers.LangTags {
         public List<string[]> GetRowValues(){
             try {
                 return _repository.Table.GetRowValues();
-            } catch (Exception e)
+            } catch
             {
                 return new List<string[]>();
             }
