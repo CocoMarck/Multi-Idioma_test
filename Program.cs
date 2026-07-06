@@ -26,6 +26,7 @@ public static class Program {
         var langTagsService = new LangTagsService(
             dbContext.Language, dbContext.Tag, dbContext.Translation, dbContext.Setting);
 
+        // Debug
         Console.WriteLine(
             langTagsService.GetText("languages", "en") + "\n" +
             langTagsService.GetText("Tags", "es") + "\n" +

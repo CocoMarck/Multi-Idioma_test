@@ -44,7 +44,27 @@ namespace Core.LangTags {
                 db, tagRepository, languageRepository);
             var settingRepository = new SettingRepository(db, languageRepository);
 
+            // Return context
+            var databaseContext = new DatabaseContext{
+                Language = languageRepository,
+                Tag = tagRepository,
+                Translation = translationRepository,
+                Setting = settingRepository
+            };
+
             // Repos save first values
+            SaveFirstValues( databaseContext );
+            
+            return databaseContext;
+        }
+        
+        private static void SaveFirstValues(DatabaseContext databaseContext)
+        {
+            var languageRepository = databaseContext.Language;
+            var tagRepository = databaseContext.Tag;
+            var translationRepository = databaseContext.Translation;
+            var settingRepository = databaseContext.Setting;
+
             languageRepository.Save("en", true);
             languageRepository.Save("es", true);
             languageRepository.Save("pt", false);
@@ -94,14 +114,6 @@ namespace Core.LangTags {
                 "get-text", "es", "Obtener texto");
             
             Console.WriteLine( translationRepository.Table.CountRows() );
-
-            // Return context
-            return new DatabaseContext{
-                Language = languageRepository,
-                Tag = tagRepository,
-                Translation = translationRepository,
-                Setting = settingRepository
-            };
         }
     }
 }
