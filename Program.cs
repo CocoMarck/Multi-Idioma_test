@@ -16,6 +16,11 @@ using Config;
 
 // Views
 using Views;
+using Controllers.LangTags;
+using Entities.LangTags;
+
+// Logger
+using Microsoft.Extensions.Logging;
 
 
 public static class Program {
@@ -25,6 +30,15 @@ public static class Program {
         DatabaseContext dbContext = DatabaseInitializer.Initialize(paths);
         var langTagsService = new LangTagsService(
             dbContext.Language, dbContext.Tag, dbContext.Translation, dbContext.Setting);
+
+        // Init logger
+        using var loggerFactory = LoggerFactory.Create(builder => 
+        {
+            builder.AddConsole().SetMinimumLevel(LogLevel.Debug);
+        });
+        var languageEntity = new LanguageEntity();
+        ILogger languageLogger = loggerFactory.CreateLogger<LanguageController>();
+        var languageController = new LanguageController( dbContext.Language, languageEntity, languageLogger);
 
         // Debug
         Console.WriteLine(
@@ -37,6 +51,7 @@ public static class Program {
 
         // Build App
         App.LangTagsService = langTagsService;
+        App.LanguageController = languageController;
         AppBuilder.Configure<App>()
             .UsePlatformDetect().StartWithClassicDesktopLifetime(args);
     }

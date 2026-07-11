@@ -1,5 +1,6 @@
 // Avalonia
 using Avalonia.Controls; // Window
+using Views.Forms;
 
 namespace Views {
     public partial class MainWindow : Window {
@@ -7,6 +8,7 @@ namespace Views {
         // Constructor
         public MainWindow() {
             InitializeComponent();
+            LanguagesTab.Content = new Languages(App.LanguageController);
             RefreshText();
         }
 
