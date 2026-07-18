@@ -2,6 +2,7 @@ namespace Utils.Text
 {
     public static class TextNumber
     {
+        // Double
         public static bool TryReadDouble(string text, out double value)
         {
             text = (text ?? "").Trim();
@@ -32,6 +33,24 @@ namespace Utils.Text
 
             return value.ToString("0.#####",
                 System.Globalization.CultureInfo.CurrentCulture);
+        }
+
+        // Integer
+        public static bool TryReadInt(string text, out int value)
+        {
+            text = (text ?? "").Trim();
+            
+            // 1. Intentar parsear con la cultura actual del sistema.
+            if (int.TryParse(text, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.CurrentCulture, out value))
+                return true;
+            
+            return int.TryParse(text, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out value);
+        }
+
+        public static int ReadInt(string text, int defaultValue=0)
+        {
+            int value;
+            return TryReadInt(text, out value) ? value : defaultValue;
         }
     }
 }

@@ -2,32 +2,38 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="Views.Forms.Languages">
     <DockPanel>
-        <!-- Id data -->
-        <StackPanel DockPanel.Dock="Top"
-                    Orientation="Horizontal">
-            <Label Content="Id"/>
-            <TextBox/>
-            <ComboBox/>
-        </StackPanel>
-        <!-- Tag data -->
-        <StackPanel DockPanel.Dock="Top"
-                    Orientation="Horizontal">
-            <Label Content="Tag"/>
-            <TextBox/>
-            <ComboBox/>
-        </StackPanel>
-        <!-- Text data -->
-        <StackPanel DockPanel.Dock="Top"
-                    Orientation="Horizontal">
-            <Label Content="Text"/>
-            <TextBox/>
-        </StackPanel>
-        <!-- Buttons -->
-        <StackPanel DockPanel.Dock="Top"
-                    Orientation="Horizontal">
-            <Button Content="Save"/>
-            <Button Content="Refresh"/>
-        </StackPanel>
+        <!-- Formulario en un grid (acoplado arriba) -->
+        <Grid DockPanel.Dock="Top"
+              Margin="0,0,0,20"
+              RowDefinitions="Auto,Auto,Auto,Auto"
+              ColumnDefinitions="80,*,120">
+            <!-- Fila 0: Id data -->
+            <Label x:Name="LabelId" Grid.Row="0" Grid.Column="0" Content="Id" VerticalAlignment="Center"/>
+            <TextBox x:Name="TextBoxId" Grid.Row="0" Grid.Column="1" Margin="0,5,10,5" TextChanged="textBoxIdChangedEventHandler"/>
+            <ComboBox Grid.Row="0" Grid.Column="2" HorizontalAlignment="Stretch" SelectedIndex="0"/>
+            
+            <!-- Fila 1: Code data -->
+            <Label x:Name="LabelCode" Grid.Row="1" Grid.Column="0" Content="Code" VerticalAlignment="Center"/>
+            <TextBox x:Name="TextBoxCode" Grid.Row="1" Grid.Column="1" Margin="0,5,10,5"/>
+            <ComboBox Grid.Row="1" Grid.Column="2" HorizontalAlignment="Stretch" SelectedIndex="0"/>
+
+            <!-- Fila 2: Is active -->
+            <CheckBox x:Name="CheckBoxIsActive" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="Is active"/>
+            <!--
+            <Label Grid.Row="2" Grid.Column="1" Content="Updated at"/>
+            <Label Grid.Row="2" Grid.Column="2" Content="Deleted at"/>
+            -->
+
+            <!-- Fila 3: Botones de acción (Alineados a la dereche de la fila) -->
+            <StackPanel Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        Spacing="10"
+                        Margin="0,10,0,0">
+                <Button x:Name="ButtonSave" Content="Save" Classes="accent"/>
+                <Button x:Name="ButtonRefresh" Content="Refresh"/>
+            </StackPanel>
+        </Grid>
         <!-- Table -->
         <ScrollViewer HorizontalScrollBarVisibility="Auto"
                       VerticalScrollBarVisibility="Auto">

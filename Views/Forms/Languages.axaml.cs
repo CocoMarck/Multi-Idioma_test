@@ -7,38 +7,47 @@ using Avalonia.Media;
 using Controllers.LangTags;
 using System.Diagnostics;
 
+// Filter
+using Utils.Text;
+
 namespace Views.Forms {
     public partial class Languages: UserControl {
-        LanguageController _controller;
+        private LanguageController _controller;
+        private int _id;
+        private string[] _cachedColumns;
+        private List<string[]> _cachedRows;
 
         // Constructor
         public Languages(LanguageController controller) {
             InitializeComponent();
             _controller = controller;
+            _id = 0;
+            LoadCache();
             LoadTable();
         }
 
         // Methods
+        private void LoadCache()
+        {
+            _cachedColumns = _controller.GetColumnNames();
+            _cachedRows = _controller.GetRowValues();
+        }
         private void LoadTable()
         {
-            string[] columns = _controller.GetColumnNames();
-            List<string[]> rowValues = _controller.GetRowValues();
-
-
             // Inicializar columnas en grid
-            foreach (string columnName in columns) {
+            foreach (string columnName in _cachedColumns) {
                 TableGrid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
             }
             // Inizializar filas en grid
             TableGrid.RowDefinitions.Add( new RowDefinition(GridLength.Auto) );
-            foreach (string[] values in rowValues){
+            foreach (string[] values in _cachedRows){
                 TableGrid.RowDefinitions.Add( new RowDefinition(GridLength.Auto) );
             }
 
             // Renderizar columnas
-            for (int colIndex = 0; colIndex < columns.Length; colIndex++) {
+            for (int colIndex = 0; colIndex < _cachedColumns.Length; colIndex++) {
                 var headerBlock = new TextBlock {
-                    Text = columns[colIndex],
+                    Text = _cachedColumns[colIndex],
                     FontWeight = FontWeight.Bold,
                     Margin = new Thickness(12, 6) // Espaciado interno para que no se amontonen
                 };
@@ -48,8 +57,8 @@ namespace Views.Forms {
             }
 
             // Renderizar filas
-            for (int rowIndex = 0; rowIndex < rowValues.Count; rowIndex++) {
-                var rowData = rowValues[rowIndex];
+            for (int rowIndex = 0; rowIndex < _cachedRows.Count; rowIndex++) {
+                var rowData = _cachedRows[rowIndex];
                 for (int colIndex = 0; colIndex < rowData.Length; colIndex++) {
                     var cellBlock = new TextBlock {
                         Text = rowData[colIndex],
@@ -61,5 +70,33 @@ namespace Views.Forms {
                 }
             }
         }
+
+        private string GetFilteredTextToAPositiveInteger(string text){
+            return TextFilter.IgnoreTextFilter( text: text, filter: "1234567890" );
+        }
+
+        private void RefreshParameters(){
+            if (_id > 0 && _id <= _cachedRows.Count)
+            {
+                string[] rowData = _cachedRows[_id-1];
+                TextBoxId.Text = rowData[0];
+                TextBoxCode.Text = rowData[1];
+            } else {
+                if ( !string.IsNullOrEmpty(TextBoxId.Text) ) {
+                    TextBoxId.Text = "";}
+            }
+        }
+        
+        // EventHandlers
+        private void textBoxIdChangedEventHandler(object? sender, TextChangedEventArgs args) 
+        {
+            if (sender is TextBox textBox){
+                string filteredText = GetFilteredTextToAPositiveInteger(textBox.Text);
+                textBox.Text = filteredText;
+                _id = TextNumber.ReadInt(filteredText);
+                RefreshParameters();
+            }
+        }
+        //
     }
 }
