@@ -49,6 +49,16 @@ namespace Controllers.LangTags {
             }
         }
 
+        public void Save(string code, bool isActive=true, int? languageId=null) {
+            try {
+                _repository.Save(
+                    code:code, isActive:isActive, languageId:languageId
+                );
+            } catch (Exception e){
+                _logger.LogError(e, $"Error saving: `{code}`");
+            }
+        }
+
         public void Delete(int id){
             try {
                 bool exists = _repository.ExistsById(id);
@@ -72,11 +82,27 @@ namespace Controllers.LangTags {
                 _logger.LogError(e, $"Error activated `{id}`");
             }
         }
-        public string? GetCode(int id){
-            return "";
+        public string GetCodeById(int id){
+            try {
+                return _repository.GetCodeById(id);
+            } catch {
+                return "";
+            }
         }
-        public int? GetId(string code){
-            return 0;
+        public int GetIdByCode(string code){
+            try {
+                return _repository.GetIdByCode(code);
+            } catch {
+                return -1;
+            }
+        }
+
+        public bool ExistsById(int id){
+            return _repository.ExistsById(id);
+        }
+
+        public bool ExistsByCode(string code){
+            return _repository.ExistsByCode(code);
         }
 
         public string[] GetColumnNames() {

@@ -7,6 +7,7 @@ using Entities.LangTags;
 // Core
 using Core.Sqlite;
 using Core.Common; // TextualDateTime
+using Core.LangTags; // LanguageCodeNormalizer.
 
 namespace Repositories.LangTags {
     public class LanguageRepository {
@@ -26,23 +27,25 @@ namespace Repositories.LangTags {
         // Methods. No TRY, full crash si pasas cosas mal.
         public void Insert(string code, bool isActive){     
             // Solo create at y deleted at para insert. updated at solo update method.
+            string normalizedCode = LanguageCodeNormalizer.Normalize(code);
             string now = TextualDateTime.ToText(DateTime.Now);
             object deletedAt = isActive ? DBNull.Value : now;
             _db.Execute(
                 sql: "INSERT INTO languages (code, created_at, updated_at, deleted_at, is_active) VALUES (@p0, @p1, NULL, @p2, @p3);", commit: true,
-                code, now, deletedAt, isActive ? 1 : 0
+                normalizedCode, now, deletedAt, isActive ? 1 : 0
             );
         }
 
         public void Update(int languageId, string code, bool isActive )
         {
             // Solo update at si esta active.
+            string normalizedCode = LanguageCodeNormalizer.Normalize(code);
             string now = TextualDateTime.ToText(DateTime.Now);
             object updatedAt = isActive ? now : DBNull.Value;
             object deletedAt = isActive ? DBNull.Value : now;
             _db.Execute(
                 sql: "UPDATE languages SET code=@p0, updated_at=@p1, deleted_at=@p2, is_active=@p3 WHERE language_id=@p4;", commit:true,
-                code, updatedAt, deletedAt, isActive ? 1 : 0, languageId
+                normalizedCode, updatedAt, deletedAt, isActive ? 1 : 0, languageId
             );
         }
 

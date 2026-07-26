@@ -1,3 +1,5 @@
+using System.Linq;
+
 // Avalonia
 using Avalonia;
 using Avalonia.Controls;
@@ -10,18 +12,25 @@ using System.Diagnostics;
 // Filter
 using Utils.Text;
 
+// Normalizer text
+using Core.LangTags;
+
 namespace Views.Forms {
     public partial class Languages: UserControl {
         private LanguageController _controller;
         private int _id;
         private string[] _cachedColumns;
         private List<string[]> _cachedRows;
+        private object[] _parameters;
 
         // Constructor
         public Languages(LanguageController controller) {
             InitializeComponent();
             _controller = controller;
-            _id = 0;
+            _id = -1;
+            _parameters = new object[]{
+                TextBoxId, TextBoxCode, CheckBoxIsActive
+            };
             LoadCache();
             LoadTable();
         }
@@ -70,6 +79,16 @@ namespace Views.Forms {
                 }
             }
         }
+        private void ClearGrid(){
+            TableGrid.Children.Clear();
+            TableGrid.RowDefinitions.Clear();
+            TableGrid.ColumnDefinitions.Clear();
+        }
+        private void RefreshTable(){
+            ClearGrid();
+            LoadCache();
+            LoadTable();
+        }
 
         private string GetFilteredTextToAPositiveInteger(string text){
             return TextFilter.IgnoreTextFilter( text: text, filter: "1234567890" );
@@ -81,10 +100,28 @@ namespace Views.Forms {
                 string[] rowData = _cachedRows[_id-1];
                 TextBoxId.Text = rowData[0];
                 TextBoxCode.Text = rowData[1];
+                CheckBoxIsActive.IsChecked = rowData[5] == "1";
             } else {
                 if ( !string.IsNullOrEmpty(TextBoxId.Text) ) {
                     TextBoxId.Text = "";}
             }
+        }
+
+        private void ClearParametersWithExceptions( object[] exceptions ){
+            for (int i = 0; i < _parameters.Length; i++){
+                object widget = _parameters[i];
+                if ( exceptions.Contains(widget) == false){
+                    if (widget is TextBox textBox){
+                        textBox.Text = "";
+                    }
+                    else if (widget is CheckBox checkBox){
+                        checkBox.IsChecked = true;
+                    }
+                }
+            }
+        }
+        private void ClearParameters(){
+            ClearParametersWithExceptions( new object[0] );
         }
         
         // EventHandlers
@@ -97,6 +134,44 @@ namespace Views.Forms {
                 RefreshParameters();
             }
         }
+
+        private void textBoxCodeChangedEventHandler( object? sender, TextChangedEventArgs args)
+        {
+            if (sender is TextBox textBox){
+                string normalizedCode = LanguageCodeNormalizer.Normalize(
+                    textBox.Text);
+                int id = _controller.GetIdByCode(normalizedCode);
+                textBox.Text = normalizedCode;
+                if (id > 0) {
+                    _id = id;
+                    RefreshParameters();
+                }
+                else {
+                    ClearParametersWithExceptions( 
+                        new object[]{ textBox } );
+                }
+            }
+        }
+
+        private void OnSaveClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            bool goodId = _id > 0;
+            bool goodCode = string.IsNullOrEmpty(TextBoxCode.Text) == false;
+            if (_id > 0 || goodCode) {
+                _controller.Save(
+                    languageId:_id, code:TextBoxCode.Text, isActive: (bool)CheckBoxIsActive.IsChecked );
+                
+                if ( goodId == false && _controller.ExistsByCode(TextBoxCode.Text) ) {
+                    _id = _controller.GetIdByCode(TextBoxCode.Text);
+                }
+                if (_controller.ExistsById(_id))
+                {
+                    RefreshTable();
+                    RefreshParameters();
+                }
+            }
+        }
+        
         //
     }
 }
