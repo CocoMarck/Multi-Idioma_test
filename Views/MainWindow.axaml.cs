@@ -9,6 +9,7 @@ namespace Views {
         public MainWindow() {
             InitializeComponent();
             LanguagesTab.Content = new Languages(App.LanguageController);
+            TagsTab.Content = new Tags(App.TagController);
             RefreshText();
         }
 

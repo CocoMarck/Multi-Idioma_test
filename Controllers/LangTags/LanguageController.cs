@@ -8,7 +8,7 @@ using Repositories.LangTags;
 using Entities.LangTags;
 
 namespace Controllers.LangTags {
-    public class LanguageController
+    public class LanguageController : ITableController
     {
         // Variables
         private LanguageRepository _repository;

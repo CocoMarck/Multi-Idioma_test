@@ -7,6 +7,7 @@ namespace Views {
     public class App : Application {
         public static LangTagsService LangTagsService { get; set; }
         public static LanguageController LanguageController { get; set; }
+        public static TagController TagController { get; set; }
         
         public override void OnFrameworkInitializationCompleted() {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {

@@ -37,8 +37,14 @@ public static class Program {
             builder.AddConsole().SetMinimumLevel(LogLevel.Debug);
         });
         var languageEntity = new LanguageEntity();
+        var tagEntity = new TagEntity();
         ILogger languageLogger = loggerFactory.CreateLogger<LanguageController>();
+        ILogger tagLogger = loggerFactory.CreateLogger<TagController>();
+        
         var languageController = new LanguageController( dbContext.Language, languageEntity, languageLogger);
+        var tagController = new TagController( 
+            dbContext.Tag, tagEntity, tagLogger 
+        );
 
         // Debug
         Console.WriteLine(
@@ -52,6 +58,7 @@ public static class Program {
         // Build App
         App.LangTagsService = langTagsService;
         App.LanguageController = languageController;
+        App.TagController = tagController;
         AppBuilder.Configure<App>()
             .UsePlatformDetect().StartWithClassicDesktopLifetime(args);
     }
