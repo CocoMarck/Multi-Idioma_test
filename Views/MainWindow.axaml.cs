@@ -10,6 +10,7 @@ namespace Views {
             InitializeComponent();
             LanguagesTab.Content = new Languages(App.LanguageController);
             TagsTab.Content = new Tags(App.TagController);
+            TranslationsTab.Content = new Translations(App.TranslationController);
             RefreshText();
         }
 
