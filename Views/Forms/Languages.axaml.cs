@@ -35,10 +35,6 @@ namespace Views.Forms {
             LoadTable();
         }
 
-        private string GetFilteredTextToAPositiveInteger(string text){
-            return TextFilter.IgnoreTextFilter( text: text, filter: "1234567890" );
-        }
-
         private void RefreshParameters(){
             if (_id > 0 && _id <= _cachedRows.Count)
             {

@@ -3,6 +3,9 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
 
+// Filter
+using Utils.Text;
+
 // Controllers
 using Controllers.LangTags;
 
@@ -67,6 +70,12 @@ namespace Views.Forms {
             LoadCache();
             LoadTable();
         }
+        
+        // Repeated text methods
+        protected string GetFilteredTextToAPositiveInteger(string text){
+            return TextFilter.IgnoreTextFilter( text: text, filter: "1234567890" );
+        }
+
         //
     }
 }
