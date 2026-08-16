@@ -50,5 +50,11 @@ namespace Controllers.LangTags {
         public void Activate(int id){
 
         }
+        public string GetLanguageCodeById(int id){
+            return _repository.GetLanguageCodeById(id);
+        }
+        public string GetTagNameById(int id){
+            return _repository.GetTagNameById(id);
+        }
     }
 }

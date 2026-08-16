@@ -137,5 +137,11 @@ namespace Repositories.LangTags {
             int languageId = _languageRepository.GetIdByCode(languageCode);
             SaveByTagIdAndLanguageId( tagId, languageId, value, isActive, translationId );
         }
+        public string GetLanguageCodeById(int id){
+            return _languageRepository.GetCodeById(id);
+        }
+        public string GetTagNameById(int id){
+            return _tagRepository.GetNameById(id);
+        }
     }
 }

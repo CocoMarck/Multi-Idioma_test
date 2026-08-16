@@ -28,6 +28,34 @@ namespace Views.Forms {
             LoadCache();
             LoadTable();
         }
+        private void RefreshParameters(){
+            if (_id > 0 && _id <= _cachedRows.Count)
+            {
+                string[] rowData = _cachedRows[_id-1];
+                TextBoxId.Text = rowData[0];
+                TextBoxTagName.Text = _translationController.GetTagNameById(
+                    TextNumber.ReadInt(rowData[1]) );
+                TextBoxLanguageCode.Text = _translationController.GetLanguageCodeById(
+                    TextNumber.ReadInt(rowData[2]) );
+                TextBoxValue.Text = rowData[3];
+                CheckBoxIsActive.IsChecked = rowData[7] == "1";
+            } else {
+                if ( !string.IsNullOrEmpty(TextBoxId.Text) ) {
+                    TextBoxId.Text = "";}
+            }
+        }
+        private void textBoxIdChangedEventHandler(object? sender, TextChangedEventArgs args)
+        {
+            if (sender is TextBox textBox){
+                string filteredText = GetFilteredTextToAPositiveInteger(textBox.Text);
+                textBox.Text = filteredText;
+                _id = TextNumber.ReadInt(filteredText);
+                RefreshParameters();
+            }
+        }
+        private void textBoxValueChangedEventHandler(object? sender, TextChangedEventArgs args)
+        {
+        }
         //
     }
 }

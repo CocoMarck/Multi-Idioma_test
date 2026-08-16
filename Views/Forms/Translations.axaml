@@ -2,6 +2,28 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="Views.Forms.Translations">
     <DockPanel>
+        <Grid DockPanel.Dock="Top"
+              Margin="0,0,0,20"
+              RowDefinitions="Auto, Auto, Auto, Auto"
+              ColumnDefinitions="*,*,*,*">
+            <!-- Fila 0: Id data -->
+            <Label x:Name="LabelId" Grid.Row="0" Grid.Column="0" Content="Id" VerticalAlignment="Center"/>
+            <TextBox x:Name="TextBoxId" Grid.Row="0" Grid.Column="1" Margin="0,5,10,5" TextChanged="textBoxIdChangedEventHandler"/>
+
+            <!-- Fila 1: Tag y Language -->
+            <Label x:Name="TagName" Grid.Row="1" Grid.Column="0" Content="TagName" VerticalAlignment="Center"/>
+            <TextBox x:Name="TextBoxTagName" Grid.Row="1" Grid.Column="1"/>
+
+            <Label x:Name="LanguageCode" Grid.Row="1" Grid.Column="2" Content="LanguageCode" VerticalAlignment="Center"/>
+            <TextBox x:Name="TextBoxLanguageCode" Grid.Row="1" Grid.Column="3"/>
+
+            <!-- Fila 2: Value -->
+            <Label x:Name="LabelValue" Grid.Row="2" Grid.Column="0" Content="Value" VerticalAlignment="Center"/>
+            <TextBox x:Name="TextBoxValue" Grid.Row="2" Grid.Column="1" Margin="0,5,10,5" TextChanged="textBoxValueChangedEventHandler"/>
+            
+            <!-- Fila 3: Is active -->
+            <CheckBox x:Name="CheckBoxIsActive" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Content="Is active" IsChecked="true"/>
+        </Grid>
         <ScrollViewer HorizontalScrollBarVisibility="Auto"
                       VerticalScrollBarVisibility="Auto">
             <!-- Table -->
