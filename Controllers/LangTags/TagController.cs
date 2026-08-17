@@ -41,6 +41,13 @@ namespace Controllers.LangTags {
                 return new List<string[]>();
             }
         }
+        public int GetIdByName(string name) {
+            try {
+                return _repository.GetIdByName(name);
+            } catch {
+                return -1;
+            }
+        }
         public bool ExistsById(int id){
             return true;
         }

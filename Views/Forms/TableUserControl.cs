@@ -15,6 +15,7 @@ namespace Views.Forms {
         protected List<string[]> _cachedRows;
         protected ITableController _controller;
         protected Grid _tableGrid; // Referencia a Grid de la vista
+        protected object[] _parameters; // Para refrescar parametros
 
         // Methods
         protected virtual void LoadCache()
@@ -75,6 +76,23 @@ namespace Views.Forms {
         protected string GetFilteredTextToAPositiveInteger(string text){
             return TextFilter.IgnoreTextFilter( text: text, filter: "1234567890" );
         }
+        protected void ClearParametersWithExceptions( object[] exceptions ){
+            for (int i = 0; i < _parameters.Length; i++){
+                object widget = _parameters[i];
+                if ( exceptions.Contains(widget) == false){
+                    if (widget is TextBox textBox){
+                        textBox.Text = "";
+                    }
+                    else if (widget is CheckBox checkBox){
+                        checkBox.IsChecked = true;
+                    }
+                }
+            }
+        }
+        protected void ClearParameters(){
+            ClearParametersWithExceptions( new object[0] );
+        }
+        
 
         //
     }

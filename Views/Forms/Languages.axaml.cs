@@ -19,7 +19,6 @@ namespace Views.Forms {
     public partial class Languages: TableUserControl {
         private int _id;
         private LanguageController _languageController;
-        private object[] _parameters;
 
         // Constructor
         public Languages(LanguageController controller) {
@@ -46,23 +45,6 @@ namespace Views.Forms {
                 if ( !string.IsNullOrEmpty(TextBoxId.Text) ) {
                     TextBoxId.Text = "";}
             }
-        }
-
-        private void ClearParametersWithExceptions( object[] exceptions ){
-            for (int i = 0; i < _parameters.Length; i++){
-                object widget = _parameters[i];
-                if ( exceptions.Contains(widget) == false){
-                    if (widget is TextBox textBox){
-                        textBox.Text = "";
-                    }
-                    else if (widget is CheckBox checkBox){
-                        checkBox.IsChecked = true;
-                    }
-                }
-            }
-        }
-        private void ClearParameters(){
-            ClearParametersWithExceptions( new object[0] );
         }
         
         // EventHandlers

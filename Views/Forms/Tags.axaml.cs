@@ -18,7 +18,6 @@ namespace Views.Forms {
     public partial class Tags: TableUserControl {
         private int _id;
         private TagController _tagController;
-        private object[] _parameters;
         
         // Constructor
         public Tags(TagController controller) {
@@ -61,6 +60,20 @@ namespace Views.Forms {
 
         private void textBoxNameChangedEventHandler(object? sender, TextChangedEventArgs args)
         {
+            if (sender is TextBox textBox){
+                string normalizedName = TagNameNormalizer.Normalize(
+                    textBox.Text);
+                int id = _tagController.GetIdByName(normalizedName);
+                textBox.Text = normalizedName;
+                if (id > 0) {
+                    _id = id;
+                    RefreshParameters();
+                }
+                else {
+                    ClearParametersWithExceptions( 
+                        new object[]{ textBox } );
+                }
+            }
         }
         
         private void OnSaveClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
