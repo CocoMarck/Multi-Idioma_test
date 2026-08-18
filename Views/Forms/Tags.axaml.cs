@@ -78,6 +78,21 @@ namespace Views.Forms {
         
         private void OnSaveClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
+            bool goodId = _id > 0;
+            bool goodName = string.IsNullOrEmpty(TextBoxName.Text) == false;
+            if (_id > 0 || goodName) {
+                _tagController.Save(
+                    tagId:_id, name:TextBoxName.Text, isActive: (bool)CheckBoxIsActive.IsChecked );
+                
+                if ( goodId == false && _tagController.ExistsByName(TextBoxName.Text) ) {
+                    _id = _tagController.GetIdByName(TextBoxName.Text);
+                }
+                if (_tagController.ExistsById(_id))
+                {
+                    RefreshTable();
+                    RefreshParameters();
+                }
+            }
         }
         //
     }

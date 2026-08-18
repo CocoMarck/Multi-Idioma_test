@@ -48,14 +48,35 @@ namespace Controllers.LangTags {
                 return -1;
             }
         }
-        public bool ExistsById(int id){
-            return true;
-        }
         public void Delete(int id) {
 
         }
         public void Activate(int id){
 
         }
+        public string GetNameById(int id){
+            try {
+                return _repository.GetNameById(id);
+            } catch {
+                return "";
+            }
+        }
+        public bool ExistsById(int id){
+            return _repository.ExistsById(id);
+        }
+
+        public bool ExistsByName(string name){
+            return _repository.ExistsByName(name);
+        }
+        public void Save(string name, bool isActive=true, int? tagId=null) {
+            try {
+                _repository.Save(
+                    name:name, isActive:isActive, tagId:tagId
+                );
+            } catch (Exception e){
+                _logger.LogError(e, $"Error saving: `{name}`");
+            }
+        }
+        //
     }
 }

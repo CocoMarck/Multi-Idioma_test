@@ -72,7 +72,7 @@ namespace Views.Forms {
             LoadTable();
         }
         
-        // Repeated text methods
+        // Repeated specific methods
         protected string GetFilteredTextToAPositiveInteger(string text){
             return TextFilter.IgnoreTextFilter( text: text, filter: "1234567890" );
         }
