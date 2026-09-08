@@ -143,5 +143,11 @@ namespace Repositories.LangTags {
         public string GetTagNameById(int id){
             return _tagRepository.GetNameById(id);
         }
+        public int GetTagIdByName(string name){
+            return _tagRepository.GetIdByName(name);
+        }
+        public int GetLanguageIdByCode(string code){
+            return _languageRepository.GetIdByCode(code);
+        }
     }
 }

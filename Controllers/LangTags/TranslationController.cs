@@ -56,5 +56,43 @@ namespace Controllers.LangTags {
         public string GetTagNameById(int id){
             return _repository.GetTagNameById(id);
         }
+        public int GetTagIdByName(string name){
+            try {
+                return _repository.GetTagIdByName(name);
+            } catch {
+                return -1;
+            }
+        }
+        public int GetLanguageIdByCode(string code){
+            try {
+                return _repository.GetLanguageIdByCode(code);
+            } catch {
+                return -1;
+            }
+        }
+        public int GetIdByTagNameAndLanguageCode(string tagName, string languageCode){
+            try {
+                return _repository.GetIdByTagNameAndLanguageCode(tagName, languageCode);
+            } catch {
+                return -1;
+            }
+        }
+        public void SaveByTagIdAndLanguageId(
+            int tagId, int languageId, string value, bool isActive=true, int? translationId=null){
+            try{
+                _repository.SaveByTagIdAndLanguageId(tagId, languageId, value, isActive, translationId);
+            } catch {
+                return;
+            }
+        }
+        public void SaveByTagNameAndLanguageCode(
+            string tagName, string languageCode, string value, bool isActive=true, int? translationId=null){
+            try{
+                _repository.SaveByTagNameAndLanguageCode(tagName, languageCode, value, isActive, translationId);
+            } catch {
+                return;
+            }
+        }
+        //
     }
 }

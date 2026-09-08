@@ -80,7 +80,7 @@ namespace Views.Forms {
         {
             bool goodId = _id > 0;
             bool goodName = string.IsNullOrEmpty(TextBoxName.Text) == false;
-            if (_id > 0 || goodName) {
+            if (goodId || goodName) {
                 _tagController.Save(
                     tagId:_id, name:TextBoxName.Text, isActive: (bool)CheckBoxIsActive.IsChecked );
                 

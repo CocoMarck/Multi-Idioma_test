@@ -23,6 +23,9 @@ namespace Views.Forms {
             _cachedColumns = _controller.GetColumnNames();
             _cachedRows = _controller.GetRowValues();
         }
+        protected virtual bool GoodIndex(int index){
+            return index > 0 && index <= _cachedRows.Count;
+        }
         protected virtual void LoadTable()
         {
             // Inicializar columnas en grid
