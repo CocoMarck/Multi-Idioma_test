@@ -7,22 +7,22 @@
               RowDefinitions="Auto, Auto, Auto, Auto, Auto"
               ColumnDefinitions="*,*,*,*">
             <!-- Fila 0: Id data -->
-            <Label x:Name="LabelId" Grid.Row="0" Grid.Column="0" Content="Id" VerticalAlignment="Center"/>
-            <TextBox x:Name="TextBoxId" Grid.Row="0" Grid.Column="1" Margin="0,5,10,5" TextChanged="textBoxIdChangedEventHandler"/>
+            <Label x:Name="labelId" Grid.Row="0" Grid.Column="0" Content="Id" VerticalAlignment="Center"/>
+            <TextBox x:Name="textBoxId" Grid.Row="0" Grid.Column="1" Margin="0,5,10,5" TextChanged="textBoxIdChangedEventHandler"/>
 
             <!-- Fila 1: Tag y Language -->
-            <Label x:Name="TagName" Grid.Row="1" Grid.Column="0" Content="TagName" VerticalAlignment="Center"/>
-            <TextBox x:Name="TextBoxTagName" Grid.Row="1" Grid.Column="1" TextChanged="textBoxTagNameChangedEventHandler"/>
+            <Label x:Name="labelTagName" Grid.Row="1" Grid.Column="0" Content="TagName" VerticalAlignment="Center"/>
+            <TextBox x:Name="textBoxTagName" Grid.Row="1" Grid.Column="1" TextChanged="textBoxTagNameChangedEventHandler"/>
 
-            <Label x:Name="LanguageCode" Grid.Row="1" Grid.Column="2" Content="LanguageCode" VerticalAlignment="Center"/>
-            <TextBox x:Name="TextBoxLanguageCode" Grid.Row="1" Grid.Column="3" TextChanged="textBoxLanguageCodeChangedEventHandler"/>
+            <Label x:Name="labelLanguageCode" Grid.Row="1" Grid.Column="2" Content="LanguageCode" VerticalAlignment="Center"/>
+            <TextBox x:Name="textBoxLanguageCode" Grid.Row="1" Grid.Column="3" TextChanged="textBoxLanguageCodeChangedEventHandler"/>
 
             <!-- Fila 2: Value -->
-            <Label x:Name="LabelValue" Grid.Row="2" Grid.Column="0" Content="Value" VerticalAlignment="Center"/>
-            <TextBox x:Name="TextBoxValue" Grid.Row="2" Grid.Column="1" Margin="0,5,10,5" TextChanged="textBoxValueChangedEventHandler"/>
+            <Label x:Name="labelValue" Grid.Row="2" Grid.Column="0" Content="Value" VerticalAlignment="Center"/>
+            <TextBox x:Name="textBoxValue" Grid.Row="2" Grid.Column="1" Margin="0,5,10,5" TextChanged="textBoxValueChangedEventHandler"/>
             
             <!-- Fila 3: Is active -->
-            <CheckBox x:Name="CheckBoxIsActive" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Content="Is active" IsChecked="true"/>
+            <CheckBox x:Name="checkBoxIsActive" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Content="Is active" IsChecked="true"/>
 
             <!-- Fila 4: Botones de acción (Alineados a la dereche de la fila) -->
             <StackPanel Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="4"
@@ -30,14 +30,14 @@
                         HorizontalAlignment="Right"
                         Spacing="10"
                         Margin="0,10,0,0">
-                <Button x:Name="ButtonSave" Content="Save" Classes="accent" Click="OnSaveClick"/>
-                <Button x:Name="ButtonRefresh" Content="Refresh"/>
+                <Button x:Name="buttonSave" Content="Save" Classes="accent" Click="OnSaveClick"/>
+                <Button x:Name="buttonRefresh" Content="Refresh"/>
             </StackPanel>
         </Grid>
         <ScrollViewer HorizontalScrollBarVisibility="Auto"
                       VerticalScrollBarVisibility="Auto">
             <!-- Table -->
-            <Grid x:Name="TableGrid" ShowGridLines="True">
+            <Grid x:Name="tableGrid" ShowGridLines="True">
             </Grid>
         </ScrollViewer>
     </DockPanel>

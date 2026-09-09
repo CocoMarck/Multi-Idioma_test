@@ -23,24 +23,34 @@ namespace Views.Forms {
             _translationController = controller;
             _controller = controller;
             _id = -1;
-            _tableGrid = TableGrid;
+            _tableGrid = tableGrid;
             LoadCache();
             LoadTable();
+            RefreshText();
+        }
+        private void RefreshText(){
+            labelTagName.Content = App.LangTagsService.GetText("Tag name");
+            labelLanguageCode.Content = App.LangTagsService.GetText("Language code");
+            labelValue.Content = App.LangTagsService.GetText("Value");
+            labelId.Content = App.LangTagsService.GetText("Id");
+            buttonRefresh.Content = App.LangTagsService.GetText("Refresh");
+            buttonSave.Content = App.LangTagsService.GetText("Save");
+            checkBoxIsActive.Content = App.LangTagsService.GetText("Is active");
         }
         private void RefreshParameters(){
             if (_id > 0 && _id <= _cachedRows.Count)
             {
                 string[] rowData = _cachedRows[_id-1];
-                TextBoxId.Text = rowData[0];
-                TextBoxTagName.Text = _translationController.GetTagNameById(
+                textBoxId.Text = rowData[0];
+                textBoxTagName.Text = _translationController.GetTagNameById(
                     TextNumber.ReadInt(rowData[1]) );
-                TextBoxLanguageCode.Text = _translationController.GetLanguageCodeById(
+                textBoxLanguageCode.Text = _translationController.GetLanguageCodeById(
                     TextNumber.ReadInt(rowData[2]) );
-                TextBoxValue.Text = rowData[3];
-                CheckBoxIsActive.IsChecked = rowData[7] == "1";
+                textBoxValue.Text = rowData[3];
+                checkBoxIsActive.IsChecked = rowData[7] == "1";
             } else {
-                if ( !string.IsNullOrEmpty(TextBoxId.Text) ) {
-                    TextBoxId.Text = "";}
+                if ( !string.IsNullOrEmpty(textBoxId.Text) ) {
+                    textBoxId.Text = "";}
             }
         }
         private void textBoxIdChangedEventHandler(object? sender, TextChangedEventArgs args)
@@ -52,7 +62,7 @@ namespace Views.Forms {
                 RefreshParameters();
             }
         }
-        private void changeIdByTagNameAndLanguageCode(string tagName, string languageCode){
+        private void ChangeIdByTagNameAndLanguageCode(string tagName, string languageCode){
             // Establecer nombre por tag name y language code.
             if (string.IsNullOrEmpty(tagName) || string.IsNullOrEmpty(languageCode)){
                 return;
@@ -61,6 +71,7 @@ namespace Views.Forms {
             string normalizedCode = LanguageCodeNormalizer.Normalize(languageCode);
             int id = _translationController.GetIdByTagNameAndLanguageCode(
                 normalizedName, normalizedCode);
+            textBoxId.Text = ""; // Para meter custom ID si es que se requiere.
             if (id > 0){
                 _id = id;
                 RefreshParameters();
@@ -69,13 +80,13 @@ namespace Views.Forms {
         private void textBoxTagNameChangedEventHandler(object? sender, TextChangedEventArgs args)
         {
             if (sender is TextBox textBox){
-                changeIdByTagNameAndLanguageCode(textBox.Text, TextBoxLanguageCode.Text);
+                ChangeIdByTagNameAndLanguageCode(textBox.Text, textBoxLanguageCode.Text);
             }
         }
         private void textBoxLanguageCodeChangedEventHandler(object? sender, TextChangedEventArgs args)
         {
             if (sender is TextBox textBox){
-                changeIdByTagNameAndLanguageCode(TextBoxTagName.Text, textBox.Text);
+                ChangeIdByTagNameAndLanguageCode(textBoxTagName.Text, textBox.Text);
             }
         }
         private void textBoxValueChangedEventHandler(object? sender, TextChangedEventArgs args)
@@ -86,7 +97,7 @@ namespace Views.Forms {
         {
             // Guardar solo si id, tagName, languageCode, y value, están bien.
             bool goodId = GoodIndex(_id);
-            bool goodValue = string.IsNullOrEmpty(TextBoxValue.Text) == false;
+            bool goodValue = string.IsNullOrEmpty(textBoxValue.Text) == false;
             if (goodValue) {
                 if (goodId){
                     Console.WriteLine(_id);
@@ -94,13 +105,13 @@ namespace Views.Forms {
                     int tagId = TextNumber.ReadInt(rowData[1]);
                     int languageId = TextNumber.ReadInt(rowData[2]);
                     _translationController.SaveByTagIdAndLanguageId(
-                        tagId: tagId, languageId: languageId, translationId: _id, value: TextBoxValue.Text, isActive:(bool)CheckBoxIsActive.IsChecked);
+                        tagId: tagId, languageId: languageId, translationId: _id, value: textBoxValue.Text, isActive:(bool)checkBoxIsActive.IsChecked);
                 } else {
                     _translationController.SaveByTagNameAndLanguageCode(
-                        tagName: TextBoxTagName.Text, languageCode: TextBoxLanguageCode.Text, translationId: null, value: TextBoxValue.Text, isActive:(bool)CheckBoxIsActive.IsChecked
+                        tagName: textBoxTagName.Text, languageCode: textBoxLanguageCode.Text, translationId: null, value: textBoxValue.Text, isActive:(bool)checkBoxIsActive.IsChecked
                     );
                     _id = _translationController.GetIdByTagNameAndLanguageCode(
-                        TextBoxTagName.Text, TextBoxLanguageCode.Text);
+                        textBoxTagName.Text, textBoxLanguageCode.Text);
                 }
                 RefreshTable();
                 RefreshParameters();

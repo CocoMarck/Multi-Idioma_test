@@ -26,11 +26,19 @@ namespace Views.Forms {
             _controller = controller;
             _id = -1;
             _parameters = new object[]{
-                TextBoxId, TextBoxName, CheckBoxIsActive
+                textBoxId, textBoxName, checkBoxIsActive
             };
-            _tableGrid = TableGrid;
+            _tableGrid = tableGrid;
             LoadCache();
             LoadTable();
+            RefreshText();
+        }
+        private void RefreshText(){
+            labelName.Content = App.LangTagsService.GetText("Name");
+            labelId.Content = App.LangTagsService.GetText("id");
+            checkBoxIsActive.Content = App.LangTagsService.GetText("Is active");
+            buttonRefresh.Content = App.LangTagsService.GetText("Refresh");
+            buttonSave.Content = App.LangTagsService.GetText("Save");
         }
 
         // Methods | Parameters
@@ -38,12 +46,12 @@ namespace Views.Forms {
             if (_id > 0 && _id <= _cachedRows.Count)
             {
                 string[] rowData = _cachedRows[_id-1];
-                TextBoxId.Text = rowData[0];
-                TextBoxName.Text = rowData[1];
-                CheckBoxIsActive.IsChecked = rowData[5] == "1";
+                textBoxId.Text = rowData[0];
+                textBoxName.Text = rowData[1];
+                checkBoxIsActive.IsChecked = rowData[5] == "1";
             } else {
-                if ( !string.IsNullOrEmpty(TextBoxId.Text) ) {
-                    TextBoxId.Text = "";}
+                if ( !string.IsNullOrEmpty(textBoxId.Text) ) {
+                    textBoxId.Text = "";}
             }
         }
 
@@ -79,13 +87,13 @@ namespace Views.Forms {
         private void OnSaveClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
         {
             bool goodId = _id > 0;
-            bool goodName = string.IsNullOrEmpty(TextBoxName.Text) == false;
+            bool goodName = string.IsNullOrEmpty(textBoxName.Text) == false;
             if (goodId || goodName) {
                 _tagController.Save(
-                    tagId:_id, name:TextBoxName.Text, isActive: (bool)CheckBoxIsActive.IsChecked );
+                    tagId:_id, name:textBoxName.Text, isActive: (bool)checkBoxIsActive.IsChecked );
                 
-                if ( goodId == false && _tagController.ExistsByName(TextBoxName.Text) ) {
-                    _id = _tagController.GetIdByName(TextBoxName.Text);
+                if ( goodId == false && _tagController.ExistsByName(textBoxName.Text) ) {
+                    _id = _tagController.GetIdByName(textBoxName.Text);
                 }
                 if (_tagController.ExistsById(_id))
                 {
