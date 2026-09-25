@@ -39,17 +39,21 @@ public static class Program {
         var languageEntity = new LanguageEntity();
         var tagEntity = new TagEntity();
         var translationEntity = new TranslationEntity();
+        var settingEntity = new SettingEntity();
         ILogger languageLogger = loggerFactory.CreateLogger<LanguageController>();
         ILogger tagLogger = loggerFactory.CreateLogger<TagController>();
         ILogger translationLogger = loggerFactory.CreateLogger<TranslationController>();
+        ILogger settingLogger = loggerFactory.CreateLogger<SettingController>();
         
-        var languageController = new LanguageController( dbContext.Language, languageEntity, languageLogger);
+        // Controllers
+        var languageController = new LanguageController(
+            dbContext.Language, languageEntity, languageLogger);
         var tagController = new TagController( 
-            dbContext.Tag, tagEntity, tagLogger 
-        );
+            dbContext.Tag, tagEntity, tagLogger );
         var translationController = new TranslationController(
-            dbContext.Translation, translationEntity, translationLogger
-        );
+            dbContext.Translation, translationEntity, translationLogger);
+        var settingController = new SettingController(
+            dbContext.Setting, settingEntity, settingLogger);
 
         // Debug
         Console.WriteLine(
@@ -65,6 +69,7 @@ public static class Program {
         App.LanguageController = languageController;
         App.TagController = tagController;
         App.TranslationController = translationController;
+        App.SettingController = settingController;
         AppBuilder.Configure<App>()
             .UsePlatformDetect().StartWithClassicDesktopLifetime(args);
     }

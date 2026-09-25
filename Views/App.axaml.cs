@@ -9,6 +9,7 @@ namespace Views {
         public static LanguageController LanguageController { get; set; }
         public static TagController TagController { get; set; }
         public static TranslationController TranslationController { get; set; }
+        public static SettingController SettingController { get; set; }
         
         public override void OnFrameworkInitializationCompleted() {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop) {

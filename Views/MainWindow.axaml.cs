@@ -11,6 +11,7 @@ namespace Views {
             LanguagesTab.Content = new Languages(App.LanguageController);
             TagsTab.Content = new Tags(App.TagController);
             TranslationsTab.Content = new Translations(App.TranslationController);
+            SettingsTab.Content = new Settings(App.SettingController);
             RefreshText();
         }
 
