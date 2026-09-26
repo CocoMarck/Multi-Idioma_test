@@ -26,6 +26,14 @@ namespace Views.Forms {
             _tableGrid = tableGrid;
             LoadCache();
             LoadTable();
+
+            string[] languagesCodes = _settingController.GetLanguageCodes();
+            var settingsCodes = new string[2]{"default", "system"};
+            var codes = new List<string>();
+            codes.AddRange(settingsCodes);
+            codes.AddRange(languagesCodes);
+            IEnumerable<string> enumerableCodes = codes;
+            comboboxLanguages.ItemsSource = enumerableCodes;
         }
     }
 }

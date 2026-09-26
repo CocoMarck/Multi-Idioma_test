@@ -2,6 +2,9 @@
 using Core;
 using Core.Sqlite;
 
+// Sqlite
+using Microsoft.Data.Sqlite;
+
 namespace Repositories.LangTags
 {
     public class SettingRepository
@@ -180,6 +183,15 @@ namespace Repositories.LangTags
         public void EstablishSystemLanguage()
         {
             UpdateSelectedLanguageId(GetSystemLanguageId());
+        }
+
+        public string[] GetLanguageCodes(){
+            using SqliteDataReader reader = _db.Query("SELECT * FROM languages");
+            var languagesCodes = new List<string>();
+            while( reader.Read() ) {
+                languagesCodes.Add( reader.GetValue(1).ToString() );
+            }
+            return languagesCodes.ToArray();
         }
     }
 }

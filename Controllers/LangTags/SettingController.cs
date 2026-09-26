@@ -22,7 +22,44 @@ namespace Controllers.LangTags {
             _logger = logger;
         }
 
-        // ITableController IMethods
+        // Methods
+        public void UpdateSelectedLanguageId(int languageId){
+            try {
+                _repository.UpdateSelectedLanguageId(languageId);
+            } catch {
+                //
+            }
+        }
+        public void UpdateSelectedLanguageCode(string languageCode){
+            try {
+                _repository.UpdateSelectedLanguageCode(languageCode);
+            } catch {
+                //
+            }
+        }
+        public void EstablishDefaultLanguage(){
+            try {
+                _repository.EstablishDefaultLanguage();
+            } catch{
+                //
+            }
+        }
+        public void EstablishSystemLanguage(){
+            try {
+                _repository.EstablishSystemLanguage();
+            } catch{
+                //
+            }
+        }
+        public string[] GetLanguageCodes(){
+            try {
+                return _repository.GetLanguageCodes();
+            } catch {
+                return new string[0];
+            }
+        }
+
+        // ITableController Methods
         public string[] GetColumnNames() {
             try {
                 return _repository.Table.GetColumnNames();
