@@ -24,8 +24,7 @@ namespace Views.Forms {
             _settingController = controller;
             _controller = controller;
             _tableGrid = tableGrid;
-            LoadCache();
-            LoadTable();
+            RefreshTable();
 
             string[] languagesCodes = _settingController.GetLanguageCodes();
             var settingsCodes = new string[2]{"default", "system"};
@@ -34,6 +33,20 @@ namespace Views.Forms {
             codes.AddRange(languagesCodes);
             IEnumerable<string> enumerableCodes = codes;
             comboboxLanguages.ItemsSource = enumerableCodes;
+        }
+
+        public void comboBoxLanguageCodeChangedEventHandler(object? sender, SelectionChangedEventArgs args) {
+            if (sender is ComboBox comboBox && comboBox.SelectedItem is string code)
+            {
+                if (code == "system"){
+                    _settingController.EstablishSystemLanguage();
+                } else if(code == "default") {
+                    _settingController.EstablishDefaultLanguage();
+                } else {
+                    _settingController.UpdateSelectedLanguageCode(code);
+                }
+                RefreshTable();
+            }
         }
     }
 }
