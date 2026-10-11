@@ -23,6 +23,14 @@ namespace Controllers.LangTags {
         }
 
         // Methods
+        public int GetSelectedLanguageId(){
+            return _repository.GetSelectedLanguageId();
+        }
+
+        public string GetSelectedLanguageCode(){
+            return _repository.GetSelectedLanguageCode();
+        }
+
         public void UpdateSelectedLanguageId(int languageId){
             try {
                 _repository.UpdateSelectedLanguageId(languageId);

@@ -18,6 +18,7 @@ using Core.LangTags;
 namespace Views.Forms {
     public partial class Settings: TableUserControl {
         private SettingController _settingController;
+        private string[] _settingsCodes;
 
         public Settings(SettingController controller) {
             InitializeComponent();
@@ -27,12 +28,30 @@ namespace Views.Forms {
             RefreshTable();
 
             string[] languagesCodes = _settingController.GetLanguageCodes();
-            var settingsCodes = new string[2]{"default", "system"};
+            _settingsCodes = new string[2]{"system", "default"};
             var codes = new List<string>();
-            codes.AddRange(settingsCodes);
+            codes.AddRange(_settingsCodes);
             codes.AddRange(languagesCodes);
             IEnumerable<string> enumerableCodes = codes;
             comboboxLanguages.ItemsSource = enumerableCodes;
+            UpdateComboBoxLanguages();
+        }
+
+        private void UpdateComboBoxLanguages(){
+            // Establecer lenguaje seleccionado por texto. Dando prioridad al texto "system", que es el ID 0, representando el idioma del sistema.
+            string match;
+            int selectedId = _settingController.GetSelectedLanguageId();
+            string selectedCode = _settingController.GetSelectedLanguageCode();
+            
+            if (selectedId == 0){
+                match = _settingsCodes[selectedId];
+            } else {
+                match = comboboxLanguages.Items
+                    .Cast<string>()
+                    .FirstOrDefault(x => x == selectedCode);
+            }
+                
+            comboboxLanguages.SelectedItem = match;
         }
 
         public void comboBoxLanguageCodeChangedEventHandler(object? sender, SelectionChangedEventArgs args) {
@@ -46,6 +65,7 @@ namespace Views.Forms {
                     _settingController.UpdateSelectedLanguageCode(code);
                 }
                 RefreshTable();
+                UpdateComboBoxLanguages();
             }
         }
     }

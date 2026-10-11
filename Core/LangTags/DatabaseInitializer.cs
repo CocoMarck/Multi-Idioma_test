@@ -82,7 +82,7 @@ namespace Core.LangTags {
             settingRepository.InitParameters();
             //settingRepository.UpdateSelectedLanguageCode("es");
             //settingRepository.EstablishDefaultLanguage();
-            settingRepository.EstablishSystemLanguage();
+            //settingRepository.EstablishSystemLanguage();
             Console.WriteLine( settingRepository.GetDefaultLanguageCode() );
             Console.WriteLine( settingRepository.GetSelectedLanguageCode() );
             Console.WriteLine( settingRepository.GetSystemLanguageId() );
